@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - Skillbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      padding: 20px;
+    }
+
+    .contact-container {
+      max-width: 600px;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+      border-radius: 15px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #059669;
+    }
+
+    .info {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .info a {
+      color: #bbf7d0;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 1rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+  </ul>
+</nav>
+
+  <div class="contact-container">
+    <h1>Contact Us</h1>
+    <form onsubmit="submitContact(event)">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+
+    <div class="info">
+      <p>Email: <a href="mailto:support@skillbook.com">support@skillbook.com</a></p>
+      <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+      <p>Address: 123 Skillbook Street, Tech City</p>
+    </div>
+  </div>
+
+  <script>
+    function submitContact(event) {
+      event.preventDefault();
+      alert("Thank you for contacting us! We will get back to you shortly.");
+      document.querySelector("form").reset();
+    }
+  </script>
+
+</body>
+</html>

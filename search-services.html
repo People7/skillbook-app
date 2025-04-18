@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search Services - Skillbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-bar input[type="text"] {
+      padding: 12px;
+      width: 70%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+    .search-bar button {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: none;
+      background-color: #10b981;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .category-container {
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: #ffffff;
+      color: black;
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 10px;
+    }
+
+    .category-container h3 {
+      margin-bottom: 10px;
+      color: #047857;
+    }
+
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .category-list button {
+      padding: 8px;
+      border: 1px solid #047857;
+      border-radius: 5px;
+      background-color: #ecfdf5;
+      color: #047857;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .category-list button:hover {
+      background-color: #047857;
+      color: white;
+    }
+
+    #map {
+      height: 300px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .service-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .service-card h3 {
+      margin: 0 0 10px 0;
+    }
+
+    .service-card p {
+      margin: 5px 0;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #bbf7d0;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .book { background-color: #10b981; }
+    .whatsapp { background-color: #25d366; }
+    .call { background-color: #3b82f6; }
+    .email { background-color: #f59e0b; }
+
+    @media (max-width: 600px) {
+      .search-bar input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 1rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+    <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
+    <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
+  </ul>
+</nav>
+
+  <h1>Search Services</h1>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search for services...">
+    <button onclick="filterServices()">Search</button>
+  </div>
+
+  <div class="category-container">
+    <h3>Select a Category</h3>
+    <div class="category-list">
+      <button onclick="filterByCategory('All')">All</button>
+      <button onclick="filterByCategory('Fitness')">Fitness</button>
+      <button onclick="filterByCategory('Yoga')">Yoga</button>
+      <button onclick="filterByCategory('Electrician')">Electrician</button>
+      <button onclick="filterByCategory('Plumber')">Plumber</button>
+      <button onclick="filterByCategory('Mechanic')">Mechanic</button>
+      <button onclick="filterByCategory('Chef')">Chef</button>
+    </div>
+  </div>
+  
+  <div class="category-container">
+    <h3>Your Location</h3>
+    <div class="category-list">
+      <button onclick="filterByCategory('Area')">Area</button>
+      <button onclick="filterByCategory('City')">City</button>
+      <button onclick="filterByCategory('State')">State</button>
+    </div>
+  </div>
+
+
+  <div class="service-list" id="serviceList">
+    <!-- Example Service -->
+    <div class="service-card" data-category="Fitness">
+      <h3>Personal Fitness Trainer</h3>
+      <p>Customized workout sessions with tracking.</p>
+      <p class="price">$50/session</p>
+      <p><strong>Duration:</strong> 1 hour</p>
+      <div class="btn-group">
+        <button class="btn book" onclick="bookService('Personal Fitness Trainer')">Book Now</button>
+        <button class="btn whatsapp" onclick="contactWhatsApp('1234567890')">WhatsApp</button>
+        <button class="btn call" onclick="contactCall('1234567890')">Call</button>
+        <button class="btn email" onclick="contactEmail('trainer@example.com')">Email</button>
+      </div>
+    </div>
+
+    <div class="service-card" data-category="Yoga">
+      <h3>Yoga & Meditation</h3>
+      <p>Relax through guided sessions.</p>
+      <p class="price">$30/session</p>
+      <p><strong>Duration:</strong> 45 mins</p>
+      <div class="btn-group">
+        <button class="btn book" onclick="bookService('Yoga & Meditation')">Book Now</button>
+        <button class="btn whatsapp" onclick="contactWhatsApp('9876543210')">WhatsApp</button>
+        <button class="btn call" onclick="contactCall('9876543210')">Call</button>
+        <button class="btn email" onclick="contactEmail('yoga@example.com')">Email</button>
+      </div>
+    </div>
+
+    <!-- Add more service cards with different categories -->
+  </div>
+
+  <script>
+    function filterServices() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.service-card');
+      cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(input) ? 'block' : 'none';
+      });
+    }
+
+    function filterByCategory(category) {
+      const cards = document.querySelectorAll('.service-card');
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        card.style.display = (category === 'All' || cat === category) ? 'block' : 'none';
+      });
+    }
+
+    function bookService(serviceName) {
+      alert(`Booking request submitted for: ${serviceName}`);
+    }
+
+    function contactWhatsApp(number) {
+      window.open(`https://wa.me/${number}`, '_blank');
+    }
+
+    function contactCall(number) {
+      window.location.href = `tel:${number}`;
+    }
+
+    function contactEmail(email) {
+      window.location.href = `mailto:${email}`;
+    }
+
+    function initMap() {
+      const mumbai = { lat: 19.0760, lng: 72.8777 };
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 12,
+        center: mumbai,
+      });
+      const marker = new google.maps.Marker({
+        position: mumbai,
+        map: map,
+      });
+    }
+  </script>
+
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+  </script>
+
+</body>
+</html>

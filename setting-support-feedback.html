@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skillbook - Settings & Support</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: rgba(0,0,0,0.2);
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #059669;
+    }
+
+    .danger {
+      background-color: #ef4444;
+    }
+
+    .danger:hover {
+      background-color: #b91c1c;
+    }
+
+    .footer-buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 1rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+  </ul>
+</nav>
+
+  <div class="container">
+    <h1>Settings & Support</h1>
+
+    <section id="settings">
+      <h2>Settings</h2>
+      <label for="language">Language</label>
+      <select id="language">
+        <option>English</option>
+        <option>Hindi</option>
+        <option>Spanish</option>
+        <option>French</option>
+      </select>
+
+      <label for="notifications">Notifications</label>
+      <select id="notifications">
+        <option>Enabled</option>
+        <option>Disabled</option>
+      </select>
+    </section>
+
+    <section id="support">
+      <h2>Support</h2>
+      <p>If you need help, contact us:</p>
+      <p>Email: <a href="mailto:support@skillbook.com" style="color: #bbf7d0;">support@skillbook.com</a></p>
+      <p>Phone: <a href="tel:+1234567890" style="color: #bbf7d0;">+1 234 567 890</a></p>
+    </section>
+
+    <section id="feedback">
+      <h2>Feedback</h2>
+      <label for="feedback-text">Your feedback:</label>
+      <textarea id="feedback-text" rows="4" placeholder="Tell us how we can improve..."></textarea>
+      <button onclick="submitFeedback()">Submit</button>
+    </section>
+
+    <div class="footer-buttons">
+      <button onclick="logout()">Log Out</button>
+      <button class="danger" onclick="deleteAccount()">Delete Account</button>
+    </div>
+  </div>
+
+  <script>
+    function submitFeedback() {
+      const feedback = document.getElementById('feedback-text').value;
+      if (feedback.trim()) {
+        alert("Thanks for your feedback!");
+        document.getElementById('feedback-text').value = "";
+      } else {
+        alert("Please write something before submitting.");
+      }
+    }
+
+    function logout() {
+      alert("You have been logged out.");
+      // Redirect to login page or clear session (depending on your backend)
+    }
+
+    function deleteAccount() {
+      const confirmDelete = confirm("Are you sure you want to delete your account? This action is irreversible.");
+      if (confirmDelete) {
+        alert("Your account has been deleted.");
+        // Trigger delete account logic from backend here
+      }
+    }
+  </script>
+
+</body>
+</html>

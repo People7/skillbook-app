@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Offer Services - Skillbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #059669;
+    }
+
+    .contact-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .contact-options label {
+      flex: 1;
+      background-color: #047857;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .contact-options input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .category-scroll {
+      max-height: 200px;
+      overflow-y: scroll;
+    }
+
+    .terms {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .terms input[type="checkbox"] {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <nav style="background-color:#065f46; padding: 1rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="login.html" style="color: white; text-decoration: none;">Login</a></li>
+      <li><a href="sign-up.html" style="color: white; text-decoration: none;">Sign Up</a></li>
+      <li><a href="booking-schedule.html" style="color: white; text-decoration: none;">Booking Schedule</a></li>
+      <li><a href="subscription.html" style="color: white; text-decoration: none;">Subscription</a></li>
+    </ul>
+  </nav>
+
+  <h1>Offer Your Services</h1>
+
+  <form>
+    <div class="form-group">
+      <label for="title">Service Title</label>
+      <input type="text" id="title" placeholder="e.g. Personal Fitness Trainer" />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Select Category</label>
+      <div class="category-scroll">
+        <select id="category">
+          <option>Personal</option>
+          <option>Social</option>
+          <option>Environmental</option>
+          <option>Household</option>
+          <option>Business</option>
+          <option>Health</option>
+          <option>Entertainment</option>
+          <option>Repair and Maintenance</option>
+          <option>Innovation</option>
+          <option>Consultancy</option>
+          <option>Engineering</option>
+          <option>Educational</option>
+          <option>Political</option>
+          <option>Safety and Security</option>
+          <option>Helping</option>
+          <option>Religious</option>
+          <option>Legal</option>
+          <option>Financial</option>
+          <option>Creative Arts</option>
+          <option>Media</option>
+          <option>Transportation</option>
+          <option>Hospitality</option>
+          <option>Technical Support</option>
+          <option>Fitness and Sports</option>
+          <option>Marketing and Sales</option>
+          <option>Event Management</option>
+          <option>Agricultural</option>
+          <option>Writing & Editing</option>
+          <option>Real Estate</option>
+          <option>Technology</option>
+          <option>Travel & Tourism</option>
+          <option>Human Resources</option>
+          <option>Fashion & Beauty</option>
+          <option>Art & Design</option>
+          <option>Photography</option>
+          <option>Training & Coaching</option>
+          <option>Translation Services</option>
+          <option>Data Entry</option>
+          <option>IT Services</option>
+          <option>Research & Analysis</option>
+          <option>Logistics</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Service Description</label>
+      <textarea id="description" rows="4" placeholder="Describe your experience and offering..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="tags">Tags (keywords separated by commas)</label>
+      <input type="text" id="tags" placeholder="e.g. yoga, home trainer, diet consultant" />
+    </div>
+
+    <div class="form-group">
+      <label>Your Location</label>
+      <input type="text" placeholder="Address" />
+      <label>Area</label>
+      <input type="text" placeholder="Area" />
+      <label>Pincode</label>
+      <input type="text" placeholder="Pincode" />
+      <label>City</label>
+      <input type="text" placeholder="City" />
+      <label>State</label>
+      <input type="text" placeholder="State" />
+    </div>
+
+    <div class="form-group">
+      <label>Availability</label>
+      <input type="text" placeholder="e.g. Mon-Fri 10AM - 6PM" />
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input type="tel" id="phoneNumber" placeholder="e.g. +911234567890" />
+    </div>
+
+    <div class="form-group">
+      <label for="whatsappNumber">WhatsApp Number</label>
+      <input type="tel" id="whatsappNumber" placeholder="e.g. +911234567890" />
+    </div>
+
+    <div class="form-group">
+      <label>Preferred Contact Method(s)</label>
+      <div class="contact-options">
+        <label><input type="checkbox" name="contact" value="chat" /> Chat</label>
+        <label><input type="checkbox" name="contact" value="whatsapp" /> WhatsApp</label>
+        <label><input type="checkbox" name="contact" value="phone" /> Phone</label>
+        <label><input type="checkbox" name="contact" value="email" /> Email</label>
+      </div>
+    </div>
+
+    <div class="form-group terms">
+      <input type="checkbox" id="terms" required />
+      <label for="terms">I agree to the <a href="#" style="color: #bbf7d0;">terms & conditions</a></label>
+    </div>
+
+    <label for="documents">Upload Certificates / Resume (Max 10)</label>
+    <input type="file" id="documents" multiple accept=".pdf,.doc,.jpg,.jpeg,.png" onchange="limitDocuments()" />
+
+    <label for="video">Upload Introduction Video (1 max)</label>
+    <input type="file" id="video" accept="video/*" onchange="limitVideo()" />
+
+    <button type="submit">Post Service</button>
+
+    <div class="form-group">
+      <button type="button" onclick="makePhoneCall()">Call Now</button>
+      <button type="button" onclick="openWhatsApp()">Message on WhatsApp</button>
+    </div>
+  </form>
+
+  <script>
+    function makePhoneCall() {
+      const phone = document.getElementById('phoneNumber').value;
+      if (phone) {
+        window.open(`tel:${phone}`, '_self');
+      } else {
+        alert('Please enter a phone number.');
+      }
+    }
+
+    function openWhatsApp() {
+      const whatsapp = document.getElementById('whatsappNumber').value;
+      if (whatsapp) {
+        const msg = encodeURIComponent("Hello! I saw your service on Skillbook.");
+        window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
+      } else {
+        alert('Please enter a WhatsApp number.');
+      }
+    }
+
+    function limitDocuments() {
+      const files = document.getElementById('documents').files;
+      if (files.length > 10) {
+        alert('You can only upload a maximum of 10 documents.');
+        document.getElementById('documents').value = "";
+      }
+    }
+
+    function limitVideo() {
+      const video = document.getElementById('video').files;
+      if (video.length > 1) {
+        alert('You can only upload one video.');
+        document.getElementById('video').value = "";
+      }
+    }
+  </script>
+
+</body>
+</html>

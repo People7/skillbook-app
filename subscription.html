@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skillbook - Subscription</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .subscription-box {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .subscription-box h1 {
+      margin-bottom: 1rem;
+    }
+
+    .plan {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+
+    .plan h2 {
+      margin: 0;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #d1fae5;
+    }
+
+    select, button {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    button {
+      background-color: #10b981;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #059669;
+    }
+
+    #message {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #d1fae5;
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 1rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+    <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
+  </ul>
+</nav>
+
+  <div class="subscription-box">
+    <h1>Subscription</h1>
+    <p></p>
+
+    <div class="plan">
+      <h2>Free Plan</h2>
+      <p class="price">Can not offer services</p>
+      <p class="note"></p>
+    </div>
+    
+     <div class="plan">
+      <h2>Monthly Plan</h2>
+      <p class="price">₹15 for 1 Month</p>
+      <p class="note"></p>
+    </div>
+
+    <div class="plan">
+      <h2>Annual Plan</h2>
+      <p class="price">₹149  for a year</p>
+      <p class="note"></p>
+    </div>
+
+    <select id="plan">
+      <option value="Free">Free Plan - Can not offer Services</option>
+       <option value="annual">Monthly Plan - ₹15/Month</option>
+      <option value="annual">Annual Plan - ₹149/Year</option>
+    </select>
+
+    <button onclick="subscribe()">Subscribe Now</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    function subscribe() {
+      const plan = document.getElementById('plan').value;
+      const message = document.getElementById('message');
+
+      if (plan === '') {
+        message.textContent = "Free activated. Enjoy all premium features except offer services!";
+      } else if (plan === 'annual') {
+        // Redirect to mock payment URL
+        message.textContent = "Redirecting to secure payment page...";
+        setTimeout(() => {
+          // Simulate redirection (replace with real payment gateway link)
+          window.location.href = "https://example.com/payment?plan=annual";
+        }, 1500);
+      }
+    }
+  </script>
+
+</body>
+</html>

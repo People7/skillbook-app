@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skillbook - Chat</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      position: relative;
+    }
+
+    .sent {
+      align-self: flex-end;
+      background-color: #10b981;
+      border-bottom-right-radius: 0;
+    }
+
+    .received {
+      align-self: flex-start;
+      background-color: #047857;
+      border-bottom-left-radius: 0;
+    }
+
+    .sender {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-bottom: 2px;
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      opacity: 0.6;
+      position: absolute;
+      bottom: -14px;
+      right: 10px;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .input-area button {
+      margin-left: 10px;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .input-area button:hover {
+      background-color: #059669;
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 1rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+    <li><a href="chatlist.html" style="color: white; text-decoration: none;">Chats</a></li>
+    <li><a href="notifications.html" style="color: white; text-decoration: none;">Notifications</a></li>
+  </ul>
+</nav>
+
+  <div class="header">Chat with John Doe</div>
+
+  <div class="chat-box" id="chatBox">
+    <div class="message received">
+      <div class="sender">John Doe</div>
+      Hello! Are you available for a plumbing job this weekend?
+      <div class="timestamp">10:45 AM</div>
+    </div>
+    <div class="message sent">
+      <div class="sender">You</div>
+      Yes, I’m available on Saturday after 2 PM.
+      <div class="timestamp">10:46 AM</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    function formatTime() {
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (text !== '') {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message sent';
+        msgDiv.innerHTML = `<div class="sender">You</div>${text}<div class="timestamp">${formatTime()}</div>`;
+        document.getElementById('chatBox').appendChild(msgDiv);
+        input.value = '';
+        msgDiv.scrollIntoView({ behavior: 'smooth' });
+
+        // Simulate reply after 2 seconds
+        setTimeout(() => {
+          const reply = document.createElement('div');
+          reply.className = 'message received';
+          reply.innerHTML = `<div class="sender">John Doe</div>Thanks for confirming!<div class="timestamp">${formatTime()}</div>`;
+          document.getElementById('chatBox').appendChild(reply);
+          reply.scrollIntoView({ behavior: 'smooth' });
+        }, 2000);
+      }
+    }
+
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Skillbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    header {
+      background-color: #065f46;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #10b981;
+      padding: 1rem;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .sidebar a:hover {
+      background-color: #059669;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .card {
+      background-color: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    button {
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #059669;
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 2rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+    <li><a href="login.html" style="color: white; text-decoration: none;">Login</a></li>
+  </ul>
+</nav>
+
+  <header>
+    <h1>Admin Panel - Skillbook</h1>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+      <a href="#" onclick="showSection('users')">Users</a>
+      <a href="#" onclick="showSection('services')">Services</a>
+      <a href="#" onclick="showSection('bookings')">Bookings</a>
+      <a href="#" onclick="showSection('reports')">Reports</a>
+      <a href="#" onclick="showSection('settings')">Settings</a>
+    </nav>
+
+    <div class="main" id="content">
+
+      <div class="card" id="dashboard-section">
+        <h2>Dashboard</h2>
+        <p>Overview of platform activity (dummy stats):</p>
+        <ul>
+          <li>Active Users: 123</li>
+          <li>Services Listed: 57</li>
+          <li>Bookings Today: 9</li>
+        </ul>
+      </div>
+
+      <div class="card" id="users-section" style="display: none;">
+        <h2>Manage Users</h2>
+        <p>List of users, ban/suspend or view profile...</p>
+        <button onclick="alert('Suspend user logic')">Suspend User</button>
+      </div>
+
+      <div class="card" id="services-section" style="display: none;">
+        <h2>Manage Services</h2>
+        <p>Approve, reject or edit services posted by users.</p>
+        <button onclick="alert('Approve service logic')">Approve Service</button>
+      </div>
+
+      <div class="card" id="bookings-section" style="display: none;">
+        <h2>Bookings</h2>
+        <p>View and manage bookings made on the platform.</p>
+      </div>
+
+      <div class="card" id="reports-section" style="display: none;">
+        <h2>User Reports</h2>
+        <p>Flagged content or abuse reports.</p>
+      </div>
+
+      <div class="card" id="settings-section" style="display: none;">
+        <h2>Admin Settings</h2>
+        <p>Control platform-level settings and configurations.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function showSection(section) {
+      const sections = [
+        'dashboard', 'users', 'services',
+        'bookings', 'reports', 'settings'
+      ];
+      sections.forEach(s => {
+        document.getElementById(`${s}-section`).style.display = 'none';
+      });
+      document.getElementById(`${section}-section`).style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

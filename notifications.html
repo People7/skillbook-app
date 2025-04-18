@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications - Skillbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .notification-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .notification-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .notification-item.read {
+      opacity: 0.6;
+    }
+
+    .notification-item h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      color: #f0fdf4;
+    }
+
+    .notification-item p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #d1fae5;
+    }
+
+    .timestamp {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #a7f3d0;
+      margin-top: 8px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: white;
+    }
+
+    .btn.read {
+      background-color: #10b981;
+    }
+
+    .btn.delete {
+      background-color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 1rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+    <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
+  </ul>
+</nav>
+
+  <h1>Notifications</h1>
+
+  <div class="notification-list" id="notificationList">
+    <div class="notification-item">
+      <h3>New Booking Request</h3>
+      <p>Ravi Sharma requested a Personal Trainer on April 12 at 7:00 AM.</p>
+      <div class="timestamp">2 hrs ago</div>
+      <div class="action-buttons">
+        <button class="btn read" onclick="markRead(event)">Mark as Read</button>
+        <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
+      </div>
+    </div>
+
+    <div class="notification-item">
+      <h3>New Message</h3>
+      <p>You have a new message from Meera Patel.</p>
+      <div class="timestamp">4 hrs ago</div>
+      <div class="action-buttons">
+        <button class="btn read" onclick="markRead(event)">Mark as Read</button>
+        <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
+      </div>
+    </div>
+
+    <div class="notification-item">
+      <h3>Service Rated</h3>
+      <p>Your service "Yoga Trainer" was rated 5 stars by Ankit Joshi.</p>
+      <div class="timestamp">Yesterday</div>
+      <div class="action-buttons">
+        <button class="btn read" onclick="markRead(event)">Mark as Read</button>
+        <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function markRead(event) {
+      event.stopPropagation();
+      const item = event.target.closest('.notification-item');
+      item.classList.add('read');
+    }
+
+    function deleteNotif(event) {
+      event.stopPropagation();
+      const item = event.target.closest('.notification-item');
+      item.remove();
+    }
+  </script>
+
+</body>
+</html>

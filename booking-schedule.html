@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking & Schedule - Skillbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .booking-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .booking-card h3 {
+      margin: 0 0 10px 0;
+    }
+
+    .booking-card p {
+      margin: 5px 0;
+    }
+
+    .btn-group {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      font-size: 1rem;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .accept { background-color: #10b981; }
+    .decline { background-color: #ef4444; }
+    .whatsapp { background-color: #25d366; }
+
+    .schedule-form {
+      margin-top: 30px;
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    label, input, select, textarea {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    select[multiple] {
+      height: 120px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #059669;
+    }
+
+    .status {
+      font-style: italic;
+      color: #bbf7d0;
+    }
+
+    @media (max-width: 600px) {
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <script>
+    function handleResponse(el, status) {
+      const card = el.closest('.booking-card');
+      card.querySelector('.status').textContent = 'Status: ' + status;
+      el.parentElement.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
+    }
+
+    function contactWhatsApp(number) {
+      window.open(`https://wa.me/${number}`, '_blank');
+    }
+  </script>
+</head>
+<body>
+<nav style="background-color:#065f46; padding: 2rem;">
+  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin: 0; padding: 0;">
+    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+    <li><a href="upcoming-bookings.html" style="color: white; text-decoration: none;">Upcoming Bookings</a></li>
+    <li><a href="notifications.html" style="color: white; text-decoration: none;">Notifications</a></li>
+    <li><a href="service-details.html" style="color: white; text-decoration: none;">Setvice Details</a></li>
+  </ul>
+</nav>
+
+  <h1>Booking & Schedule</h1>
+
+  <!-- Sample Booking Request -->
+  <div class="booking-card">
+    <h3>Service: Personal Fitness Training</h3>
+    <p><strong>Client:</strong> John Doe</p>
+    <p><strong>Date:</strong> April 12, 2025</p>
+    <p><strong>Time:</strong> 10:00 AM</p>
+    <p><strong>Location:</strong> Downtown Gym, NY</p>
+    <p><strong>Client Note:</strong> Please bring resistance bands if possible.</p>
+    <p class="status">Status: Pending</p>
+    <div class="btn-group">
+      <button class="btn accept" onclick="handleResponse(this, 'Accepted')">Accept</button>
+      <button class="btn decline" onclick="handleResponse(this, 'Declined')">Decline</button>
+      <button class="btn whatsapp" onclick="contactWhatsApp('1234567890')">WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- Booking Schedule Form -->
+  <div class="schedule-form">
+    <h2>Set Your Availability</h2>
+
+    <label for="day">Available Day(s)</label>
+    <select id="day" multiple>
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+      <option>Saturday</option>
+      <option>Sunday</option>
+    </select>
+
+    <label for="start-time">Start Time</label>
+    <input type="time" id="start-time" />
+
+    <label for="end-time">End Time</label>
+    <input type="time" id="end-time" />
+
+    <label for="duration">Session Duration (mins)</label>
+    <input type="number" id="duration" placeholder="e.g. 60" />
+
+    <label for="note">Additional Notes (Optional)</label>
+    <textarea id="note" rows="3" placeholder="Mention preferences or unavailable dates..."></textarea>
+
+    <button type="submit">Save Availability</button>
+  </div>
+
+</body>
+</html>
