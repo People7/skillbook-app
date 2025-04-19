@@ -166,6 +166,78 @@
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAuth, RecaptchaVerifier } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+    authDomain: "skillbook-3fa41.firebaseapp.com",
+    projectId: "skillbook-3fa41",
+    storageBucket: "skillbook-3fa41.firebasestorage.app",
+    messagingSenderId: "599549421075",
+    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+    measurementId: "G-3VKK01HXE6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  function setupRecaptcha() {
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': (response) => {
+        console.log("Recaptcha verified!");
+      }
+    }, auth);
+  }
+
+  setupRecaptcha(); // Initialize ReCAPTCHA
+</script>
+<script type="module">
+  import { getAuth, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+  // Function to send OTP
+  function sendVerificationCode() {
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const appVerifier = window.recaptchaVerifier;
+
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        alert("OTP sent!");
+      })
+      .catch((error) => {
+        alert("Error: " + error.message);
+      });
+  }
+
+  // Function to verify OTP
+  function verifyCode() {
+    const code = document.getElementById("verificationCode").value;
+    window.confirmationResult.confirm(code)
+      .then((result) => {
+        alert("Phone number verified!");
+      })
+      .catch((error) => {
+        alert("Error: " + error.message);
+      });
+  }
+</script>
+<body>
+  <h1>Phone Authentication</h1>
+  <div id="recaptcha-container"></div>
+
+  <!-- Phone number input -->
+  <input type="text" id="phoneNumber" placeholder="Enter phone number">
+  <button onclick="sendVerificationCode()">Send OTP</button>
+
+  <!-- OTP input -->
+  <input type="text" id="verificationCode" placeholder="Enter OTP">
+  <button onclick="verifyCode()">Verify OTP</button>
+</body>
+
+  
 </body>
 </html>
 <div 
