@@ -51,24 +51,21 @@
       font-weight: bold;
     }
 
-    label {
-      font-size: 13px;
-      display: block;
-      margin-top: -5px;
-      margin-bottom: 5px;
+    #logout-btn {
+      margin-top: 15px;
+      background-color: #e53e3e;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <h2>Login with Mobile</h2>
-    <input type="tel" id="login-phone" placeholder="+91xxxxxxxxxx" pattern="^\+\d{10,15}$"
-      oninput="this.value = this.value.replace(/[^+\d]/g, '')" />
+    <input type="text" id="login-phone" placeholder="+1234567890" oninput="this.value=this.value.replace(/[^0-9+]/g,'')" />
     <div id="recaptcha-login"></div>
     <button onclick="sendLoginOTP()">Send OTP</button>
     <input type="text" id="login-otp" placeholder="Enter OTP" />
-    <button onclick="verifyLoginOTP()">Verify OTP & Login</button>
+    <button onclick="verifyLoginOTP()">Verify & Continue</button>
+    <button id="logout-btn" onclick="logout()">Logout</button>
   </div>
 
   <!-- Firebase -->
@@ -87,18 +84,14 @@
 
     firebase.initializeApp(firebaseConfig);
 
-    // Recaptcha setup
+    // Recaptcha
     window.recaptchaVerifierLogin = new firebase.auth.RecaptchaVerifier('recaptcha-login', {
-      'size': 'invisible',
-      'callback': () => console.log("Recaptcha solved")
+      'size': 'invisible'
     });
 
+    // Send OTP
     function sendLoginOTP() {
-      const phone = document.getElementById("login-phone").value.trim();
-      if (!phone.match(/^\+\d{10,15}$/)) {
-        alert("Please enter a valid phone number with country code (e.g., +91XXXXXXXXXX)");
-        return;
-      }
+      const phone = document.getElementById("login-phone").value;
 
       firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifierLogin)
         .then((confirmationResult) => {
@@ -110,22 +103,28 @@
         });
     }
 
+    // Verify OTP
     function verifyLoginOTP() {
-      const code = document.getElementById("login-otp").value.trim();
-
-      if (!window.loginConfirmation) {
-        alert("Please request OTP first.");
-        return;
-      }
+      const code = document.getElementById("login-otp").value;
 
       window.loginConfirmation.confirm(code)
         .then(() => {
-          alert("Phone login successful!");
-          window.location.href = "dashboard.html";
+          alert("Login successful!");
+          window.location.href = "profile.html"; // Redirect to profile
         })
         .catch((error) => {
           alert("OTP Error: " + error.message);
         });
+    }
+
+    // Logout
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        alert("Logged out!");
+        location.reload();
+      }).catch((error) => {
+        alert("Logout Error: " + error.message);
+      });
     }
   </script>
 </body>
