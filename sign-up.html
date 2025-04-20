@@ -1,153 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Skillbook - Sign Up</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #38a169, #68d391);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background: #ffffff22;
-      padding: 20px 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #00000040;
-      max-width: 400px;
-      width: 90%;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
-    }
-
-    input {
-      background: #ffffffcc;
-      color: #000;
-    }
-
-    button {
-      background: #2f855a;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .social-btns button {
-      margin: 5px 0;
-      background: #4a5568;
-    }
-
-    .toggle {
-      text-align: center;
-      margin-top: 10px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-  </style>
 </head>
 <body>
-	<nav style="background-color:#065f46; padding: 1rem;">
-  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
-  </ul>
-</nav>
+  <h2>Create an Account</h2>
+  <input type="email" id="signup-email" placeholder="Email"><br><br>
+  <input type="password" id="signup-password" placeholder="Password"><br><br>
+  <button onclick="signUp()">Sign Up</button>
 
-  <div class="container">
-    <h2>Skillbook Sign Up</h2>
+  <p>Already have an account? <a href="login.html">Login here</a></p>
 
-    <!-- Username -->
-    <input type="text" id="username" placeholder="Username" required />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-    <!-- Email/Password -->
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-
-    <!-- Phone OTP -->
-    <input type="text" id="phone" placeholder="+1234567890" />
-    <div id="recaptcha-signup"></div>
-    <button onclick="sendSignupOTP()">Send OTP</button>
-    <input type="text" id="otp" placeholder="Enter OTP" />
-    <button onclick="verifySignupOTP()">Verify Phone & Register</button>
-
-    <!-- Social Sign Up -->
-    <div class="social-btns">
-      <button>Sign Up with Google</button>
-      <button>Sign Up with Facebook</button>
-    </div>
-
-    <div class="toggle" onclick="location.href='login.html'">Already have an account? Login</div>
-  </div>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script>
     const firebaseConfig = {
-      // Add your Firebase config here
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.firebasestorage.app",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-3VKK01HXE6"
     };
-    firebase.initializeApp(firebaseConfig);
 
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-signup', {
-      'size': 'invisible'
-    });
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    function sendSignupOTP() {
-      const phone = document.getElementById("phone").value;
-      firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert("OTP sent to phone!");
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    }
+    window.signUp = function () {
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
 
-    function verifySignupOTP() {
-      const code = document.getElementById("otp").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-
-      if (password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-      }
-
-      confirmationResult.confirm(code)
+      createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-          firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {
-              alert("Sign up successful!");
-              window.location.href = "dashboard.html";
-            })
-            .catch((error) => {
-              alert("Email Error: " + error.message);
-            });
+          alert('Sign-up successful!');
+          window.location.href = 'dashboard.html';
         })
         .catch((error) => {
-          alert("OTP Error: " + error.message);
+          alert("Error: " + error.message);
         });
     }
   </script>
