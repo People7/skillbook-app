@@ -1,46 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Skillbook - Sign Up</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skillbook - Auth</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #38a169, #68d391);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #ffffff22;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00000040;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+    }
+
+    input {
+      background: #ffffffcc;
+      color: #000;
+    }
+
+    button {
+      background: #2f855a;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .social-btns button {
+      margin: 5px 0;
+      background: #4a5568;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    label {
+      font-size: 13px;
+      display: block;
+      margin-top: -5px;
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Create an Account</h2>
-  <input type="email" id="signup-email" placeholder="Email"><br><br>
-  <input type="password" id="signup-password" placeholder="Password"><br><br>
-  <button onclick="signUp()">Sign Up</button>
+  <nav style="background-color:#065f46; padding: 1rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
+    </ul>
+  </nav>
 
-  <p>Already have an account? <a href="login.html">Login here</a></p>
+  <div class="container">
+    <!-- Sign Up Section -->
+    <div id="signup-section">
+      <h2>Skillbook Sign Up</h2>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+      <label><input type="checkbox" onclick="togglePasswordVisibility()"> Show Passwords</label>
+      <input type="text" id="phone" placeholder="+1234567890" />
+      <div id="recaptcha-signup"></div>
+      <button onclick="sendSignupOTP()">Send OTP</button>
+      <input type="text" id="otp" placeholder="Enter OTP" />
+      <button onclick="verifySignupOTP()">Verify Phone & Register</button>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+      <div class="social-btns">
+        <button>Sign Up with Google</button>
+        <button>Sign Up with Facebook</button>
+      </div>
 
+      <div class="toggle" onclick="toggleSections()">Already have an account? Login</div>
+    </div>
+
+    <!-- Login Section -->
+    <div id="login-section" class="hidden">
+      <h2>Skillbook Login</h2>
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <label><input type="checkbox" onclick="toggleLoginPassword()"> Show Password</label>
+      <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+      <button onclick="login()">Login</button>
+      <div class="toggle" onclick="toggleSections()">Don't have an account? Sign Up</div>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
       authDomain: "skillbook-3fa41.firebaseapp.com",
       projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.firebasestorage.app",
+      storageBucket: "skillbook-3fa41.appspot.com",
       messagingSenderId: "599549421075",
       appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
       measurementId: "G-3VKK01HXE6"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
 
-    window.signUp = function () {
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
+    // Recaptcha for Phone Auth
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-signup', {
+      'size': 'invisible'
+    });
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          alert('Sign-up successful!');
-          window.location.href = 'dashboard.html';
+    function sendSignupOTP() {
+      const phone = document.getElementById("phone").value;
+      firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          alert("OTP sent to phone!");
         })
         .catch((error) => {
-          alert("Error: " + error.message);
+          alert(error.message);
         });
+    }
+
+    function verifySignupOTP() {
+      const code = document.getElementById("otp").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      confirmationResult.confirm(code)
+        .then(() => {
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+              alert("Sign up successful!");
+              window.location.href = "dashboard.html";
+            })
+            .catch((error) => {
+              alert("Email Error: " + error.message);
+            });
+        })
+        .catch((error) => {
+          alert("OTP Error: " + error.message);
+        });
+    }
+
+    function login() {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("Login Error: " + error.message);
+        });
+    }
+
+    function toggleSections() {
+      document.getElementById("signup-section").classList.toggle("hidden");
+      document.getElementById("login-section").classList.toggle("hidden");
+    }
+
+    function togglePasswordVisibility() {
+      let p1 = document.getElementById("password");
+      let p2 = document.getElementById("confirmPassword");
+      p1.type = p1.type === "password" ? "text" : "password";
+      p2.type = p2.type === "password" ? "text" : "password";
+    }
+
+    function toggleLoginPassword() {
+      let p = document.getElementById("login-password");
+      p.type = p.type === "password" ? "text" : "password";
     }
   </script>
 </body>
