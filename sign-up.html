@@ -3,126 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skillbook - Auth</title>
+  <title>Skillbook - Welcome</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #38a169, #68d391);
-      color: #fff;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    #splash {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      z-index: 1000;
+      animation: fadeOut 1s ease-out 1s forwards;
     }
-
-    .container {
-      background: #ffffff22;
-      padding: 20px 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #00000040;
-      max-width: 400px;
-      width: 90%;
+    #splash h1 {
+      font-size: 3rem;
+      animation: slideIn 1s ease-out;
     }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
+    #splash p {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      opacity: 0.8;
     }
-
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    input {
-      background: #ffffffcc;
-      color: #000;
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
     }
-
-    button {
-      background: #2f855a;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .social-btns button {
-      margin: 5px 0;
-      background: #4a5568;
-    }
-
-    .toggle {
-      text-align: center;
-      margin-top: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      text-decoration: underline;
-    }
-
-    .hidden {
+    #main {
       display: none;
+      padding: 2rem 1rem;
+      text-align: center;
     }
-
-    label {
-      font-size: 13px;
-      display: block;
-      margin-top: -5px;
-      margin-bottom: 5px;
+    h2 { margin-bottom: 1rem; }
+    input {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      width: 250px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.6rem 1.2rem;
+      font-weight: bold;
+      background-color: #065f46;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #34d399;
     }
   </style>
 </head>
 <body>
-  <nav style="background-color:#065f46; padding: 1rem;">
-    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-      <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
-    </ul>
-  </nav>
-
-  <div class="container">
-    <!-- Sign Up Section -->
-    <div id="signup-section">
-      <h2>Skillbook Sign Up</h2>
-      <input type="text" id="username" placeholder="Username" required />
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-      <label><input type="checkbox" onclick="togglePasswordVisibility()"> Show Passwords</label>
-      <input type="text" id="phone" placeholder="+1234567890" />
-      <div id="recaptcha-signup"></div>
-      <button onclick="sendSignupOTP()">Send OTP</button>
-      <input type="text" id="otp" placeholder="Enter OTP" />
-      <button onclick="verifySignupOTP()">Verify Phone & Register</button>
-
-      <div class="social-btns">
-        <button>Sign Up with Google</button>
-        <button>Sign Up with Facebook</button>
-      </div>
-
-      <div class="toggle" onclick="toggleSections()">Already have an account? Login</div>
-    </div>
-
-    <!-- Login Section -->
-    <div id="login-section" class="hidden">
-      <h2>Skillbook Login</h2>
-      <input type="email" id="login-email" placeholder="Email" />
-      <input type="password" id="login-password" placeholder="Password" />
-      <label><input type="checkbox" onclick="toggleLoginPassword()"> Show Password</label>
-      <label><input type="checkbox" id="rememberMe"> Remember Me</label>
-      <button onclick="login()">Login</button>
-      <div class="toggle" onclick="toggleSections()">Don't have an account? Sign Up</div>
-    </div>
+  <!-- Splash Screen -->
+  <div id="splash">
+    <h1>Skillbook</h1>
+    <p>Connecting People through Skills</p>
   </div>
 
-  <!-- Firebase Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <!-- Main Mobile Auth UI -->
+  <div id="main">
+    <h2>Login / Sign Up with Mobile</h2>
+    <div id="recaptcha-container"></div>
+    <input
+      type="tel"
+      id="phoneNumber"
+      placeholder="+91xxxxxxxxxx"
+      pattern="^\+\d{10,15}$"
+      required
+      oninput="this.value = this.value.replace(/[^+\d]/g, '')"
+    />
+    <br />
+    <button onclick="sendVerificationCode()">Send OTP</button>
+    <br /><br />
+    <input type="text" id="verificationCode" placeholder="Enter OTP" />
+    <br />
+    <button onclick="verifyCode()">Verify & Continue</button>
+  </div>
+
   <script>
+    setTimeout(() => {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+    }, 3000);
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
       authDomain: "skillbook-3fa41.firebaseapp.com",
@@ -133,82 +125,62 @@
       measurementId: "G-3VKK01HXE6"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Recaptcha for Phone Auth
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-signup', {
-      'size': 'invisible'
+    // Auto-redirect if already logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "profile.html";
+      }
     });
 
-    function sendSignupOTP() {
-      const phone = document.getElementById("phone").value;
-      firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
+    // Setup invisible recaptcha
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      size: 'invisible',
+      callback: () => console.log("Recaptcha solved")
+    }, auth);
+
+    // Send OTP
+    window.sendVerificationCode = function () {
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const appVerifier = window.recaptchaVerifier;
+
+      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
         .then((confirmationResult) => {
           window.confirmationResult = confirmationResult;
-          alert("OTP sent to phone!");
+          alert("OTP sent to " + phoneNumber);
         })
         .catch((error) => {
-          alert(error.message);
+          alert("Error: " + error.message);
         });
-    }
+    };
 
-    function verifySignupOTP() {
-      const code = document.getElementById("otp").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
+    // Verify OTP
+    window.verifyCode = async function () {
+      const code = document.getElementById("verificationCode").value.trim();
+      try {
+        const result = await window.confirmationResult.confirm(code);
+        const user = result.user;
 
-      if (password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid: user.uid,
+            phone: user.phoneNumber,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        alert("Login successful!");
+        window.location.href = "profile.html";
+      } catch (error) {
+        alert("Verification failed: " + error.message);
       }
-
-      confirmationResult.confirm(code)
-        .then(() => {
-          firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {
-              alert("Sign up successful!");
-              window.location.href = "dashboard.html";
-            })
-            .catch((error) => {
-              alert("Email Error: " + error.message);
-            });
-        })
-        .catch((error) => {
-          alert("OTP Error: " + error.message);
-        });
-    }
-
-    function login() {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Login successful!");
-          window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-          alert("Login Error: " + error.message);
-        });
-    }
-
-    function toggleSections() {
-      document.getElementById("signup-section").classList.toggle("hidden");
-      document.getElementById("login-section").classList.toggle("hidden");
-    }
-
-    function togglePasswordVisibility() {
-      let p1 = document.getElementById("password");
-      let p2 = document.getElementById("confirmPassword");
-      p1.type = p1.type === "password" ? "text" : "password";
-      p2.type = p2.type === "password" ? "text" : "password";
-    }
-
-    function toggleLoginPassword() {
-      let p = document.getElementById("login-password");
-      p.type = p.type === "password" ? "text" : "password";
-    }
+    };
   </script>
 </body>
 </html>
