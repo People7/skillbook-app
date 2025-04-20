@@ -5,15 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Skillbook - Welcome</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body, html {
       height: 100%;
       font-family: 'Segoe UI', sans-serif;
     }
+
     #splash {
       position: fixed;
       width: 100%;
@@ -27,151 +25,140 @@
       z-index: 1000;
       animation: fadeOut 1s ease-out 1s forwards;
     }
+
     #splash h1 {
       font-size: 3rem;
       animation: slideIn 1s ease-out;
     }
+
     #splash p {
       font-size: 1.2rem;
       margin-top: 1rem;
       opacity: 0.8;
     }
+
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     @keyframes fadeOut {
       to { opacity: 0; visibility: hidden; }
     }
 
-    #main {
+    nav {
+      background-color: #065f46;
+      padding: 1rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+    }
+
+    #landing {
       display: none;
+      background: white;
+      color: black;
+      text-align: center;
       padding: 2rem 1rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #landing h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #landing p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .button-group a {
+      text-decoration: none;
+      background-color: green;
+      color: white;
+      font-weight: bold;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+      width: 220px;
       text-align: center;
     }
-    h2 {
-      margin-bottom: 1rem;
+
+    .button-group a:hover {
+      background-color: #d1fae5;
+      color: black;
     }
-    input {
-      margin: 0.5rem;
-      padding: 0.5rem;
-      width: 250px;
-      font-size: 1rem;
-    }
-    button {
-      padding: 0.6rem 1.2rem;
-      font-weight: bold;
-      background-color: #065f46;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #34d399;
+
+    @media(min-width: 600px) {
+      .button-group {
+        flex-direction: row;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Splash Screen -->
-  <div id="splash">
-    <h1>Skillbook</h1>
-    <p>Connecting People through Skills</p>
+
+<!-- Navigation -->
+<nav>
+  <ul>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="sign-up.html">Sign Up</a></li>
+    <li><a href="profile.html">Profile</a></li>
+    <li><a href="upcoming-bookings.html">Bookings</a></li>
+    <li><a href="subscription.html">Subscription</a></li>
+    <li><a href="chatlist.html">Chat Inbox</a></li>
+    <li><a href="setting-support-feedback.html">Settings</a></li>
+  </ul>
+</nav>
+
+<!-- Splash Screen -->
+<div id="splash">
+  <h1>Skillbook</h1>
+  <p>Connecting People through Skills</p>
+</div>
+
+<!-- Landing Page -->
+<div id="landing">
+  <h1>Welcome to Skillbook</h1>
+  <p>Share your skill and Earn</p>
+  <div class="button-group">
+    <a href="search-services.html">🔍 Search Services</a>
+    <a href="offer-services.html">🛠️ Offer Services</a>
   </div>
+</div>
 
-  <!-- Main Login Interface -->
-  <div id="main">
-    <h2>Login / Sign Up with Mobile</h2>
-    <div id="recaptcha-container"></div>
-    <input type="text" id="phoneNumber" placeholder="Enter phone number (with country code)">
-    <br>
-    <button onclick="sendVerificationCode()">Send OTP</button>
-    <br><br>
-    <input type="text" id="verificationCode" placeholder="Enter OTP">
-    <br>
-    <button onclick="verifyCode()">Verify & Continue</button>
-  </div>
+<!-- Script to Hide Splash -->
+<script>
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+  }, 3000);
+</script>
 
-  <script>
-    setTimeout(() => {
-      document.getElementById('splash').style.display = 'none';
-      document.getElementById('main').style.display = 'block';
-    }, 3000);
-  </script>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-      authDomain: "skillbook-3fa41.firebaseapp.com",
-      projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.appspot.com",
-      messagingSenderId: "599549421075",
-      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-      measurementId: "G-3VKK01HXE6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Auto redirect if already logged in
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        window.location.href = "profile.html";
-      }
-    });
-
-    // Setup Recaptcha
-    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-      'size': 'invisible',
-      'callback': () => console.log("Recaptcha solved")
-    }, auth);
-
-    // Send OTP
-    window.sendVerificationCode = function () {
-      const phoneNumber = document.getElementById("phoneNumber").value;
-      const appVerifier = window.recaptchaVerifier;
-
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert("OTP sent!");
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
-    };
-
-    // Verify OTP
-    window.verifyCode = async function () {
-      const code = document.getElementById("verificationCode").value;
-      try {
-        const result = await window.confirmationResult.confirm(code);
-        const user = result.user;
-
-        // Check if user exists in Firestore
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
-          await setDoc(userRef, {
-            uid: user.uid,
-            phone: user.phoneNumber,
-            createdAt: new Date().toISOString()
-          });
-        }
-
-        alert("Login successful!");
-        window.location.href = "profile.html";
-      } catch (error) {
-        alert("Verification failed: " + error.message);
-      }
-    };
-  </script>
 </body>
 </html>
