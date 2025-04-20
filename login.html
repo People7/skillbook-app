@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skillbook - Mobile Login</title>
+  <title>Skillbook - Login</title>
   <style>
     body {
       margin: 0;
@@ -51,21 +51,39 @@
       font-weight: bold;
     }
 
-    #logout-btn {
-      margin-top: 15px;
-      background-color: #e53e3e;
+    .toggle {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
+  <nav style="background-color:#2c5282; padding: 1rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
+    </ul>
+  </nav>
+
   <div class="container">
-    <h2>Login with Mobile</h2>
-    <input type="text" id="login-phone" placeholder="+1234567890" oninput="this.value=this.value.replace(/[^0-9+]/g,'')" />
-    <div id="recaptcha-login"></div>
-    <button onclick="sendLoginOTP()">Send OTP</button>
-    <input type="text" id="login-otp" placeholder="Enter OTP" />
-    <button onclick="verifyLoginOTP()">Verify & Continue</button>
-    <button id="logout-btn" onclick="logout()">Logout</button>
+    <!-- Phone OTP Section -->
+    <div id="phone-login">
+      <h2>Phone Login</h2>
+      <input type="text" id="login-phone" placeholder="+1234567890" />
+      <div id="recaptcha-login"></div>
+      <button onclick="sendLoginOTP()">Send OTP</button>
+      <input type="text" id="login-otp" placeholder="Enter OTP" />
+      <button onclick="verifyLoginOTP()">Verify OTP & Login</button>
+    </div>
+
+    <div class="toggle" onclick="window.location.href='sign-up.html'">Don't have an account? Sign Up</div>
   </div>
 
   <!-- Firebase -->
@@ -89,7 +107,6 @@
       'size': 'invisible'
     });
 
-    // Send OTP
     function sendLoginOTP() {
       const phone = document.getElementById("login-phone").value;
 
@@ -103,28 +120,17 @@
         });
     }
 
-    // Verify OTP
     function verifyLoginOTP() {
       const code = document.getElementById("login-otp").value;
 
       window.loginConfirmation.confirm(code)
         .then(() => {
-          alert("Login successful!");
-          window.location.href = "profile.html"; // Redirect to profile
+          alert("Phone login successful!");
+          window.location.href = "dashboard.html"; // Redirect to dashboard page
         })
         .catch((error) => {
           alert("OTP Error: " + error.message);
         });
-    }
-
-    // Logout
-    function logout() {
-      firebase.auth().signOut().then(() => {
-        alert("Logged out!");
-        location.reload();
-      }).catch((error) => {
-        alert("Logout Error: " + error.message);
-      });
     }
   </script>
 </body>
