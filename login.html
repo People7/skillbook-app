@@ -1,45 +1,218 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Skillbook - Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #2b6cb0, #63b3ed);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #ffffff22;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00000040;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+    }
+
+    input {
+      background: #ffffffcc;
+      color: #000;
+    }
+
+    button {
+      background: #2b6cb0;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .social-btns button {
+      background: #4a5568;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    label {
+      font-size: 13px;
+      display: block;
+      margin-top: -5px;
+      margin-bottom: 5px;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Login</h2>
-  <input type="email" id="login-email" placeholder="Email"><br><br>
-  <input type="password" id="login-password" placeholder="Password"><br><br>
-  <button onclick="login()">Login</button>
+  <nav style="background-color:#2c5282; padding: 1rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
+    </ul>
+  </nav>
 
-  <p>New user? <a href="sign-up.html">Sign up here</a></p>
+  <div class="container">
+    <!-- Email Login Section -->
+    <div id="email-login">
+      <h2>Email Login</h2>
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <label><input type="checkbox" onclick="toggleLoginPassword()"> Show Password</label>
+      <button onclick="login()">Login</button>
+    </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    <!-- Phone OTP Section -->
+    <div id="phone-login" class="hidden">
+      <h2>Phone Login</h2>
+      <input type="text" id="login-phone" placeholder="+1234567890" />
+      <div id="recaptcha-login"></div>
+      <button onclick="sendLoginOTP()">Send OTP</button>
+      <input type="text" id="login-otp" placeholder="Enter OTP" />
+      <button onclick="verifyLoginOTP()">Verify OTP & Login</button>
+    </div>
 
+    <!-- Social Buttons -->
+    <div class="social-btns">
+      <button onclick="googleLogin()">Sign In with Google</button>
+      <button onclick="facebookLogin()">Sign In with Facebook</button>
+    </div>
+
+    <div class="toggle" onclick="toggleLoginMethods()">Use Phone Instead</div>
+    <div class="toggle" onclick="window.location.href='sign-up.html'">Don't have an account? Sign Up</div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
       authDomain: "skillbook-3fa41.firebaseapp.com",
       projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.firebasestorage.app",
+      storageBucket: "skillbook-3fa41.appspot.com",
       messagingSenderId: "599549421075",
       appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
       measurementId: "G-3VKK01HXE6"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
 
-    window.login = function () {
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
+    // Recaptcha
+    window.recaptchaVerifierLogin = new firebase.auth.RecaptchaVerifier('recaptcha-login', {
+      'size': 'invisible'
+    });
 
-      signInWithEmailAndPassword(auth, email, password)
+    function toggleLoginPassword() {
+      let p = document.getElementById("login-password");
+      p.type = p.type === "password" ? "text" : "password";
+    }
+
+    function toggleLoginMethods() {
+      const emailLogin = document.getElementById("email-login");
+      const phoneLogin = document.getElementById("phone-login");
+      emailLogin.classList.toggle("hidden");
+      phoneLogin.classList.toggle("hidden");
+      document.querySelector(".toggle").innerText =
+        emailLogin.classList.contains("hidden") ? "Use Email Instead" : "Use Phone Instead";
+    }
+
+    function login() {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
-          alert('Login successful!');
-          window.location.href = 'dashboard.html';
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
         })
         .catch((error) => {
-          alert("Error: " + error.message);
+          alert("Login Error: " + error.message);
+        });
+    }
+
+    function sendLoginOTP() {
+      const phone = document.getElementById("login-phone").value;
+
+      firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifierLogin)
+        .then((confirmationResult) => {
+          window.loginConfirmation = confirmationResult;
+          alert("OTP sent to phone!");
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
+
+    function verifyLoginOTP() {
+      const code = document.getElementById("login-otp").value;
+
+      window.loginConfirmation.confirm(code)
+        .then(() => {
+          alert("Phone login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("OTP Error: " + error.message);
+        });
+    }
+
+    // Google Login
+    function googleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then(() => {
+          alert("Google login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("Google Login Error: " + error.message);
+        });
+    }
+
+    // Facebook Login
+    function facebookLogin() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then(() => {
+          alert("Facebook login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("Facebook Login Error: " + error.message);
         });
     }
   </script>
