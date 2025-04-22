@@ -123,30 +123,55 @@
     </div>
   </div>
 
-  <script>
-    function submitFeedback() {
-      const feedback = document.getElementById('feedback-text').value;
-      if (feedback.trim()) {
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCIYjxuPoI_oYLDCP3uubQecm4EdF_wjJo",
+      authDomain: "skillbook-fd29a.firebaseapp.com",
+      projectId: "skillbook-fd29a",
+      storageBucket: "skillbook-fd29a.appspot.com",
+      messagingSenderId: "1015166367097",
+      appId: "1:1015166367097:web:2ddf8c7cde95ff22c465c6"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Submit feedback to Firestore
+    window.submitFeedback = async function () {
+      const feedbackText = document.getElementById('feedback-text').value.trim();
+      if (!feedbackText) {
+        alert("Please write something before submitting.");
+        return;
+      }
+
+      try {
+        const user = auth.currentUser;
+        await addDoc(collection(db, "feedback"), {
+          feedback: feedbackText,
+          uid: user ? user.uid : null,
+          timestamp: serverTimestamp()
+        });
         alert("Thanks for your feedback!");
         document.getElementById('feedback-text').value = "";
-      } else {
-        alert("Please write something before submitting.");
+      } catch (error) {
+        console.error("Error submitting feedback:", error);
+        alert("An error occurred while submitting your feedback.");
       }
-    }
+    };
 
-    function logout() {
-      alert("You have been logged out.");
-      // Redirect to login page or clear session (depending on your backend)
-    }
-
-    function deleteAccount() {
-      const confirmDelete = confirm("Are you sure you want to delete your account? This action is irreversible.");
-      if (confirmDelete) {
-        alert("Your account has been deleted.");
-        // Trigger delete account logic from backend here
-      }
-    }
-  </script>
-
-</body>
-</html>
+    // Log out the current user
+    window.logout = async function () {
+      try {
+        await signOut(auth);
+        alert("You have been logged out.");
+        // Redirect to login page if necessary
+        // window.location28
