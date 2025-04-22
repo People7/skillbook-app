@@ -78,5 +78,27 @@
     <p>If you have any questions about this policy, contact us at <a href="mailto:support@skillbook.com">support@skillbook.com</a>.</p>
   </div>
 
+<!-- Firebase SDK v9+ -->
+<script type="module">
+  // Import Firebase libraries
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+  import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js';
+
+  // Firebase config (your actual Firebase config)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+    authDomain: "skillbook-3fa41.firebaseapp.com",
+    projectId: "skillbook-3fa41",
+    storageBucket: "skillbook-3fa41.appspot.com",
+    messagingSenderId: "599549421075",
+    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+    measurementId: "G-3VKK01HXE6"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 </body>
 </html>
