@@ -63,33 +63,44 @@
     button:hover {
       background-color: #34d399;
     }
+    .toggle {
+      margin-top: 1rem;
+      cursor: pointer;
+      color: #065f46;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <!-- Splash Screen -->
   <div id="splash">
     <h1>Skillbook</h1>
     <p>Connecting People through Skills</p>
   </div>
 
-  <!-- Main Mobile Auth UI -->
   <div id="main">
-    <h2>Login / Sign Up with Mobile</h2>
+    <h2 id="authTitle">Login / Sign Up with Mobile</h2>
+
     <div id="recaptcha-container"></div>
-    <input
-      type="tel"
-      id="phoneNumber"
-      placeholder="+91xxxxxxxxxx"
-      pattern="^\+\d{10,15}$"
-      required
-      oninput="this.value = this.value.replace(/[^+\d]/g, '')"
-    />
-    <br />
-    <button onclick="sendVerificationCode()">Send OTP</button>
-    <br /><br />
-    <input type="text" id="verificationCode" placeholder="Enter OTP" />
-    <br />
-    <button onclick="verifyCode()">Verify & Continue</button>
+
+    <div id="phone-auth">
+      <input type="tel" id="phoneNumber" placeholder="+91xxxxxxxxxx" pattern="^\+\d{10,15}$" required oninput="this.value = this.value.replace(/[^+\d]/g, '')" />
+      <br />
+      <button onclick="sendVerificationCode()">Send OTP</button>
+      <br /><br />
+      <input type="text" id="verificationCode" placeholder="Enter OTP" />
+      <br />
+      <button onclick="verifyCode()">Verify & Continue</button>
+    </div>
+
+    <div id="email-auth" style="display: none;">
+      <input type="email" id="email" placeholder="Email" required />
+      <br />
+      <input type="password" id="password" placeholder="Password" required />
+      <br />
+      <button onclick="emailLogin()">Login / Sign Up</button>
+    </div>
+
+    <div class="toggle" onclick="toggleAuth()">Switch to Email Login</div>
   </div>
 
   <script>
@@ -97,6 +108,16 @@
       document.getElementById('splash').style.display = 'none';
       document.getElementById('main').style.display = 'block';
     }, 3000);
+
+    let usingPhone = true;
+
+    function toggleAuth() {
+      usingPhone = !usingPhone;
+      document.getElementById('phone-auth').style.display = usingPhone ? 'block' : 'none';
+      document.getElementById('email-auth').style.display = usingPhone ? 'none' : 'block';
+      document.getElementById('authTitle').innerText = usingPhone ? 'Login / Sign Up with Mobile' : 'Login / Sign Up with Email';
+      document.querySelector('.toggle').innerText = usingPhone ? 'Switch to Email Login' : 'Switch to Mobile Login';
+    }
   </script>
 
   <script type="module">
@@ -106,6 +127,8 @@
       getAuth,
       RecaptchaVerifier,
       signInWithPhoneNumber,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
     import {
@@ -130,14 +153,14 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Auto-redirect if already logged in
+    // Auto-redirect if logged in
     onAuthStateChanged(auth, (user) => {
       if (user) {
         window.location.href = "profile.html";
       }
     });
 
-    // Setup invisible recaptcha
+    // reCAPTCHA for phone
     window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
       callback: () => console.log("Recaptcha solved")
@@ -179,6 +202,37 @@
         window.location.href = "profile.html";
       } catch (error) {
         alert("Verification failed: " + error.message);
+      }
+    };
+
+    // Email login/signup
+    window.emailLogin = async function () {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        let result;
+        try {
+          result = await signInWithEmailAndPassword(auth, email, password);
+        } catch (e) {
+          result = await createUserWithEmailAndPassword(auth, email, password);
+        }
+
+        const user = result.user;
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid: user.uid,
+            email: user.email,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        alert("Login successful!");
+        window.location.href = "profile.html";
+      } catch (error) {
+        alert("Error: " + error.message);
       }
     };
   </script>
