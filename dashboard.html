@@ -99,22 +99,21 @@
   </style>
 </head>
 <body>
-<nav style="background-color:#065f46; padding: 2rem;">
-  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
-    <li><a href="chatlist.html" style="color: white; text-decoration: none;">Chat Index</a></li>
-    <li><a href="messages.html" style="color: white; text-decoration: none;">Messages</a></li>
-    <li><a href="subscription.html" style="color: white; text-decoration: none;">Subscription</a></li>
-    <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
-  </ul>
-</nav>
+  <nav style="background-color:#065f46; padding: 2rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
+      <li><a href="chatlist.html" style="color: white; text-decoration: none;">Chat Index</a></li>
+      <li><a href="messages.html" style="color: white; text-decoration: none;">Messages</a></li>
+      <li><a href="subscription.html" style="color: white; text-decoration: none;">Subscription</a></li>
+      <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
+    </ul>
+  </nav>
 
   <div class="header">Welcome, User!</div>
   <div class="date">Thursday, 10 April 2025 08:52 PM</div>
 
   <div class="container">
-
     <div class="quick-links">
       <div>
         <strong>Bookings</strong><br>
@@ -151,6 +150,51 @@
 
   </div>
 
+  <!-- Firebase setup and usage -->
+  <script type="module">
+    // Import Firebase SDK and services
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.appspot.com",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-XXXXXXXXXX" // Replace with actual measurementId
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Example usage: Listen for user authentication state changes
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("User logged in:", user.email);
+      } else {
+        console.log("No user logged in");
+      }
+    });
+
+    // Example usage: Fetching data from Firestore (e.g., user profile)
+    async function getUserProfile() {
+      const docRef = doc(db, "users", "userId"); // Replace "userId" with actual document ID
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("User profile:", docSnap.data());
+      } else {
+        console.log("No such document!");
+      }
+    }
+
+    // Call the function
+    getUserProfile();
+  </script>
 </body>
 </html>
