@@ -83,45 +83,17 @@
   </style>
 </head>
 <body>
-<nav style="background-color:#065f46; padding: 1rem;">
-  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
-  </ul>
-</nav>
+  <nav style="background-color:#065f46; padding: 1rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
+    </ul>
+  </nav>
 
   <h1>Notifications</h1>
 
   <div class="notification-list" id="notificationList">
-    <div class="notification-item">
-      <h3>New Booking Request</h3>
-      <p>Ravi Sharma requested a Personal Trainer on April 12 at 7:00 AM.</p>
-      <div class="timestamp">2 hrs ago</div>
-      <div class="action-buttons">
-        <button class="btn read" onclick="markRead(event)">Mark as Read</button>
-        <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
-      </div>
-    </div>
-
-    <div class="notification-item">
-      <h3>New Message</h3>
-      <p>You have a new message from Meera Patel.</p>
-      <div class="timestamp">4 hrs ago</div>
-      <div class="action-buttons">
-        <button class="btn read" onclick="markRead(event)">Mark as Read</button>
-        <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
-      </div>
-    </div>
-
-    <div class="notification-item">
-      <h3>Service Rated</h3>
-      <p>Your service "Yoga Trainer" was rated 5 stars by Ankit Joshi.</p>
-      <div class="timestamp">Yesterday</div>
-      <div class="action-buttons">
-        <button class="btn read" onclick="markRead(event)">Mark as Read</button>
-        <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
-      </div>
-    </div>
+    <p>Loading notifications...</p>
   </div>
 
   <script>
@@ -138,5 +110,54 @@
     }
   </script>
 
+  <script type="module">
+    // Firebase Modular SDK v9+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC8VvIbEeqikKZlKNfZ1g7Im7HRRGdgmQQ",
+      authDomain: "skillbook-21e10.firebaseapp.com",
+      projectId: "skillbook-21e10",
+      storageBucket: "skillbook-21e10.appspot.com",
+      messagingSenderId: "658458131920",
+      appId: "1:658458131920:web:59c94c246acfb8474b77e0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function fetchNotifications() {
+      const list = document.getElementById("notificationList");
+      list.innerHTML = ""; // clear placeholder
+      try {
+        const querySnapshot = await getDocs(collection(db, "notifications"));
+        if (querySnapshot.empty) {
+          list.innerHTML = "<p>No notifications found.</p>";
+          return;
+        }
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "notification-item";
+          div.innerHTML = `
+            <h3>${data.title || 'Untitled Notification'}</h3>
+            <p>${data.message || ''}</p>
+            <div class="timestamp">${data.timestamp || 'Just now'}</div>
+            <div class="action-buttons">
+              <button class="btn read" onclick="markRead(event)">Mark as Read</button>
+              <button class="btn delete" onclick="deleteNotif(event)">Delete</button>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+        list.innerHTML = "<p>Error loading notifications.</p>";
+      }
+    }
+
+    fetchNotifications();
+  </script>
 </body>
 </html>
