@@ -183,8 +183,54 @@
     </div>
   </div>
 
-  <!-- JavaScript -->
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
   <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.appspot.com",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-3VKK01HXE6"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(app);
+
+    // Function to save availability
+    function saveAvailability() {
+      const day = document.getElementById('day').value;
+      const time = document.getElementById('time').value;
+      const duration = document.getElementById('duration').value;
+
+      if (day && time && duration) {
+        db.collection('availabilities').add({
+          day: day,
+          time: time,
+          duration: duration,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          alert(`Availability saved:\nDay: ${day}\nTime: ${time}\nDuration: ${duration} mins`);
+          document.getElementById('day').value = '';
+          document.getElementById('time').value = '';
+          document.getElementById('duration').value = '';
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+          alert("Error saving availability.");
+        });
+      } else {
+        alert("Please fill all fields before saving.");
+      }
+    }
+
+    // Function to toggle sections
     function showSection(event) {
       const targetId = event.currentTarget.getAttribute('data-target');
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -192,21 +238,6 @@
 
       document.getElementById(targetId).classList.add('active');
       event.currentTarget.classList.add('active');
-    }
-
-    function saveAvailability() {
-      const day = document.getElementById('day').value;
-      const time = document.getElementById('time').value;
-      const duration = document.getElementById('duration').value;
-
-      if (day && time && duration) {
-        alert(`Availability saved:\nDay: ${day}\nTime: ${time}\nDuration: ${duration} mins`);
-        document.getElementById('day').value = '';
-        document.getElementById('time').value = '';
-        document.getElementById('duration').value = '';
-      } else {
-        alert("Please fill all fields before saving.");
-      }
     }
   </script>
 
