@@ -99,7 +99,7 @@
 
   <h1>Offer Your Services</h1>
 
-  <form>
+  <form id="serviceForm">
     <div class="form-group">
       <label for="title">Service Title</label>
       <input type="text" id="title" placeholder="e.g. Personal Fitness Trainer" />
@@ -184,11 +184,6 @@
     </div>
 
     <div class="form-group">
-      <label for="phoneNumber">Phone Number</label>
-      <input type="tel" id="phoneNumber" placeholder="e.g. +911234567890" />
-    </div>
-
-    <div class="form-group">
       <label for="whatsappNumber">WhatsApp Number</label>
       <input type="tel" id="whatsappNumber" placeholder="e.g. +911234567890" />
     </div>
@@ -223,41 +218,35 @@
   </form>
 
   <script>
-    function makePhoneCall() {
-      const phone = document.getElementById('phoneNumber').value;
-      if (phone) {
-        window.open(`tel:${phone}`, '_self');
-      } else {
-        alert('Please enter a phone number.');
-      }
-    }
-
-    function openWhatsApp() {
-      const whatsapp = document.getElementById('whatsappNumber').value;
-      if (whatsapp) {
-        const msg = encodeURIComponent("Hello! I saw your service on Skillbook.");
-        window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
-      } else {
-        alert('Please enter a WhatsApp number.');
-      }
-    }
-
     function limitDocuments() {
-      const files = document.getElementById('documents').files;
+      let files = document.getElementById('documents').files;
       if (files.length > 10) {
-        alert('You can only upload a maximum of 10 documents.');
-        document.getElementById('documents').value = "";
+        alert('You can only upload a maximum of 10 files');
+        document.getElementById('documents').value = '';
       }
     }
 
     function limitVideo() {
-      const video = document.getElementById('video').files;
-      if (video.length > 1) {
-        alert('You can only upload one video.');
-        document.getElementById('video').value = "";
+      let videoFile = document.getElementById('video').files[0];
+      if (videoFile && videoFile.size > 10 * 1024 * 1024) {
+        alert('Video file size must be less than 10MB');
+        document.getElementById('video').value = '';
       }
     }
-  </script>
 
+    function makePhoneCall() {
+      window.location.href = "tel:+911234567890";
+    }
+
+    function openWhatsApp() {
+      let phoneNumber = document.getElementById('whatsappNumber').value || '+911234567890';
+      window.location.href = `https://wa.me/${phoneNumber}`;
+    }
+
+    document.getElementById('serviceForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert('Service posted successfully!');
+    });
+  </script>
 </body>
 </html>
