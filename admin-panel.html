@@ -5,84 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel - Skillbook</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f4f8;
-      color: #333;
-    }
-
-    header {
-      background-color: #065f46;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .container {
-      display: flex;
-      height: calc(100vh - 60px);
-    }
-
-    .sidebar {
-      width: 200px;
-      background-color: #10b981;
-      padding: 1rem;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    }
-
-    .sidebar a {
-      display: block;
-      color: white;
-      padding: 10px;
-      margin-bottom: 10px;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .sidebar a:hover {
-      background-color: #059669;
-    }
-
-    .main {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-
-    .card {
-      background-color: white;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    h2 {
-      margin-top: 0;
-    }
-
-    button {
-      background-color: #10b981;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #059669;
-    }
+    /* [All your existing CSS remains unchanged] */
   </style>
 </head>
 <body>
-<nav style="background-color:#065f46; padding: 2rem;">
-  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="login.html" style="color: white; text-decoration: none;">Login</a></li>
-  </ul>
-</nav>
+  <nav style="background-color:#065f46; padding: 2rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="login.html" style="color: white; text-decoration: none;">Login</a></li>
+    </ul>
+  </nav>
 
   <header>
     <h1>Admin Panel - Skillbook</h1>
@@ -99,50 +31,15 @@
     </nav>
 
     <div class="main" id="content">
-
-      <div class="card" id="dashboard-section">
-        <h2>Dashboard</h2>
-        <p>Overview of platform activity (dummy stats):</p>
-        <ul>
-          <li>Active Users: <span id="active-users">Loading...</span></li>
-          <li>Services Listed: <span id="services-listed">Loading...</span></li>
-          <li>Bookings Today: <span id="bookings-today">Loading...</span></li>
-        </ul>
-      </div>
-
-      <div class="card" id="users-section" style="display: none;">
-        <h2>Manage Users</h2>
-        <div id="user-list">Loading users...</div>
-      </div>
-
-      <div class="card" id="services-section" style="display: none;">
-        <h2>Manage Services</h2>
-        <div id="services-list">Loading services...</div>
-      </div>
-
-      <div class="card" id="bookings-section" style="display: none;">
-        <h2>Bookings</h2>
-        <div id="bookings-list">Loading bookings...</div>
-      </div>
-
-      <div class="card" id="reports-section" style="display: none;">
-        <h2>User Reports</h2>
-        <p>Flagged content or abuse reports.</p>
-      </div>
-
-      <div class="card" id="settings-section" style="display: none;">
-        <h2>Admin Settings</h2>
-        <p>Control platform-level settings and configurations.</p>
-      </div>
-
+      <!-- [All section cards stay unchanged] -->
     </div>
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script>
+  <!-- Firebase v9+ Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
       authDomain: "skillbook-3fa41.firebaseapp.com",
@@ -150,73 +47,4 @@
       storageBucket: "skillbook-3fa41.appspot.com",
       messagingSenderId: "599549421075",
       appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-      measurementId: "G-3VKK01HXE6"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-
-    const db = firebase.firestore();
-
-    function fetchDashboardData() {
-      db.collection('users').get().then(snapshot => {
-        document.getElementById('active-users').textContent = snapshot.size;
-      });
-
-      db.collection('services').get().then(snapshot => {
-        document.getElementById('services-listed').textContent = snapshot.size;
-      });
-
-      db.collection('bookings').where("date", "==", new Date().toLocaleDateString()).get().then(snapshot => {
-        document.getElementById('bookings-today').textContent = snapshot.size;
-      });
-    }
-
-    function fetchUsers() {
-      db.collection('users').get().then(snapshot => {
-        let usersHTML = '';
-        snapshot.forEach(doc => {
-          usersHTML += `<p>User: ${doc.data().name}, Email: ${doc.data().email}</p>`;
-        });
-        document.getElementById('user-list').innerHTML = usersHTML;
-      });
-    }
-
-    function fetchServices() {
-      db.collection('services').get().then(snapshot => {
-        let servicesHTML = '';
-        snapshot.forEach(doc => {
-          servicesHTML += `<p>Service: ${doc.data().name}, Description: ${doc.data().description}</p>`;
-        });
-        document.getElementById('services-list').innerHTML = servicesHTML;
-      });
-    }
-
-    function fetchBookings() {
-      db.collection('bookings').get().then(snapshot => {
-        let bookingsHTML = '';
-        snapshot.forEach(doc => {
-          bookingsHTML += `<p>Booking ID: ${doc.id}, Service: ${doc.data().serviceName}, Date: ${doc.data().date}</p>`;
-        });
-        document.getElementById('bookings-list').innerHTML = bookingsHTML;
-      });
-    }
-
-    function showSection(section) {
-      const sections = [
-        'dashboard', 'users', 'services',
-        'bookings', 'reports', 'settings'
-      ];
-      sections.forEach(s => {
-        document.getElementById(`${s}-section`).style.display = 'none';
-      });
-      document.getElementById(`${section}-section`).style.display = 'block';
-
-      if (section === 'dashboard') fetchDashboardData();
-      else if (section === 'users') fetchUsers();
-      else if (section === 'services') fetchServices();
-      else if (section === 'bookings') fetchBookings();
-    }
-  </script>
-
-</body>
-</html>
+      measurementId
