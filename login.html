@@ -15,6 +15,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      flex-direction: column;
     }
 
     .container {
@@ -51,12 +52,13 @@
       font-weight: bold;
     }
 
-    .toggle {
+    .toggle, .forgot {
       text-align: center;
       margin-top: 10px;
       cursor: pointer;
       font-size: 14px;
       text-decoration: underline;
+      color: #fff;
     }
 
     .hidden {
@@ -83,13 +85,30 @@
       <button onclick="verifyLoginOTP()">Verify OTP & Login</button>
     </div>
 
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #fff;" />
+
+    <!-- Email Login Section -->
+    <div id="email-login">
+      <h2>Email Login</h2>
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="emailLogin()">Login with Email</button>
+      <div class="forgot" onclick="forgotPassword()">Forgot Password?</div>
+    </div>
+
     <div class="toggle" onclick="window.location.href='sign-up.html'">Don't have an account? Sign Up</div>
   </div>
 
   <!-- Firebase v9+ -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { 
+      getAuth, 
+      RecaptchaVerifier, 
+      signInWithPhoneNumber, 
+      signInWithEmailAndPassword, 
+      sendPasswordResetEmail 
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
@@ -103,17 +122,15 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
     let confirmationResult;
 
-    // Initialize Recaptcha
+    // reCAPTCHA for phone login
     window.recaptchaVerifierLogin = new RecaptchaVerifier('recaptcha-login', {
       size: 'invisible',
-      callback: (response) => {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-      }
+      callback: () => {}
     }, auth);
 
+    // Send OTP
     window.sendLoginOTP = async () => {
       const phone = document.getElementById("login-phone").value;
       try {
@@ -125,6 +142,7 @@
       }
     };
 
+    // Verify OTP
     window.verifyLoginOTP = async () => {
       const code = document.getElementById("login-otp").value;
       try {
@@ -133,6 +151,34 @@
         window.location.href = "dashboard.html";
       } catch (error) {
         alert("OTP Error: " + error.message);
+      }
+    };
+
+    // Email Login
+    window.emailLogin = async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Email login successful!");
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        alert("Email Login Error: " + error.message);
+      }
+    };
+
+    // Forgot Password
+    window.forgotPassword = async () => {
+      const email = document.getElementById("email").value;
+      if (!email) {
+        alert("Please enter your email first.");
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Password reset email sent!");
+      } catch (error) {
+        alert("Error: " + error.message);
       }
     };
   </script>
