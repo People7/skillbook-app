@@ -159,119 +159,68 @@
   <div class="category-container">
     <h3>Select a Category</h3>
     <div class="category-list">
-      <button onclick="filterByCategory('All')">All</button>
-      <button onclick="filterByCategory('Fitness')">Fitness</button>
-      <button onclick="filterByCategory('Yoga')">Yoga</button>
-      <button onclick="filterByCategory('Electrician')">Electrician</button>
-      <button onclick="filterByCategory('Plumber')">Plumber</button>
-      <button onclick="filterByCategory('Mechanic')">Mechanic</button>
-      <button onclick="filterByCategory('Chef')">Chef</button>
+      <button onclick="filterByCategory('Personal')">Personal</button>
+      <button onclick="filterByCategory('Social')">Social</button>
+      <button onclick="filterByCategory('Environmental')">Environmental</button>
+      <button onclick="filterByCategory('Household')">Household</button>
+      <button onclick="filterByCategory('Business')">Business</button>
+      <button onclick="filterByCategory('Health')">Health</button>
+      <button onclick="filterByCategory('Entertainment')">Entertainment</button>
+      <button onclick="filterByCategory('Repair and Maintenance')">Repair and Maintenance</button>
+      <button onclick="filterByCategory('Innovation')">Innovation</button>
+      <button onclick="filterByCategory('Consultancy')">Consultancy</button>
+      <button onclick="filterByCategory('Engineering')">Engineering</button>
+      <button onclick="filterByCategory('Educational')">Educational</button>
+      <button onclick="filterByCategory('Political')">Political</button>
+      <button onclick="filterByCategory('Safety and Security')">Safety and Security</button>
+      <button onclick="filterByCategory('Helping')">Helping</button>
+      <button onclick="filterByCategory('Legal')">Legal</button>
+      <button onclick="filterByCategory('Financial')">Financial</button>
+      <button onclick="filterByCategory('Creative Arts')">Creative Arts</button>
+      <button onclick="filterByCategory('Media')">Media</button>
+      <button onclick="filterByCategory('Transportation')">Transportation</button>
+      <button onclick="filterByCategory('Hospitality')">Hospitality</button>
+      <button onclick="filterByCategory('Technical Support')">Technical Support</button>
+      <button onclick="filterByCategory('Fitness and Sports')">Fitness and Sports</button>
+      <button onclick="filterByCategory('Marketing and Sales')">Marketing and Sales</button>
+      <button onclick="filterByCategory('Event Management')">Event Management</button>
+      <button onclick="filterByCategory('Agricultural')">Agricultural</button>
+      <button onclick="filterByCategory('Writing & Editing')">Writing & Editing</button>
+      <button onclick="filterByCategory('Real Estate')">Real Estate</button>
+      <button onclick="filterByCategory('Technology')">Technology</button>
+      <button onclick="filterByCategory('Travel & Tourism')">Travel & Tourism</button>
+      <button onclick="filterByCategory('Human Resources')">Human Resources</button>
+      <button onclick="filterByCategory('Fashion & Beauty')">Fashion & Beauty</button>
+      <button onclick="filterByCategory('Art & Design')">Art & Design</button>
+      <button onclick="filterByCategory('Photography')">Photography</button>
+      <button onclick="filterByCategory('Training & Coaching')">Training & Coaching</button>
+      <button onclick="filterByCategory('Translation Services')">Translation Services</button>
+      <button onclick="filterByCategory('Data Entry')">Data Entry</button>
+      <button onclick="filterByCategory('Research & Analysis')">Research & Analysis</button>
+      <button onclick="filterByCategory('Logistics')">Logistics</button>
+      <button onclick="filterByCategory('Other')">Other</button>
     </div>
   </div>
   
-  <div class="category-container">
-    <h3>Your Location</h3>
-    <div class="category-list">
-      <button onclick="filterByCategory('Area')">Area</button>
-      <button onclick="filterByCategory('City')">City</button>
-      <button onclick="filterByCategory('State')">State</button>
-    </div>
-  </div>
-
   <div class="service-list" id="serviceList">
     <!-- Example Service -->
-    <div class="service-card" data-category="Fitness">
+    <div class="service-card" data-category="Household">
+      <h3>Plumbing Service</h3>
+      <p>Professional plumbing services for residential and commercial needs.</p>
+      <p class="price">$40/service</p>
+      <p><strong>Duration:</strong> 1 hour</p>
+      <div class="btn-group">
+        <button class="btn book" onclick="bookService('Plumbing Service')">Book Now</button>
+        <button class="btn whatsapp" onclick="contactWhatsApp('1234567890')">WhatsApp</button>
+        <button class="btn call" onclick="contactCall('1234567890')">Call</button>
+        <button class="btn email" onclick="contactEmail('plumber@example.com')">Email</button>
+      </div>
+    </div>
+
+    <div class="service-card" data-category="Fitness and Sports">
       <h3>Personal Fitness Trainer</h3>
       <p>Customized workout sessions with tracking.</p>
       <p class="price">$50/session</p>
       <p><strong>Duration:</strong> 1 hour</p>
       <div class="btn-group">
-        <button class="btn book" onclick="bookService('Personal Fitness Trainer')">Book Now</button>
-        <button class="btn whatsapp" onclick="contactWhatsApp('1234567890')">WhatsApp</button>
-        <button class="btn call" onclick="contactCall('1234567890')">Call</button>
-        <button class="btn email" onclick="contactEmail('trainer@example.com')">Email</button>
-      </div>
-    </div>
-
-    <div class="service-card" data-category="Yoga">
-      <h3>Yoga & Meditation</h3>
-      <p>Relax through guided sessions.</p>
-      <p class="price">$30/session</p>
-      <p><strong>Duration:</strong> 45 mins</p>
-      <div class="btn-group">
-        <button class="btn book" onclick="bookService('Yoga & Meditation')">Book Now</button>
-        <button class="btn whatsapp" onclick="contactWhatsApp('9876543210')">WhatsApp</button>
-        <button class="btn call" onclick="contactCall('9876543210')">Call</button>
-        <button class="btn email" onclick="contactEmail('yoga@example.com')">Email</button>
-      </div>
-    </div>
-
-    <!-- Add more service cards with different categories -->
-  </div>
-
-  <!-- Firebase JS SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-      authDomain: "skillbook-3fa41.firebaseapp.com",
-      projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.appspot.com",
-      messagingSenderId: "599549421075",
-      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-      measurementId: "G-3VKK01HXE6"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Function to add service to Firebase
-    async function addService(serviceName, price) {
-      try {
-        const docRef = await addDoc(collection(db, "services"), {
-          name: serviceName,
-          price: price,
-          createdAt: serverTimestamp()
-        });
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    }
-  </script>
-
-  <script>
-    function filterServices() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.service-card');
-      cards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = title.includes(input) ? 'block' : 'none';
-      });
-    }
-
-    function filterByCategory(category) {
-      const cards = document.querySelectorAll('.service-card');
-      cards.forEach(card => {
-        const cat = card.getAttribute('data-category');
-        card.style.display = (category === 'All' || cat === category) ? 'block' : 'none';
-      });
-    }
-
-    function bookService(serviceName) {
-      alert(`Booking request submitted for: ${serviceName}`);
-    }
-
-    function contactWhatsApp(number) {
-      window.open(`https://wa.me/${number}`, '_blank');
-    }
-
-    function contactCall(number) {
-      window.location.href = `tel:${number}`;
-    }
-
-    function contactEmail(email) {
-      window.location
+        <button class="btn book" onclick="bookService('Personal Fitness Trainer')">
