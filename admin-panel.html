@@ -104,27 +104,25 @@
         <h2>Dashboard</h2>
         <p>Overview of platform activity (dummy stats):</p>
         <ul>
-          <li>Active Users: 123</li>
-          <li>Services Listed: 57</li>
-          <li>Bookings Today: 9</li>
+          <li>Active Users: <span id="active-users">Loading...</span></li>
+          <li>Services Listed: <span id="services-listed">Loading...</span></li>
+          <li>Bookings Today: <span id="bookings-today">Loading...</span></li>
         </ul>
       </div>
 
       <div class="card" id="users-section" style="display: none;">
         <h2>Manage Users</h2>
-        <p>List of users, ban/suspend or view profile...</p>
-        <button onclick="alert('Suspend user logic')">Suspend User</button>
+        <div id="user-list">Loading users...</div>
       </div>
 
       <div class="card" id="services-section" style="display: none;">
         <h2>Manage Services</h2>
-        <p>Approve, reject or edit services posted by users.</p>
-        <button onclick="alert('Approve service logic')">Approve Service</button>
+        <div id="services-list">Loading services...</div>
       </div>
 
       <div class="card" id="bookings-section" style="display: none;">
         <h2>Bookings</h2>
-        <p>View and manage bookings made on the platform.</p>
+        <div id="bookings-list">Loading bookings...</div>
       </div>
 
       <div class="card" id="reports-section" style="display: none;">
@@ -140,7 +138,69 @@
     </div>
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.appspot.com",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-3VKK01HXE6"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore();
+
+    function fetchDashboardData() {
+      db.collection('users').get().then(snapshot => {
+        document.getElementById('active-users').textContent = snapshot.size;
+      });
+
+      db.collection('services').get().then(snapshot => {
+        document.getElementById('services-listed').textContent = snapshot.size;
+      });
+
+      db.collection('bookings').where("date", "==", new Date().toLocaleDateString()).get().then(snapshot => {
+        document.getElementById('bookings-today').textContent = snapshot.size;
+      });
+    }
+
+    function fetchUsers() {
+      db.collection('users').get().then(snapshot => {
+        let usersHTML = '';
+        snapshot.forEach(doc => {
+          usersHTML += `<p>User: ${doc.data().name}, Email: ${doc.data().email}</p>`;
+        });
+        document.getElementById('user-list').innerHTML = usersHTML;
+      });
+    }
+
+    function fetchServices() {
+      db.collection('services').get().then(snapshot => {
+        let servicesHTML = '';
+        snapshot.forEach(doc => {
+          servicesHTML += `<p>Service: ${doc.data().name}, Description: ${doc.data().description}</p>`;
+        });
+        document.getElementById('services-list').innerHTML = servicesHTML;
+      });
+    }
+
+    function fetchBookings() {
+      db.collection('bookings').get().then(snapshot => {
+        let bookingsHTML = '';
+        snapshot.forEach(doc => {
+          bookingsHTML += `<p>Booking ID: ${doc.id}, Service: ${doc.data().serviceName}, Date: ${doc.data().date}</p>`;
+        });
+        document.getElementById('bookings-list').innerHTML = bookingsHTML;
+      });
+    }
+
     function showSection(section) {
       const sections = [
         'dashboard', 'users', 'services',
@@ -150,6 +210,11 @@
         document.getElementById(`${s}-section`).style.display = 'none';
       });
       document.getElementById(`${section}-section`).style.display = 'block';
+
+      if (section === 'dashboard') fetchDashboardData();
+      else if (section === 'users') fetchUsers();
+      else if (section === 'services') fetchServices();
+      else if (section === 'bookings') fetchBookings();
     }
   </script>
 
