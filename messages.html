@@ -98,27 +98,18 @@
   </style>
 </head>
 <body>
-<nav style="background-color:#065f46; padding: 1rem;">
-  <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-    <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="chatlist.html" style="color: white; text-decoration: none;">Chats</a></li>
-    <li><a href="notifications.html" style="color: white; text-decoration: none;">Notifications</a></li>
-  </ul>
-</nav>
+  <nav style="background-color:#065f46; padding: 1rem;">
+    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="chatlist.html" style="color: white; text-decoration: none;">Chats</a></li>
+      <li><a href="notifications.html" style="color: white; text-decoration: none;">Notifications</a></li>
+    </ul>
+  </nav>
 
   <div class="header">Chat with John Doe</div>
 
   <div class="chat-box" id="chatBox">
-    <div class="message received">
-      <div class="sender">John Doe</div>
-      Hello! Are you available for a plumbing job this weekend?
-      <div class="timestamp">10:45 AM</div>
-    </div>
-    <div class="message sent">
-      <div class="sender">You</div>
-      Yes, I’m available on Saturday after 2 PM.
-      <div class="timestamp">10:46 AM</div>
-    </div>
+    <!-- Messages will be loaded here dynamically -->
   </div>
 
   <div class="input-area">
@@ -126,40 +117,67 @@
     <button onclick="sendMessage()">Send</button>
   </div>
 
-  <script>
-    function formatTime() {
-      const now = new Date();
-      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Your actual Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDDxKt-C-HR4crzj9ZK1_XnG46rMjcRQSk",
+      authDomain: "chat-app-demo-2025.firebaseapp.com",
+      projectId: "chat-app-demo-2025",
+      storageBucket: "chat-app-demo-2025.appspot.com",
+      messagingSenderId: "541234567890",
+      appId: "1:541234567890:web:abcd1234abcd5678efgh90"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const messagesRef = collection(db, "messages");
+
+    const chatBox = document.getElementById("chatBox");
+
+    function formatTime(date = new Date()) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    function sendMessage() {
+    window.sendMessage = async function () {
       const input = document.getElementById('messageInput');
       const text = input.value.trim();
       if (text !== '') {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message sent';
-        msgDiv.innerHTML = `<div class="sender">You</div>${text}<div class="timestamp">${formatTime()}</div>`;
-        document.getElementById('chatBox').appendChild(msgDiv);
+        await addDoc(messagesRef, {
+          sender: 'You',
+          text: text,
+          timestamp: serverTimestamp()
+        });
         input.value = '';
-        msgDiv.scrollIntoView({ behavior: 'smooth' });
-
-        // Simulate reply after 2 seconds
-        setTimeout(() => {
-          const reply = document.createElement('div');
-          reply.className = 'message received';
-          reply.innerHTML = `<div class="sender">John Doe</div>Thanks for confirming!<div class="timestamp">${formatTime()}</div>`;
-          document.getElementById('chatBox').appendChild(reply);
-          reply.scrollIntoView({ behavior: 'smooth' });
-        }, 2000);
       }
-    }
+    };
 
-    function handleKeyPress(e) {
+    window.handleKeyPress = function (e) {
       if (e.key === 'Enter') {
         sendMessage();
       }
-    }
-  </script>
+    };
 
+    const q = query(messagesRef, orderBy("timestamp"));
+    onSnapshot(q, (snapshot) => {
+      chatBox.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const date = data.timestamp?.toDate?.() || new Date();
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message ' + (data.sender === 'You' ? 'sent' : 'received');
+        msgDiv.innerHTML = `
+          <div class="sender">${data.sender}</div>
+          ${data.text}
+          <div class="timestamp">${formatTime(date)}</div>
+        `;
+        chatBox.appendChild(msgDiv);
+        msgDiv.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>
