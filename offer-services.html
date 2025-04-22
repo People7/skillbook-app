@@ -217,7 +217,55 @@
     </div>
   </form>
 
-  <script>
+  <script type="module">
+    // Firebase v9+ Config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.appspot.com",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-3VKK01HXE6"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Form submission handler
+    document.getElementById('serviceForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const serviceData = {
+        title: document.getElementById('title').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
+        tags: document.getElementById('tags').value,
+        location: {
+          address: document.querySelector('input[placeholder="Address"]').value,
+          area: document.querySelector('input[placeholder="Area"]').value,
+          pincode: document.querySelector('input[placeholder="Pincode"]').value,
+          city: document.querySelector('input[placeholder="City"]').value,
+          state: document.querySelector('input[placeholder="State"]').value
+        },
+        availability: document.querySelector('input[placeholder="e.g. Mon-Fri 10AM - 6PM"]').value,
+        whatsappNumber: document.getElementById('whatsappNumber').value,
+        contactMethods: Array.from(document.querySelectorAll('input[name="contact"]:checked')).map(e => e.value),
+        termsAccepted: document.getElementById('terms').checked
+      };
+
+      try {
+        const docRef = await addDoc(collection(db, "services"), serviceData);
+        alert('Service posted successfully!');
+      } catch (e) {
+        alert('Error posting service: ' + e.message);
+      }
+    });
+
     function limitDocuments() {
       let files = document.getElementById('documents').files;
       if (files.length > 10) {
@@ -227,26 +275,4 @@
     }
 
     function limitVideo() {
-      let videoFile = document.getElementById('video').files[0];
-      if (videoFile && videoFile.size > 10 * 1024 * 1024) {
-        alert('Video file size must be less than 10MB');
-        document.getElementById('video').value = '';
-      }
-    }
-
-    function makePhoneCall() {
-      window.location.href = "tel:+911234567890";
-    }
-
-    function openWhatsApp() {
-      let phoneNumber = document.getElementById('whatsappNumber').value || '+911234567890';
-      window.location.href = `https://wa.me/${phoneNumber}`;
-    }
-
-    document.getElementById('serviceForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      alert('Service posted successfully!');
-    });
-  </script>
-</body>
-</html>
+      let videoFile =
