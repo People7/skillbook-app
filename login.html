@@ -86,10 +86,11 @@
     <div class="toggle" onclick="window.location.href='sign-up.html'">Don't have an account? Sign Up</div>
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script>
+  <!-- Firebase v9+ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
       authDomain: "skillbook-3fa41.firebaseapp.com",
@@ -100,38 +101,40 @@
       measurementId: "G-3VKK01HXE6"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    // Recaptcha
-    window.recaptchaVerifierLogin = new firebase.auth.RecaptchaVerifier('recaptcha-login', {
-      'size': 'invisible'
-    });
+    let confirmationResult;
 
-    function sendLoginOTP() {
+    // Initialize Recaptcha
+    window.recaptchaVerifierLogin = new RecaptchaVerifier('recaptcha-login', {
+      size: 'invisible',
+      callback: (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+      }
+    }, auth);
+
+    window.sendLoginOTP = async () => {
       const phone = document.getElementById("login-phone").value;
+      try {
+        confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifierLogin);
+        window.confirmationResult = confirmationResult;
+        alert("OTP sent to phone!");
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    };
 
-      firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifierLogin)
-        .then((confirmationResult) => {
-          window.loginConfirmation = confirmationResult;
-          alert("OTP sent to phone!");
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
-    }
-
-    function verifyLoginOTP() {
+    window.verifyLoginOTP = async () => {
       const code = document.getElementById("login-otp").value;
-
-      window.loginConfirmation.confirm(code)
-        .then(() => {
-          alert("Phone login successful!");
-          window.location.href = "dashboard.html"; // Redirect to dashboard page
-        })
-        .catch((error) => {
-          alert("OTP Error: " + error.message);
-        });
-    }
+      try {
+        await window.confirmationResult.confirm(code);
+        alert("Phone login successful!");
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        alert("OTP Error: " + error.message);
+      }
+    };
   </script>
 </body>
 </html>
