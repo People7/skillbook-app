@@ -1,85 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skillbook - User Profile</title>
+  <title>Service Details - Skillbook</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #34d399, #065f46);
       color: white;
+      padding: 20px;
     }
 
-    .header {
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 1.8rem;
-      background-color: rgba(0,0,0,0.2);
-    }
-
-    .container {
-      max-width: 600px;
+    .service-container {
+      max-width: 800px;
       margin: auto;
+      background-color: rgba(0, 0, 0, 0.3);
       padding: 2rem;
+      border-radius: 15px;
     }
 
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
+    .service-header {
+      text-align: center;
+      margin-bottom: 2rem;
     }
 
-    input, select, textarea, button {
-      width: 100%;
-      padding: 0.7rem;
-      margin-top: 0.3rem;
+    .service-header h1 {
+      margin: 0;
+    }
+
+    .service-details {
+      margin-bottom: 2rem;
+    }
+
+    .service-details p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    .info-group {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .info-group div {
+      margin: 0.5rem 0;
+      flex: 1 1 45%;
+    }
+
+    button {
+      background-color: #10b981;
+      color: white;
       border: none;
+      padding: 12px 20px;
       border-radius: 8px;
       font-size: 1rem;
-      outline: none;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
     }
 
-    input[type="file"] {
-      background: white;
-      color: black;
-    }
-
-    input[type="checkbox"] {
-      width: auto;
-      margin-right: 10px;
-    }
-
-    .availability-section, .ratings {
-      margin-top: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1rem;
-      border-radius: 10px;
-    }
-
-    .slot {
-      display: flex;
-      gap: 10px;
-      margin-top: 0.5rem;
-    }
-
-    .slot input {
-      flex: 1;
-    }
-
-    #locationDisplay {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #d1fae5;
-    }
-
-    iframe {
-      width: 100%;
-      height: 300px;
-      border: 0;
-      border-radius: 10px;
-      margin-top: 1rem;
+    button:hover {
+      background-color: #059669;
     }
   </style>
 </head>
@@ -87,171 +71,80 @@
 <nav style="background-color:#065f46; padding: 1rem;">
   <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
     <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="dashboard.html" style="color: white; text-decoration: none;">Dashboard</a></li>
+    <li><a href="booking-schedule.html" style="color: white; text-decoration: none;">Booking Schedule</a></li>
     <li><a href="notifications.html" style="color: white; text-decoration: none;">Notifications</a></li>
     <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
   </ul>
 </nav>
 
-<div class="header">User Profile</div>
+<div class="service-container">
+  <div class="service-header">
+    <h1>Plumbing Services</h1>
+    <p>By John Doe</p>
+  </div>
 
-<div class="container">
-
-  <label for="name">Full Name</label>
-  <input type="text" id="name" placeholder="Enter your name" />
-
-  <label for="bio">Short Bio</label>
-  <textarea id="bio" placeholder="Write about yourself..." rows="3"></textarea>
-
-  <label for="documents">Upload Certificates / Resume (Max 10)</label>
-  <input type="file" id="documents" multiple accept=".pdf,.doc,.jpg,.jpeg,.png" onchange="limitDocuments()" />
-
-  <label for="video">Upload Introduction Video (1 max)</label>
-  <input type="file" id="video" accept="video/*" onchange="limitVideo()" />
-
-  <label for="availability">Availability</label>
-  <input type="checkbox" id="availability" checked />
-  <span id="availabilityText">Available</span>
-
-  <div class="availability-section">
-    <label for="days">Select Available Days</label>
-    <select id="days" multiple>
-      <option>Monday</option>
-      <option>Tuesday</option>
-      <option>Wednesday</option>
-      <option>Thursday</option>
-      <option>Friday</option>
-      <option>Saturday</option>
-      <option>Sunday</option>
-    </select>
-
-    <label>Time Slots</label>
-    <div id="timeSlots">
-      <div class="slot">
-        <input type="time" />
-        <input type="time" />
-      </div>
+  <div class="service-details">
+    <div class="info-group">
+      <div><strong>Category:</strong> Home Repair</div>
+      <div><strong>Rate:</strong> $25/hour</div>
+      <div><strong>Location:</strong> New York, NY</div>
+      <div><strong>Experience:</strong> 5+ years</div>
     </div>
-    <button type="button" onclick="addTimeSlot()">+ Add Another Slot</button>
+
+    <h3>Description</h3>
+    <p>
+      Offering professional plumbing services for residential and commercial properties. 
+      Services include leak repairs, pipe installations, water heater setup, drain cleaning, and more. 
+      Fast response and guaranteed quality.
+    </p>
+
+    <h3>Availability</h3>
+    <p>Mon - Sat | 9:00 AM - 6:00 PM</p>
+
+    <h3>Customer Reviews</h3>
+    <p>⭐⭐⭐⭐☆ (4.5/5 based on 27 reviews)</p>
   </div>
 
-  <label>Your Location</label>
-  <button type="button" onclick="getLocation()">Detect Location</button>
-  <div id="locationDisplay">Location not detected yet.</div>
-  <input type="hidden" id="lat" name="lat" />
-  <input type="hidden" id="lng" name="lng" />
-  <div id="mapFrame"></div>
-
-  <div class="ratings">
-    <strong>Ratings:</strong> 4.5/5  
-    <br/>
-    <strong>Feedback:</strong>  
-    <ul>
-      <li>“Great service and punctual!”</li>
-      <li>“Very professional and helpful.”</li>
-    </ul>
-  </div>
-
-  <button onclick="saveProfile()">Save Profile</button>
-
+  <button onclick="bookService()">Book This Service</button>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<!-- Firebase v9+ SDK -->
+<script type="module">
+  // Import Firebase functions
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-<script>
-  // Firebase config
+  // Your Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-    authDomain: "skillbook-3fa41.firebaseapp.com",
-    projectId: "skillbook-3fa41",
-    storageBucket: "skillbook-3fa41.appspot.com",
-    messagingSenderId: "599549421075",
-    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-    measurementId: "G-3VKK01HXE6"
+    apiKey: "AIzaSyCIYjxuPoI_oYLDCP3uubQecm4EdF_wjJo",
+    authDomain: "skillbook-fd29a.firebaseapp.com",
+    projectId: "skillbook-fd29a",
+    storageBucket: "skillbook-fd29a.appspot.com",
+    messagingSenderId: "1015166367097",
+    appId: "1:1015166367097:web:2ddf8c7cde95ff22c465c6"
   };
 
-  // Initialize Firebase (v9+ Modular SDK)
-  import { initializeApp } from 'firebase/app';
-  import { getStorage } from 'firebase/storage';
-  import { getAuth } from 'firebase/auth';
-  import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
-
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
-  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  document.getElementById("availability").addEventListener("change", function() {
-    document.getElementById("availabilityText").innerText = this.checked ? "Available" : "Not Available";
-  });
-
-  function addTimeSlot() {
-    const slot = document.createElement("div");
-    slot.className = "slot";
-    slot.innerHTML = `
-      <input type="time" />
-      <input type="time" />
-    `;
-    document.getElementById("timeSlots").appendChild(slot);
-  }
-
-  function limitDocuments() {
-    const files = document.getElementById("documents").files;
-    if (files.length > 10) {
-      alert("You can upload up to 10 documents only.");
-      document.getElementById("documents").value = "";
-    }
-  }
-
-  function limitVideo() {
-    const file = document.getElementById("video").files;
-    if (file.length > 1) {
-      alert("Only one video is allowed.");
-      document.getElementById("video").value = "";
-    }
-  }
-
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(pos) {
-        const lat = pos.coords.latitude.toFixed(6);
-        const lng = pos.coords.longitude.toFixed(6);
-        document.getElementById("lat").value = lat;
-        document.getElementById("lng").value = lng;
-        document.getElementById("locationDisplay").innerText = `Lat: ${lat}, Lng: ${lng}`;
-        document.getElementById("mapFrame").innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed" allowfullscreen></iframe>`;
-      }, function() {
-        document.getElementById("locationDisplay").innerText = "Unable to detect location.";
-      });
-    } else {
-      document.getElementById("locationDisplay").innerText = "Geolocation not supported.";
-    }
-  }
-
-  async function saveProfile() {
-    const name = document.getElementById("name").value;
-    const bio = document.getElementById("bio").value;
-    const lat = document.getElementById("lat").value;
-    const lng = document.getElementById("lng").value;
-    const days = Array.from(document.getElementById("days").selectedOptions).map(option => option.value);
-
+  // Example: Save service interaction when booked
+  window.bookService = async function () {
+    alert("Redirecting to booking page...");
+    
     try {
-      await addDoc(collection(db, "profiles"), {
-        name,
-        bio,
-        lat,
-        lng,
-        availableDays: days,
-        createdAt: serverTimestamp()
+      await addDoc(collection(db, "bookings"), {
+        service: "Plumbing Services",
+        provider: "John Doe",
+        timestamp: new Date()
       });
-      alert("Profile saved successfully!");
+      console.log("Booking saved to Firestore");
     } catch (error) {
-      alert("Error saving profile: " + error.message);
+      console.error("Error saving booking:", error);
     }
-  }
+
+    window.location.href = "booking-schedule.html";
+  };
 </script>
 
 </body>
