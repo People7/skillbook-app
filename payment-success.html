@@ -68,5 +68,42 @@
     <a href="dashboard.html">Go to Dashboard</a>
   </div>
 
+<!-- Firebase SDK v9+ -->
+<script type="module">
+  // Import Firebase libraries
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+  import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js';
+  import { getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+
+  // Firebase config (your actual Firebase config)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+    authDomain: "skillbook-3fa41.firebaseapp.com",
+    projectId: "skillbook-3fa41",
+    storageBucket: "skillbook-3fa41.appspot.com",
+    messagingSenderId: "599549421075",
+    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+    measurementId: "G-3VKK01HXE6"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // Reference to Firebase Realtime Database
+  const db = getDatabase(app);
+
+  // You can now set data to Firebase, e.g., marking the payment as successful
+  const paymentStatusRef = ref(db, 'payments/success/');
+  set(paymentStatusRef, {
+    success: true,
+    timestamp: new Date().toISOString(),
+  }).then(() => {
+    console.log('Payment status saved successfully to Firebase!');
+  }).catch((error) => {
+    console.error('Error saving payment status to Firebase:', error);
+  });
+</script>
+
 </body>
 </html>
