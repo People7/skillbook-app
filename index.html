@@ -67,13 +67,12 @@
     }
 
     #landing {
-      display: none;
       background: white;
       color: black;
       text-align: center;
       padding: 2rem 1rem;
       height: 100%;
-      display: flex;
+      display: none;
       flex-direction: column;
       justify-content: center;
     }
@@ -151,6 +150,57 @@
     <a href="offer-services.html">🛠️ Offer Services</a>
   </div>
 </div>
+
+<!-- Firebase and App Scripts -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+    authDomain: "skillbook-3fa41.firebaseapp.com",
+    projectId: "skillbook-3fa41",
+    storageBucket: "skillbook-3fa41.appspot.com",
+    messagingSenderId: "599549421075",
+    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+    measurementId: "G-3VKK01HXE6"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  // Example Recaptcha Setup (can be removed if not used here)
+  window.recaptchaVerifierLogin = new firebase.auth.RecaptchaVerifier('recaptcha-login', {
+    'size': 'invisible'
+  });
+
+  // Placeholder function for phone login (for example only)
+  function sendLoginOTP() {
+    const phone = document.getElementById("login-phone")?.value;
+    if (!phone) return alert("Phone input not found.");
+
+    firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifierLogin)
+      .then((confirmationResult) => {
+        window.loginConfirmation = confirmationResult;
+        alert("OTP sent to phone!");
+      })
+      .catch((error) => {
+        alert("Error: " + error.message);
+      });
+  }
+
+  function verifyLoginOTP() {
+    const code = document.getElementById("login-otp")?.value;
+    if (!code) return alert("OTP input not found.");
+
+    window.loginConfirmation.confirm(code)
+      .then(() => {
+        alert("Phone login successful!");
+        window.location.href = "dashboard.html";
+      })
+      .catch((error) => {
+        alert("OTP Error: " + error.message);
+      });
+  }
+</script>
 
 <!-- Script to Hide Splash -->
 <script>
