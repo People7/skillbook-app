@@ -156,7 +156,29 @@
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
 <script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+    authDomain: "skillbook-3fa41.firebaseapp.com",
+    projectId: "skillbook-3fa41",
+    storageBucket: "skillbook-3fa41.appspot.com",
+    messagingSenderId: "599549421075",
+    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+    measurementId: "G-3VKK01HXE6"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const storage = firebase.storage();
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
   document.getElementById("availability").addEventListener("change", function() {
     document.getElementById("availabilityText").innerText = this.checked ? "Available" : "Not Available";
   });
@@ -205,8 +227,27 @@
   }
 
   function saveProfile() {
-    // You can hook this to your backend
-    alert("Profile saved successfully!");
+    const name = document.getElementById("name").value;
+    const bio = document.getElementById("bio").value;
+    const lat = document.getElementById("lat").value;
+    const lng = document.getElementById("lng").value;
+    const days = Array.from(document.getElementById("days").selectedOptions).map(option => option.value);
+    
+    // Here you can save data to Firestore or Firebase Realtime Database
+    db.collection("profiles").add({
+      name,
+      bio,
+      lat,
+      lng,
+      availableDays: days,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+      alert("Profile saved successfully!");
+    })
+    .catch((error) => {
+      alert("Error saving profile: " + error.message);
+    });
   }
 </script>
 
