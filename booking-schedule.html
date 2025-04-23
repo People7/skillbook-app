@@ -66,23 +66,12 @@
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { auth } from './firebase.js';
 
-  // Replace with your actual Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBX-EXAMPLE-wGk",
-    authDomain: "skillbook-app.firebaseapp.com",
-    projectId: "skillbook-app",
-    storageBucket: "skillbook-app.appspot.com",
-    messagingSenderId: "987654321000",
-    appId: "1:987654321000:web:abc123def456"
-  };
+  // Example check:
+  console.log('Firebase Auth ready:', auth);
+</script>
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
 
   document.getElementById('availability-form').addEventListener('submit', async (e) => {
     e.preventDefault();
