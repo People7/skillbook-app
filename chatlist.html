@@ -54,23 +54,12 @@
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  import { auth } from './firebase.js';
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBO-xU8JYMgZSmZxMGUuAYcNL_p2gWNFJQ",
-    authDomain: "skillbook-auth.firebaseapp.com",
-    projectId: "skillbook-auth",
-    storageBucket: "skillbook-auth.appspot.com",
-    messagingSenderId: "280154644472",
-    appId: "1:280154644472:web:e3293f6e402f7550055f32",
-    measurementId: "G-LT1KMQY5M0"
-  };
+  // Example check:
+  console.log('Firebase Auth ready:', auth);
+</script>
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
 
   // Example: Get user chats if authenticated
   onAuthStateChanged(auth, async user => {
