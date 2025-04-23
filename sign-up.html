@@ -45,6 +45,28 @@
       text-align: center;
     }
     h2 { margin-bottom: 1rem; }
+
+    .input-group {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .input-group select {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 140px;
+    }
+    .input-group input {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 160px;
+      text-align: center;
+    }
+
     input {
       margin: 0.5rem;
       padding: 0.5rem;
@@ -83,8 +105,73 @@
     <div id="recaptcha-container"></div>
 
     <div id="phone-auth">
-      <input type="tel" id="phoneNumber" placeholder="+91xxxxxxxxxx" pattern="^\+\d{10,15}$" required oninput="this.value = this.value.replace(/[^+\d]/g, '')" />
-      <br />
+      <div class="input-group">
+        <select id="countryCode">
+          <option value="+93">+93 Afghanistan</option>
+          <option value="+355">+355 Albania</option>
+          <option value="+213">+213 Algeria</option>
+          <option value="+54">+54 Argentina</option>
+          <option value="+61">+61 Australia</option>
+          <option value="+43">+43 Austria</option>
+          <option value="+1-242">+1-242 Bahamas</option>
+          <option value="+880">+880 Bangladesh</option>
+          <option value="+32">+32 Belgium</option>
+          <option value="+55">+55 Brazil</option>
+          <option value="+1">+1 Canada</option>
+          <option value="+56">+56 Chile</option>
+          <option value="+86">+86 China</option>
+          <option value="+57">+57 Colombia</option>
+          <option value="+420">+420 Czech Republic</option>
+          <option value="+45">+45 Denmark</option>
+          <option value="+20">+20 Egypt</option>
+          <option value="+358">+358 Finland</option>
+          <option value="+33">+33 France</option>
+          <option value="+49">+49 Germany</option>
+          <option value="+233">+233 Ghana</option>
+          <option value="+30">+30 Greece</option>
+          <option value="+852">+852 Hong Kong</option>
+          <option value="+36">+36 Hungary</option>
+          <option value="+91" selected>+91 India</option>
+          <option value="+62">+62 Indonesia</option>
+          <option value="+353">+353 Ireland</option>
+          <option value="+972">+972 Israel</option>
+          <option value="+39">+39 Italy</option>
+          <option value="+81">+81 Japan</option>
+          <option value="+254">+254 Kenya</option>
+          <option value="+60">+60 Malaysia</option>
+          <option value="+52">+52 Mexico</option>
+          <option value="+31">+31 Netherlands</option>
+          <option value="+64">+64 New Zealand</option>
+          <option value="+234">+234 Nigeria</option>
+          <option value="+47">+47 Norway</option>
+          <option value="+92">+92 Pakistan</option>
+          <option value="+63">+63 Philippines</option>
+          <option value="+48">+48 Poland</option>
+          <option value="+351">+351 Portugal</option>
+          <option value="+7">+7 Russia</option>
+          <option value="+966">+966 Saudi Arabia</option>
+          <option value="+65">+65 Singapore</option>
+          <option value="+27">+27 South Africa</option>
+          <option value="+82">+82 South Korea</option>
+          <option value="+34">+34 Spain</option>
+          <option value="+46">+46 Sweden</option>
+          <option value="+41">+41 Switzerland</option>
+          <option value="+66">+66 Thailand</option>
+          <option value="+90">+90 Turkey</option>
+          <option value="+971">+971 UAE</option>
+          <option value="+44">+44 United Kingdom</option>
+          <option value="+1">+1 United States</option>
+          <option value="+84">+84 Vietnam</option>
+        </select>
+        <input
+          type="tel"
+          id="mobileNumber"
+          placeholder="Mobile Number"
+          pattern="^\d{6,15}$"
+          required
+          oninput="this.value = this.value.replace(/[^\d]/g, '')"
+        />
+      </div>
       <button onclick="sendVerificationCode()">Send OTP</button>
       <br /><br />
       <input type="text" id="verificationCode" placeholder="Enter OTP" />
@@ -110,13 +197,16 @@
     }, 3000);
 
     let usingPhone = true;
-
     function toggleAuth() {
       usingPhone = !usingPhone;
       document.getElementById('phone-auth').style.display = usingPhone ? 'block' : 'none';
       document.getElementById('email-auth').style.display = usingPhone ? 'none' : 'block';
-      document.getElementById('authTitle').innerText = usingPhone ? 'Login / Sign Up with Mobile' : 'Login / Sign Up with Email';
-      document.querySelector('.toggle').innerText = usingPhone ? 'Switch to Email Login' : 'Switch to Mobile Login';
+      document.getElementById('authTitle').innerText = usingPhone
+        ? 'Login / Sign Up with Mobile'
+        : 'Login / Sign Up with Email';
+      document.querySelector('.toggle').innerText = usingPhone
+        ? 'Switch to Email Login'
+        : 'Switch to Mobile Login';
     }
   </script>
 
@@ -153,86 +243,72 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Auto-redirect if logged in
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "profile.html";
-      }
+      if (user) window.location.href = "profile.html";
     });
 
-    // reCAPTCHA for phone
-    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-      size: 'invisible',
-      callback: () => console.log("Recaptcha solved")
-    }, auth);
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      'recaptcha-container',
+      { size: 'invisible', callback: () => console.log("reCAPTCHA solved") },
+      auth
+    );
 
-    // Send OTP
     window.sendVerificationCode = function () {
-      const phoneNumber = document.getElementById("phoneNumber").value.trim();
-      const appVerifier = window.recaptchaVerifier;
-
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert("OTP sent to " + phoneNumber);
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
+      const countryCode = document.getElementById("countryCode").value;
+      const mobileNumber = document.getElementById("mobileNumber").value.trim();
+      if (!/^\d{6,15}$/.test(mobileNumber)) {
+        alert("Please enter a valid mobile number.");
+        return;
+      }
+      const phoneNumber = countryCode + mobileNumber;
+      signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+        .then(cr => { window.confirmationResult = cr; alert("OTP sent to " + phoneNumber); })
+        .catch(e => alert("Error: " + e.message));
     };
 
-    // Verify OTP
     window.verifyCode = async function () {
       const code = document.getElementById("verificationCode").value.trim();
+      if (!code) { alert("Please enter the OTP."); return; }
       try {
         const result = await window.confirmationResult.confirm(code);
         const user = result.user;
-
         const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
           await setDoc(userRef, {
             uid: user.uid,
             phone: user.phoneNumber,
             createdAt: new Date().toISOString()
           });
         }
-
         alert("Login successful!");
         window.location.href = "profile.html";
-      } catch (error) {
-        alert("Verification failed: " + error.message);
+      } catch (e) {
+        alert("Verification failed: " + e.message);
       }
     };
 
-    // Email login/signup
     window.emailLogin = async function () {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-
       try {
-        let result;
-        try {
-          result = await signInWithEmailAndPassword(auth, email, password);
-        } catch (e) {
-          result = await createUserWithEmailAndPassword(auth, email, password);
-        }
-
-        const user = result.user;
+        let res;
+        try { res = await signInWithEmailAndPassword(auth, email, password); }
+        catch { res = await createUserWithEmailAndPassword(auth, email, password); }
+        const user = res.user;
         const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
           await setDoc(userRef, {
             uid: user.uid,
             email: user.email,
             createdAt: new Date().toISOString()
           });
         }
-
         alert("Login successful!");
         window.location.href = "profile.html";
-      } catch (error) {
-        alert("Error: " + error.message);
+      } catch (e) {
+        alert("Error: " + e.message);
       }
     };
   </script>
