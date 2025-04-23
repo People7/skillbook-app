@@ -75,27 +75,12 @@
   </nav>
 
   <div class="container">
-    <!-- Phone OTP Section -->
-    <div id="phone-login">
-      <h2>Phone Login</h2>
-      <input type="text" id="login-phone" placeholder="+91 1234567890" />
-      <div id="recaptcha-login"></div>
-      <button onclick="sendLoginOTP()">Send OTP</button>
-      <input type="text" id="login-otp" placeholder="Enter OTP" />
-      <button onclick="verifyLoginOTP()">Verify OTP & Login</button>
-    </div>
-
-    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #fff;" />
-
-    <!-- Email Login Section -->
-    <div id="email-login">
-      <h2>Email Login</h2>
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
-      <button onclick="emailLogin()">Login with Email</button>
-      <div class="forgot" onclick="forgotPassword()">Forgot Password?</div>
-    </div>
-
+    <!-- Email Login Section Only -->
+    <h2>Email Login</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="emailLogin()">Login with Email</button>
+    <div class="forgot" onclick="forgotPassword()">Forgot Password?</div>
     <div class="toggle" onclick="window.location.href='sign-up.html'">Don't have an account? Sign Up</div>
   </div>
 
@@ -104,8 +89,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { 
       getAuth, 
-      RecaptchaVerifier, 
-      signInWithPhoneNumber, 
       signInWithEmailAndPassword, 
       sendPasswordResetEmail 
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -122,37 +105,6 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    let confirmationResult;
-
-    // reCAPTCHA for phone login
-    window.recaptchaVerifierLogin = new RecaptchaVerifier('recaptcha-login', {
-      size: 'invisible',
-      callback: () => {}
-    }, auth);
-
-    // Send OTP
-    window.sendLoginOTP = async () => {
-      const phone = document.getElementById("login-phone").value;
-      try {
-        confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifierLogin);
-        window.confirmationResult = confirmationResult;
-        alert("OTP sent to phone!");
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
-    };
-
-    // Verify OTP
-    window.verifyLoginOTP = async () => {
-      const code = document.getElementById("login-otp").value;
-      try {
-        await window.confirmationResult.confirm(code);
-        alert("Phone login successful!");
-        window.location.href = "dashboard.html";
-      } catch (error) {
-        alert("OTP Error: " + error.message);
-      }
-    };
 
     // Email Login
     window.emailLogin = async () => {
