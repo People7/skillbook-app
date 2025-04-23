@@ -36,14 +36,9 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { auth } from './firebase.js';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-      authDomain: "skillbook-3fa41.firebaseapp.com",
-      projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.appspot.com",
-      messagingSenderId: "599549421075",
-      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-      measurementId
+  // Example check:
+  console.log('Firebase Auth ready:', auth);
+</script>
+
