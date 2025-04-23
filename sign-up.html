@@ -3,75 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skillbook - Welcome</title>
+  <title>Skillbook - Login</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html {
       height: 100%;
       font-family: 'Segoe UI', sans-serif;
     }
-    #splash {
-      position: fixed;
-      width: 100%;
+    #main {
       height: 100%;
-      background: linear-gradient(135deg, #34d399, #065f46);
-      color: white;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
-      animation: fadeOut 1s ease-out 1s forwards;
-    }
-    #splash h1 {
-      font-size: 3rem;
-      animation: slideIn 1s ease-out;
-    }
-    #splash p {
-      font-size: 1.2rem;
-      margin-top: 1rem;
-      opacity: 0.8;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
-    #main {
-      display: none;
       padding: 2rem 1rem;
       text-align: center;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
     }
     h2 { margin-bottom: 1rem; }
 
-    .input-group {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-    .input-group select {
-      margin: 0.5rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 140px;
-    }
-    .input-group input {
-      margin: 0.5rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 160px;
-      text-align: center;
-    }
-
     input {
-      margin: 0.5rem;
-      padding: 0.5rem;
       width: 250px;
+      margin: 0.5rem;
+      padding: 0.6rem;
       font-size: 1rem;
+      border-radius: 6px;
+      border: none;
     }
     button {
       padding: 0.6rem 1.2rem;
@@ -85,148 +43,27 @@
     button:hover {
       background-color: #34d399;
     }
-    .toggle {
-      margin-top: 1rem;
-      cursor: pointer;
-      color: #065f46;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
-  <div id="splash">
-    <h1>Skillbook</h1>
-    <p>Connecting People through Skills</p>
-  </div>
-
   <div id="main">
-    <h2 id="authTitle">Login / Sign Up with Mobile</h2>
-
-    <div id="recaptcha-container"></div>
-
-    <div id="phone-auth">
-      <div class="input-group">
-        <select id="countryCode">
-          <option value="+93">+93 Afghanistan</option>
-          <option value="+355">+355 Albania</option>
-          <option value="+213">+213 Algeria</option>
-          <option value="+54">+54 Argentina</option>
-          <option value="+61">+61 Australia</option>
-          <option value="+43">+43 Austria</option>
-          <option value="+1-242">+1-242 Bahamas</option>
-          <option value="+880">+880 Bangladesh</option>
-          <option value="+32">+32 Belgium</option>
-          <option value="+55">+55 Brazil</option>
-          <option value="+1">+1 Canada</option>
-          <option value="+56">+56 Chile</option>
-          <option value="+86">+86 China</option>
-          <option value="+57">+57 Colombia</option>
-          <option value="+420">+420 Czech Republic</option>
-          <option value="+45">+45 Denmark</option>
-          <option value="+20">+20 Egypt</option>
-          <option value="+358">+358 Finland</option>
-          <option value="+33">+33 France</option>
-          <option value="+49">+49 Germany</option>
-          <option value="+233">+233 Ghana</option>
-          <option value="+30">+30 Greece</option>
-          <option value="+852">+852 Hong Kong</option>
-          <option value="+36">+36 Hungary</option>
-          <option value="+91" selected>+91 India</option>
-          <option value="+62">+62 Indonesia</option>
-          <option value="+353">+353 Ireland</option>
-          <option value="+972">+972 Israel</option>
-          <option value="+39">+39 Italy</option>
-          <option value="+81">+81 Japan</option>
-          <option value="+254">+254 Kenya</option>
-          <option value="+60">+60 Malaysia</option>
-          <option value="+52">+52 Mexico</option>
-          <option value="+31">+31 Netherlands</option>
-          <option value="+64">+64 New Zealand</option>
-          <option value="+234">+234 Nigeria</option>
-          <option value="+47">+47 Norway</option>
-          <option value="+92">+92 Pakistan</option>
-          <option value="+63">+63 Philippines</option>
-          <option value="+48">+48 Poland</option>
-          <option value="+351">+351 Portugal</option>
-          <option value="+7">+7 Russia</option>
-          <option value="+966">+966 Saudi Arabia</option>
-          <option value="+65">+65 Singapore</option>
-          <option value="+27">+27 South Africa</option>
-          <option value="+82">+82 South Korea</option>
-          <option value="+34">+34 Spain</option>
-          <option value="+46">+46 Sweden</option>
-          <option value="+41">+41 Switzerland</option>
-          <option value="+66">+66 Thailand</option>
-          <option value="+90">+90 Turkey</option>
-          <option value="+971">+971 UAE</option>
-          <option value="+44">+44 United Kingdom</option>
-          <option value="+1">+1 United States</option>
-          <option value="+84">+84 Vietnam</option>
-        </select>
-        <input
-          type="tel"
-          id="mobileNumber"
-          placeholder="Mobile Number"
-          pattern="^\d{6,15}$"
-          required
-          oninput="this.value = this.value.replace(/[^\d]/g, '')"
-        />
-      </div>
-      <button onclick="sendVerificationCode()">Send OTP</button>
-      <br /><br />
-      <input type="text" id="verificationCode" placeholder="Enter OTP" />
-      <br />
-      <button onclick="verifyCode()">Verify & Continue</button>
-    </div>
-
-    <div id="email-auth" style="display: none;">
-      <input type="email" id="email" placeholder="Email" required />
-      <br />
-      <input type="password" id="password" placeholder="Password" required />
-      <br />
-      <button onclick="emailLogin()">Login / Sign Up</button>
-    </div>
-
-    <div class="toggle" onclick="toggleAuth()">Switch to Email Login</div>
+    <h2>Login / Sign Up with Email</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <br />
+    <input type="password" id="password" placeholder="Password" required />
+    <br />
+    <button onclick="emailLogin()">Login / Sign Up</button>
   </div>
-
-  <script>
-    setTimeout(() => {
-      document.getElementById('splash').style.display = 'none';
-      document.getElementById('main').style.display = 'block';
-    }, 3000);
-
-    let usingPhone = true;
-    function toggleAuth() {
-      usingPhone = !usingPhone;
-      document.getElementById('phone-auth').style.display = usingPhone ? 'block' : 'none';
-      document.getElementById('email-auth').style.display = usingPhone ? 'none' : 'block';
-      document.getElementById('authTitle').innerText = usingPhone
-        ? 'Login / Sign Up with Mobile'
-        : 'Login / Sign Up with Email';
-      document.querySelector('.toggle').innerText = usingPhone
-        ? 'Switch to Email Login'
-        : 'Switch to Mobile Login';
-    }
-  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
     import {
       getAuth,
-      RecaptchaVerifier,
-      signInWithPhoneNumber,
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
@@ -239,77 +76,34 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    getAnalytics(app);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
     onAuthStateChanged(auth, (user) => {
       if (user) window.location.href = "profile.html";
     });
 
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      'recaptcha-container',
-      { size: 'invisible', callback: () => console.log("reCAPTCHA solved") },
-      auth
-    );
-
-    window.sendVerificationCode = function () {
-      const countryCode = document.getElementById("countryCode").value;
-      const mobileNumber = document.getElementById("mobileNumber").value.trim();
-      if (!/^\d{6,15}$/.test(mobileNumber)) {
-        alert("Please enter a valid mobile number.");
-        return;
-      }
-      const phoneNumber = countryCode + mobileNumber;
-      signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-        .then(cr => { window.confirmationResult = cr; alert("OTP sent to " + phoneNumber); })
-        .catch(e => alert("Error: " + e.message));
-    };
-
-    window.verifyCode = async function () {
-      const code = document.getElementById("verificationCode").value.trim();
-      if (!code) { alert("Please enter the OTP."); return; }
-      try {
-        const result = await window.confirmationResult.confirm(code);
-        const user = result.user;
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        if (!snap.exists()) {
-          await setDoc(userRef, {
-            uid: user.uid,
-            phone: user.phoneNumber,
-            createdAt: new Date().toISOString()
-          });
-        }
-        alert("Login successful!");
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert("Verification failed: " + e.message);
-      }
-    };
-
-    window.emailLogin = async function () {
+    window.emailLogin = () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      try {
-        let res;
-        try { res = await signInWithEmailAndPassword(auth, email, password); }
-        catch { res = await createUserWithEmailAndPassword(auth, email, password); }
-        const user = res.user;
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        if (!snap.exists()) {
-          await setDoc(userRef, {
-            uid: user.uid,
-            email: user.email,
-            createdAt: new Date().toISOString()
-          });
-        }
-        alert("Login successful!");
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert("Error: " + e.message);
-      }
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Logged in successfully!");
+        })
+        .catch((error) => {
+          if (error.code === 'auth/user-not-found') {
+            createUserWithEmailAndPassword(auth, email, password)
+              .then((userCredential) => {
+                alert("Account created and logged in!");
+              })
+              .catch((error) => {
+                alert("Error: " + error.message);
+              });
+          } else {
+            alert("Login failed: " + error.message);
+          }
+        });
     };
   </script>
 </body>
