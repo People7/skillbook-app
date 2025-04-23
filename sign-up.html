@@ -1,1 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skillbook - Welcome</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    #splash {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeOut 1s ease-out 1s forwards;
+    }
+    #splash h1 {
+      font-size: 3rem;
+      animation: slideIn 1s ease-out;
+    }
+    #splash p {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      opacity: 0.8;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+    #main {
+      display: none;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    h2 { margin-bottom: 1rem; }
+    input {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      width: 250px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.6rem 1.2rem;
+      font-weight: bold;
+      background-color: #065f46;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #34d399;
+    }
+    .toggle {
+      margin-top: 1rem;
+      cursor: pointer;
+      color: #065f46;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="splash">
+    <h1>Skillbook</h1>
+    <p>Connecting People through Skills</p>
+  </div>
 
+  <div id="main">
+    <h2 id="authTitle">Login / Sign Up with Mobile</h2>
+
+    <div id="recaptcha-container"></div>
+
+    <div id="phone-auth">
+      <input type="tel" id="phoneNumber" placeholder="+91xxxxxxxxxx" pattern="^\+\d{10,15}$" required oninput="this.value = this.value.replace(/[^+\d]/g, '')" />
+      <br />
+      <button onclick="sendVerificationCode()">Send OTP</button>
+      <br /><br />
+      <input type="text" id="verificationCode" placeholder="Enter OTP" />
+      <br />
+      <button onclick="verifyCode()">Verify & Continue</button>
+    </div>
+
+    <div id="email-auth" style="display: none;">
+      <input type="email" id="email" placeholder="Email" required />
+      <br />
+      <input type="password" id="password" placeholder="Password" required />
+      <br />
+      <button onclick="emailLogin()">Login / Sign Up</button>
+    </div>
+
+    <div class="toggle" onclick="toggleAuth()">Switch to Email Login</div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+    }, 3000);
+
+    let usingPhone = true;
+
+    function toggleAuth() {
+      usingPhone = !usingPhone;
+      document.getElementById('phone-auth').style.display = usingPhone ? 'block' : 'none';
+      document.getElementById('email-auth').style.display = usingPhone ? 'none' : 'block';
+      document.getElementById('authTitle').innerText = usingPhone ? 'Login / Sign Up with Mobile' : 'Login / Sign Up with Email';
+      document.querySelector('.toggle').innerText = usingPhone ? 'Switch to Email Login' : 'Switch to Mobile Login';
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.appspot.com",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-3VKK01HXE6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Auto-redirect if logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "profile.html";
+      }
+    });
+
+    // reCAPTCHA for phone
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      size: 'invisible',
+      callback: () => console.log("Recaptcha solved")
+    }, auth);
+
+    // Send OTP
+    window.sendVerificationCode = function () {
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const appVerifier = window.recaptchaVerifier;
+
+      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          alert("OTP sent to " + phoneNumber);
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    };
+
+    // Verify OTP
+    window.verifyCode = async function () {
+      const code = document.getElementById("verificationCode").value.trim();
+      try {
+        const result = await window.confirmationResult.confirm(code);
+        const user = result.user;
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid: user.uid,
+            phone: user.phoneNumber,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        alert("Login successful!");
+        window.location.href = "profile.html";
+      } catch (error) {
+        alert("Verification failed: " + error.message);
+      }
+    };
+
+    // Email login/signup
+    window.emailLogin = async function () {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        let result;
+        try {
+          result = await signInWithEmailAndPassword(auth, email, password);
+        } catch (e) {
+          result = await createUserWithEmailAndPassword(auth, email, password);
+        }
+
+        const user = result.user;
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid: user.uid,
+            email: user.email,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        alert("Login successful!");
+        window.location.href = "profile.html";
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    };
+  </script>
+</body>
+</html>
