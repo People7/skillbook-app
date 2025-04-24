@@ -3,27 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skillbook - User Dashboard</title>
+  <title>Skillbook Dashboard</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      height: 100%;
       background: white;
       color: black;
     }
 
     .header {
       display: flex;
-      align-items: center;
+      justify-content: space-between;
+      align-items: flex-start;
       position: fixed;
       top: 0;
       left: 0;
-      padding: 10px 20px;
+      right: 0;
       background-color: white;
-      width: 100%;
-      z-index: 10;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
     }
 
     .header img {
@@ -37,86 +44,113 @@
       font-weight: bold;
     }
 
+    .time-icons {
+      text-align: right;
+    }
+
     .time {
-      position: fixed;
-      top: 10px;
-      right: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .top-icons {
+      margin-top: 5px;
+    }
+
+    .top-icons a {
+      margin-left: 10px;
+      color: #065f46;
+      background-color: white;
+      padding: 6px;
+      border-radius: 50%;
+      text-decoration: none;
       font-size: 1.2rem;
-      font-weight: bold;
-      color: black;
-      z-index: 20;
+    }
+
+    .main-icons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 80px;
+      padding: 10px;
+      background-color: #f1f1f1;
+    }
+
+    .main-icons a {
+      color: #065f46;
+      text-decoration: none;
+      font-size: 1.6rem;
+      background-color: white;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .container {
+      padding: 20px;
+      padding-top: 140px;
+      padding-bottom: 80px;
     }
 
     .nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      background-color: #065f46;
-      padding: 1rem;
       position: fixed;
       bottom: 0;
-      width: 100%;
-      z-index: 5;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      background-color: #065f46;
+      padding: 10px 0;
+      z-index: 100;
     }
 
-    .nav button {
-      background-color: #4caf50;
+    .nav a {
       color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      border-radius: 5px;
-      font-weight: bold;
+      font-size: 1.5rem;
+      text-decoration: none;
     }
 
-    .nav button:hover {
-      background-color: #45a049;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 1rem;
-      }
-
-      .nav button {
-        flex: 1 1 calc(50% - 1rem);
-      }
+    .nav a:hover {
+      color: #90ee90;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <img src="your-logo-url.png" alt="Skillbook Logo" />
-    <h1>Skillbook</h1>
+    <div class="logo-title">
+      <img src="your-logo-url.png" alt="Skillbook Logo" />
+      <h1>Skillbook</h1>
+    </div>
+    <div class="time-icons">
+      <div class="time" id="current-time"></div>
+      <div class="top-icons">
+        <a href="messages.html" title="Messages"><i class="fas fa-envelope"></i></a>
+        <a href="chatlist.html" title="Chatlist"><i class="fas fa-comments"></i></a>
+        <a href="setting-support-feedback.html" title="Settings"><i class="fas fa-cog"></i></a>
+      </div>
+    </div>
   </div>
 
-  <div class="time" id="current-time"></div>
+  <div class="main-icons">
+    <a href="profile.html" title="Profile"><i class="fas fa-user"></i></a>
+    <a href="offer-services.html" title="Offer Services"><i class="fas fa-hand-holding-heart"></i></a>
+    <a href="search-services.html" title="Search Services"><i class="fas fa-search"></i></a>
+  </div>
 
-  <div class="container" style="margin-top: 80px; padding: 20px;">
-    <h2>Welcome to Your Dashboard!</h2>
-    <p id="user-info"></p>
+  <div class="container">
+    <h2>Welcome to Your Dashboard</h2>
+    <p id="user-info">Loading user info...</p>
   </div>
 
   <div class="nav">
-    <button onclick="location.href='profile.html'">Profile</button>
-    <button onclick="location.href='chatlist.html'">Chat Index</button>
-    <button onclick="location.href='messages.html'">Messages</button>
-    <button onclick="location.href='notifications.html'">Notifications</button>
-    <button onclick="location.href='booking-schedule.html'">Booking Schedule</button>
-    <button onclick="location.href='offer-services.html'">Offer Services</button>
-    <button onclick="location.href='search-services.html'">Search Services</button>
-    <button onclick="location.href='upcoming-bookings.html'">Upcoming Bookings</button>
-    <button onclick="location.href='subscription.html'">Subscription</button>
-    <button onclick="location.href='setting-support-feedback.html'">Settings</button>
+    <a href="notifications.html" title="Notifications"><i class="fas fa-bell"></i></a>
+    <a href="booking-schedule.html" title="Booking Schedule"><i class="fas fa-calendar-check"></i></a>
+    <a href="upcoming-bookings.html" title="Upcoming Bookings"><i class="fas fa-clock"></i></a>
+    <a href="subscription.html" title="Subscription"><i class="fas fa-star"></i></a>
   </div>
 
-  <script type="text/javascript">
+  <script>
     function updateTime() {
       const now = new Date();
-      const timeString = now.toLocaleTimeString();
-      document.getElementById('current-time').textContent = timeString;
+      document.getElementById("current-time").textContent = now.toLocaleTimeString();
     }
     setInterval(updateTime, 1000);
     updateTime();
@@ -141,13 +175,7 @@
 
     onAuthStateChanged(auth, (user) => {
       const userInfo = document.getElementById("user-info");
-      if (user) {
-        userInfo.textContent = `Logged in as: ${user.email}`;
-      } else {
-        userInfo.textContent = "You are not logged in.";
-        // Optional redirect:
-        // location.href = "login.html";
-      }
+      userInfo.textContent = user ? `Logged in as: ${user.email}` : "Not logged in.";
     });
   </script>
 </body>
