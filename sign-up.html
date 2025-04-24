@@ -55,34 +55,22 @@
     <button onclick="emailLogin()">Login / Sign Up</button>
   </div>
 
+  <!-- Import your own Firebase config JS (hosted file from GitHub or Netlify) -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    import { auth } from './firebase.js'; // Update path as per your file location
     import {
-      getAuth,
       signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      onAuthStateChanged
+      createUserWithEmailAndPassword
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-      authDomain: "skillbook-3fa41.firebaseapp.com",
-      projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.appspot.com",
-      messagingSenderId: "599549421075",
-      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-      measurementId: "G-3VKK01HXE6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    getAnalytics(app);
-    const auth = getAuth(app);
-    });
 
     window.emailLogin = () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        alert("Please enter email and password.");
+        return;
+      }
 
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
