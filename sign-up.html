@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skillbook - Login / Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html {
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-    }
+    body, html { height: 100%; font-family: 'Segoe UI', sans-serif; }
     #main {
       height: 100%;
       display: flex;
@@ -22,8 +20,7 @@
       color: white;
     }
     h2 { margin-bottom: 1rem; }
-
-    input {
+    input, button {
       width: 250px;
       margin: 0.5rem;
       padding: 0.6rem;
@@ -32,41 +29,38 @@
       border: none;
     }
     button {
-      padding: 0.6rem 1.2rem;
-      font-weight: bold;
       background-color: #065f46;
       color: white;
-      border: none;
-      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #34d399;
-    }
-
-    .intl-tel-input {
-      width: 250px;
-      margin: 0.5rem;
-    }
+    button:hover { background-color: #34d399; }
+    .intl-tel-input { width: 250px; margin: 0.5rem; }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
 </head>
 <body>
   <div id="main">
-    <h2>Email or Phone Login / Sign Up</h2>
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password (min 6 chars)" />
-    <button onclick="emailLogin()">Login / Sign Up with Email</button>
+    <h2>Email Sign Up</h2>
+    <input type="email" id="signup-email" placeholder="Email" />
+    <input type="password" id="signup-password" placeholder="Password" />
+    <button onclick="emailSignup()">Sign Up with Email</button>
 
+    <h2>Email Login</h2>
+    <input type="email" id="login-email" placeholder="Email" />
+    <input type="password" id="login-password" placeholder="Password" />
+    <button onclick="emailLogin()">Login with Email</button>
+
+    <h2>Phone Login</h2>
     <input id="phone" type="tel" placeholder="Phone Number" />
-    <button onclick="phoneLogin()">Login / Sign Up with Phone</button>
+    <button onclick="phoneLogin()">Send OTP</button>
 
+    <h2>Google Login</h2>
     <button onclick="googleLogin()">Login with Google</button>
   </div>
 
   <div id="recaptcha-container"></div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
@@ -94,85 +88,65 @@
     getAnalytics(app);
     const auth = getAuth(app);
 
-    // Intl-Tel-Input init
     const phoneInput = document.querySelector("#phone");
     const iti = window.intlTelInput(phoneInput, {
       preferredCountries: ["in", "us", "gb", "ca", "bd", "sa", "ae"],
-      onlyCountries: ["in", "us", "gb", "ca", "bd", "sa", "ae"],
       separateDialCode: true,
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
     });
 
-    // Recaptcha global instance
-    let appVerifier;
-    window.onload = () => {
-      appVerifier = new RecaptchaVerifier('recaptcha-container', {
-        size: 'invisible',
-        callback: (response) => {}
-      }, auth);
-      appVerifier.render();
+    window.emailSignup = () => {
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          alert("Sign up successful!");
+        })
+        .catch(error => {
+          alert("Signup error: " + error.message);
+        });
     };
 
     window.emailLogin = () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (email === "" || password.length < 6) {
-        alert("Please enter valid email and password (min 6 chars).");
-        return;
-      }
-
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          alert("Logged in successfully!");
-          window.location.href = "/dashboard.html";
+        .then(userCredential => {
+          alert("Login successful!");
         })
-        .catch((error) => {
-          if (error.code === 'auth/user-not-found') {
-            createUserWithEmailAndPassword(auth, email, password)
-              .then(() => {
-                alert("Account created and logged in!");
-                window.location.href = "/dashboard.html";
-              })
-              .catch((error) => {
-                alert("Signup Error: " + error.message);
-              });
-          } else {
-            alert("Login Error: " + error.message);
-          }
+        .catch(error => {
+          alert("Login error: " + error.message);
         });
     };
 
     window.phoneLogin = () => {
       const phoneNumber = iti.getNumber();
-
+      const appVerifier = new RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible',
+        callback: (response) => {}
+      }, auth);
       signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        .then((confirmationResult) => {
+        .then(confirmationResult => {
           window.confirmationResult = confirmationResult;
-          const otp = prompt("Enter the OTP sent to your phone:");
-          confirmationResult.confirm(otp)
-            .then(() => {
-              alert("Phone login successful!");
-              window.location.href = "/dashboard.html";
-            })
-            .catch((error) => {
-              alert("Invalid OTP: " + error.message);
-            });
+          const code = prompt("Enter OTP:");
+          return confirmationResult.confirm(code);
         })
-        .catch((error) => {
-          alert("Phone Login Error: " + error.message);
+        .then(result => {
+          alert("Phone login successful!");
+        })
+        .catch(error => {
+          alert("Phone login error: " + error.message);
         });
     };
 
     window.googleLogin = () => {
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
-        .then((result) => {
+        .then(result => {
           alert("Google login successful! Welcome, " + result.user.displayName);
-          window.location.href = "/dashboard.html";
         })
-        .catch((error) => {
-          alert("Google Login Error: " + error.message);
+        .catch(error => {
+          alert("Google login error: " + error.message);
         });
     };
   </script>
