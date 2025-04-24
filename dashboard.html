@@ -14,172 +14,118 @@
       color: black;
     }
 
+    /* Styling for the header (Skillbook logo and name) */
     .header {
-      padding: 1rem;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.2);
-      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 10px 20px;
+      background-color: white;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .header img {
+      height: 40px; /* Adjust logo size */
+      margin-right: 10px;
+    }
+
+    .header h1 {
+      color: #065f46;  /* Green color */
+      font-size: 1.8rem;
       font-weight: bold;
     }
 
-    .card {
-      text-align: center;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      color: white;
+    /* Styling for the current time on the top-right corner */
+    .time {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: black; /* Black font for time */
+      z-index: 20;
     }
 
-    .container {
-      padding: 2rem;
-    }
-
-    .card {
-      background-color: green;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .card h3 {
-      margin-bottom: 0.5rem;
-    }
-
-    .quick-links {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .quick-links div {
-      flex: 1;
-      background: green;
-      margin: 0 0.5rem;
-      padding: 1rem;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      color: white ;
-    }
-
+    /* Styling for the horizontal navigation buttons */
     .nav {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
+      gap: 1rem;
+      background-color: #065f46;
       padding: 1rem;
-      background-color: rgba(255, 255, 255, 0.1);
       position: fixed;
       bottom: 0;
       width: 100%;
+      z-index: 5;
     }
 
-    .nav a {
-      color: #d1fae5;
-      text-decoration: none;
+    .nav button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      border-radius: 5px;
       font-weight: bold;
     }
 
-    .nav a:hover {
-      text-decoration: underline;
+    .nav button:hover {
+      background-color: #45a049;
     }
 
+    /* Responsive styling for smaller screens */
     @media (max-width: 600px) {
       .container {
         padding: 1rem;
-      }
-
-      .quick-links {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .quick-links div {
-        margin: 0;
       }
     }
   </style>
 </head>
 <body>
-  <nav style="background-color:#065f46; padding: 2rem;">
-    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-      <li><a href="profile.html" style="color: white; text-decoration: none;">Profile</a></li>
-      <li><a href="chatlist.html" style="color: white; text-decoration: none;">Chat Index</a></li>
-      <li><a href="messages.html" style="color: white; text-decoration: none;">Messages</a></li>
-      <li><a href="subscription.html" style="color: white; text-decoration: none;">Subscription</a></li>
-      <li><a href="setting-support-feedback.html" style="color: white; text-decoration: none;">Settings</a></li>
-    </ul>
-  </nav>
-
-  <div class="header">Welcome, User!</div>
-  <div class="date">Thursday, 10 April 2025 08:52 PM</div>
-
-  <div class="container">
-    <div class="quick-links">
-      <div>
-        <strong>Bookings</strong><br>
-        3 upcoming
-      </div>
-      <div>
-        <strong>Messages</strong><br>
-        2 new
-      </div>
-      <div>
-        <strong>Ratings</strong><br>
-        4.6 / 5
-      </div>
-    </div>
-    <div class="card">
-      <h3>Your Profile</h3>
-      <p>View and edit your personal details, skills, and uploaded documents.</p>
-    </div>
-
-    <div class="card">
-      <h3>My Services</h3>
-      <p>Manage the services you offer with availability and location settings.</p>
-    </div>
-
-    <div class="card">
-      <h3>Requests & Offers</h3>
-      <p>See who requested your service or offered help.</p>
-    </div>
-
-    <div class="card">
-      <h3>Notifications</h3>
-      <p>You have 2 unread alerts. Check your updates.</p>
-    </div>
-
+  <!-- Skillbook logo and name in upper-left corner -->
+  <div class="header">
+    <img src="your-logo-url.png" alt="Skillbook Logo" />
+    <h1>Skillbook</h1>
   </div>
 
-  <!-- Firebase setup and usage -->
-<script type="module">
-  import { auth } from './firebase.js';
+  <!-- Time display on the top-right corner -->
+  <div class="time" id="current-time"></div>
 
-  // Example check:
-  console.log('Firebase Auth ready:', auth);
-</script>
+  <div class="container">
+    <!-- Content goes here -->
+    <div>
+      <!-- User Dashboard content (e.g., cards, etc.) -->
+      <h2>Welcome to Your Dashboard!</h2>
+    </div>
+  </div>
 
-    // Example usage: Listen for user authentication state changes
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log("User logged in:", user.email);
-      } else {
-        console.log("No user logged in");
-      }
-    });
+  <!-- Navigation buttons below Skillbook -->
+  <div class="nav">
+    <button onclick="location.href='profile.html'">Profile</button>
+    <button onclick="location.href='chatlist.html'">Chat Index</button>
+    <button onclick="location.href='messages.html'">Messages</button>
+    <button onclick="location.href='subscription.html'">Subscription</button>
+    <button onclick="location.href='setting-support-feedback.html'">Settings</button>
+  </div>
 
-    // Example usage: Fetching data from Firestore (e.g., user profile)
-    async function getUserProfile() {
-      const docRef = doc(db, "users", "userId"); // Replace "userId" with actual document ID
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log("User profile:", docSnap.data());
-      } else {
-        console.log("No such document!");
-      }
+  <!-- Script for displaying current time -->
+  <script type="text/javascript">
+    // Function to update the time
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString();
+      document.getElementById('current-time').textContent = timeString;
     }
 
-    // Call the function
-    getUserProfile();
+    // Update time every second
+    setInterval(updateTime, 1000);
+    
+    // Call function once on page load to display time immediately
+    updateTime();
   </script>
 </body>
 </html>
