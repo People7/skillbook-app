@@ -36,6 +36,23 @@
     }
     button:hover { background-color: #34d399; }
     .intl-tel-input { width: 250px; margin: 0.5rem; }
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .password-wrapper input {
+      padding-right: 40px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -43,12 +60,18 @@
     <div id="auth-section">
       <h2>Email Sign Up</h2>
       <input type="email" id="signup-email" placeholder="Email" />
-      <input type="password" id="signup-password" placeholder="Password" />
+      <div class="password-wrapper">
+        <input type="password" id="signup-password" placeholder="Password" />
+        <span class="toggle-password" onclick="togglePassword('signup-password', this)">👁️</span>
+      </div>
       <button onclick="emailSignup()">Sign Up</button>
 
       <h2>Email Login</h2>
       <input type="email" id="login-email" placeholder="Email" />
-      <input type="password" id="login-password" placeholder="Password" />
+      <div class="password-wrapper">
+        <input type="password" id="login-password" placeholder="Password" />
+        <span class="toggle-password" onclick="togglePassword('login-password', this)">👁️</span>
+      </div>
       <button onclick="emailLogin()">Login</button>
 
       <h2>Phone Login</h2>
@@ -106,8 +129,7 @@
 
     onAuthStateChanged(auth, user => {
       if (user) {
-        authSection.style.display = 'none';
-        logoutBtn.style.display = 'block';
+        window.location.href = "dashboard.html";
       } else {
         authSection.style.display = 'block';
         logoutBtn.style.display = 'none';
@@ -120,6 +142,7 @@
       createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
           alert("Sign up successful!");
+          window.location.href = "dashboard.html";
         })
         .catch(error => {
           alert("Signup error: " + error.message);
@@ -132,6 +155,7 @@
       signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
           alert("Login successful!");
+          window.location.href = "dashboard.html";
         })
         .catch(error => {
           alert("Login error: " + error.message);
@@ -153,6 +177,7 @@
         })
         .then(result => {
           alert("Phone login successful!");
+          window.location.href = "dashboard.html";
         })
         .catch(error => {
           alert("Phone login error: " + error.message);
@@ -164,6 +189,7 @@
       signInWithPopup(auth, provider)
         .then(result => {
           alert("Google login successful! Welcome, " + result.user.displayName);
+          window.location.href = "dashboard.html";
         })
         .catch(error => {
           alert("Google login error: " + error.message);
@@ -173,9 +199,21 @@
     window.logout = () => {
       signOut(auth).then(() => {
         alert("Logged out successfully.");
+        window.location.href = "index.html";
       }).catch(error => {
         alert("Logout error: " + error.message);
       });
+    };
+
+    window.togglePassword = (fieldId, toggleIcon) => {
+      const field = document.getElementById(fieldId);
+      if (field.type === "password") {
+        field.type = "text";
+        toggleIcon.textContent = "🙈";
+      } else {
+        field.type = "password";
+        toggleIcon.textContent = "👁️";
+      }
     };
   </script>
 </body>
