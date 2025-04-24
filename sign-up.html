@@ -19,7 +19,7 @@
       background: linear-gradient(135deg, #34d399, #065f46);
       color: white;
     }
-    h2 { margin-bottom: 1rem; }
+    h2 { margin-top: 2rem; }
     input, button {
       width: 250px;
       margin: 0.5rem;
@@ -40,22 +40,26 @@
 </head>
 <body>
   <div id="main">
-    <h2>Email Sign Up</h2>
-    <input type="email" id="signup-email" placeholder="Email" />
-    <input type="password" id="signup-password" placeholder="Password" />
-    <button onclick="emailSignup()">Sign Up with Email</button>
+    <div id="auth-section">
+      <h2>Email Sign Up</h2>
+      <input type="email" id="signup-email" placeholder="Email" />
+      <input type="password" id="signup-password" placeholder="Password" />
+      <button onclick="emailSignup()">Sign Up</button>
 
-    <h2>Email Login</h2>
-    <input type="email" id="login-email" placeholder="Email" />
-    <input type="password" id="login-password" placeholder="Password" />
-    <button onclick="emailLogin()">Login with Email</button>
+      <h2>Email Login</h2>
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button onclick="emailLogin()">Login</button>
 
-    <h2>Phone Login</h2>
-    <input id="phone" type="tel" placeholder="Phone Number" />
-    <button onclick="phoneLogin()">Send OTP</button>
+      <h2>Phone Login</h2>
+      <input id="phone" type="tel" placeholder="Phone Number" />
+      <button onclick="phoneLogin()">Send OTP</button>
 
-    <h2>Google Login</h2>
-    <button onclick="googleLogin()">Login with Google</button>
+      <h2>Google Login</h2>
+      <button onclick="googleLogin()">Login with Google</button>
+    </div>
+
+    <button id="logout-btn" onclick="logout()" style="display:none;">Logout</button>
   </div>
 
   <div id="recaptcha-container"></div>
@@ -71,7 +75,9 @@
       signInWithPhoneNumber,
       RecaptchaVerifier,
       GoogleAuthProvider,
-      signInWithPopup
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -90,9 +96,22 @@
 
     const phoneInput = document.querySelector("#phone");
     const iti = window.intlTelInput(phoneInput, {
-      preferredCountries: ["in", "us", "gb", "ca", "bd", "sa", "ae"],
+      preferredCountries: ["in", "gb", "us", "ca", "bd", "sa", "ae"],
       separateDialCode: true,
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+
+    const authSection = document.getElementById('auth-section');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        authSection.style.display = 'none';
+        logoutBtn.style.display = 'block';
+      } else {
+        authSection.style.display = 'block';
+        logoutBtn.style.display = 'none';
+      }
     });
 
     window.emailSignup = () => {
@@ -125,6 +144,7 @@
         size: 'invisible',
         callback: (response) => {}
       }, auth);
+
       signInWithPhoneNumber(auth, phoneNumber, appVerifier)
         .then(confirmationResult => {
           window.confirmationResult = confirmationResult;
@@ -148,6 +168,14 @@
         .catch(error => {
           alert("Google login error: " + error.message);
         });
+    };
+
+    window.logout = () => {
+      signOut(auth).then(() => {
+        alert("Logged out successfully.");
+      }).catch(error => {
+        alert("Logout error: " + error.message);
+      });
     };
   </script>
 </body>
