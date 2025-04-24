@@ -46,26 +46,6 @@
       to { opacity: 0; visibility: hidden; }
     }
 
-    nav {
-      background-color: #065f46;
-      padding: 1rem;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-    }
-
     #landing {
       background: white;
       color: black;
@@ -121,20 +101,6 @@
 </head>
 <body>
 
-<!-- Navigation -->
-<nav>
-  <ul>
-    <li><a href="login.html">Login</a></li>
-    <li><a href="dashboard.html">Dashboard</a></li>
-    <li><a href="sign-up.html">Sign Up</a></li>
-    <li><a href="profile.html">Profile</a></li>
-    <li><a href="upcoming-bookings.html">Bookings</a></li>
-    <li><a href="subscription.html">Subscription</a></li>
-    <li><a href="chatlist.html">Chat Inbox</a></li>
-    <li><a href="setting-support-feedback.html">Settings</a></li>
-  </ul>
-</nav>
-
 <!-- Splash Screen -->
 <div id="splash">
   <h1>Skillbook</h1>
@@ -146,8 +112,8 @@
   <h1>Welcome to Skillbook</h1>
   <p>Share your skill and Earn</p>
   <div class="button-group">
-    <a href="search-services.html">🔍 Search Services</a>
-    <a href="offer-services.html">🛠️ Offer Services</a>
+    <!-- Login button for first-time users -->
+    <a href="login.html" id="login-btn">Login</a>
   </div>
 </div>
 
@@ -157,7 +123,7 @@
 <!-- Firebase v9+ Modular SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-  import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
@@ -169,54 +135,29 @@
     measurementId: "G-3VKK01HXE6"
   };
 
-  // Initialize Firebase and Auth
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // Setup invisible reCAPTCHA
-  window.recaptchaVerifierLogin = new RecaptchaVerifier('recaptcha-login', {
-    'size': 'invisible',
-    'callback': (response) => {
-      console.log('reCAPTCHA resolved');
+  // Check if the user is logged in
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // If logged in, redirect to dashboard
+      window.location.href = 'dashboard.html';
+    } else {
+      // If not logged in, show landing page with login button
+      document.getElementById('landing').style.display = 'flex';
+      document.getElementById('splash').style.display = 'none';
     }
-  }, auth);
+  });
 
-  // Send OTP function
-  window.sendLoginOTP = () => {
-    const phone = document.getElementById("login-phone")?.value;
-    if (!phone) return alert("Phone input not found.");
-
-    signInWithPhoneNumber(auth, phone, window.recaptchaVerifierLogin)
-      .then((confirmationResult) => {
-        window.loginConfirmation = confirmationResult;
-        alert("OTP sent to phone!");
-      })
-      .catch((error) => {
-        alert("Error: " + error.message);
-      });
-  };
-
-  // Verify OTP function
-  window.verifyLoginOTP = () => {
-    const code = document.getElementById("login-otp")?.value;
-    if (!code) return alert("OTP input not found.");
-
-    window.loginConfirmation.confirm(code)
-      .then(() => {
-        alert("Phone login successful!");
-        window.location.href = "dashboard.html";
-      })
-      .catch((error) => {
-        alert("OTP Error: " + error.message);
-      });
-  };
 </script>
 
 <!-- Splash Screen Timeout -->
 <script>
   setTimeout(() => {
+    // Check if user is logged in, and redirect if necessary
     document.getElementById('splash').style.display = 'none';
-    document.getElementById('landing').style.display = 'flex';
   }, 3000);
 </script>
 
