@@ -9,23 +9,21 @@
     body, html {
       height: 100%;
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #34d399, #065f46);
+      color: white;
     }
     #main {
-      height: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2rem 1rem;
-      text-align: center;
-      background: linear-gradient(135deg, #34d399, #065f46);
-      color: white;
+      padding: 2rem;
     }
     h2 { margin-bottom: 1rem; }
-
     input {
       width: 250px;
-      margin: 0.5rem;
+      margin: 0.4rem;
       padding: 0.6rem;
       font-size: 1rem;
       border-radius: 6px;
@@ -34,47 +32,57 @@
     button {
       padding: 0.6rem 1.2rem;
       font-weight: bold;
+      margin-top: 0.5rem;
       background-color: #065f46;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 0.5rem;
     }
     button:hover {
       background-color: #34d399;
     }
-    .divider {
-      margin: 1rem 0;
+    .section {
+      margin-bottom: 2rem;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div id="main">
-    <h2>Login / Sign Up</h2>
+    <h2>Skillbook Login</h2>
 
-    <input type="email" id="email" placeholder="Email" />
-    <br />
-    <input type="password" id="password" placeholder="Password" />
-    <br />
-    <button onclick="emailLogin()">Login / Sign Up with Email</button>
+    <!-- Email Section -->
+    <div class="section">
+      <input type="email" id="email" placeholder="Email" required />
+      <br />
+      <input type="password" id="password" placeholder="Password" required />
+      <br />
+      <button onclick="emailLogin()">Login / Sign Up</button>
+    </div>
 
-    <div class="divider">OR</div>
+    <!-- Google Section -->
+    <div class="section">
+      <button onclick="googleLogin()">Sign in with Google</button>
+    </div>
 
-    <button onclick="googleLogin()">Continue with Google</button>
-
-    <div class="divider">OR</div>
-
-    <input type="tel" id="phone" placeholder="Phone Number (+91...)" />
-    <div id="recaptcha-container"></div>
-    <button onclick="sendOTP()">Send OTP</button>
-    <input type="text" id="otp" placeholder="Enter OTP" />
-    <button onclick="verifyOTP()">Verify OTP</button>
+    <!-- Phone Section -->
+    <div class="section">
+      <input type="text" id="phone" placeholder="+911234567890" />
+      <br />
+      <div id="recaptcha-container"></div>
+      <button onclick="sendOTP()">Send OTP</button>
+      <br />
+      <input type="text" id="otp" placeholder="Enter OTP" />
+      <br />
+      <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
   </div>
 
+  <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
@@ -88,8 +96,9 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    // Email Login/Signup
+    // Email Login
     window.emailLogin = () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
@@ -104,7 +113,7 @@
               .then(() => {
                 window.location.href = "dashboard.html";
               })
-              .catch((err) => alert("Signup Error: " + err.message));
+              .catch(err => alert("Signup Error: " + err.message));
           } else {
             alert("Login Error: " + error.message);
           }
@@ -113,39 +122,47 @@
 
     // Google Sign-In
     window.googleLogin = () => {
-      const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then(() => {
           window.location.href = "dashboard.html";
         })
-        .catch((error) => alert("Google Sign-In Error: " + error.message));
+        .catch(error => {
+          alert("Google Login Error: " + error.message);
+        });
     };
 
     // Phone Auth
     let confirmationResult;
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': () => {}
+    }, auth);
+
     window.sendOTP = () => {
-      const phone = document.getElementById("phone").value.trim();
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-          size: 'normal',
-          callback: () => {}
-        }, auth);
-      }
-      signInWithPhoneNumber(auth, phone, window.recaptchaVerifier)
+      const phoneNumber = document.getElementById("phone").value.trim();
+      signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
         .then((result) => {
           confirmationResult = result;
           alert("OTP sent successfully!");
         })
-        .catch((error) => alert("OTP Error: " + error.message));
+        .catch((error) => {
+          alert("OTP Error: " + error.message);
+        });
     };
 
     window.verifyOTP = () => {
-      const otp = document.getElementById("otp").value.trim();
-      confirmationResult.confirm(otp)
+      const code = document.getElementById("otp").value.trim();
+      if (!confirmationResult) {
+        alert("First send the OTP.");
+        return;
+      }
+      confirmationResult.confirm(code)
         .then(() => {
           window.location.href = "dashboard.html";
         })
-        .catch((error) => alert("OTP Verification Error: " + error.message));
+        .catch((error) => {
+          alert("OTP Verification Failed: " + error.message);
+        });
     };
   </script>
 </body>
