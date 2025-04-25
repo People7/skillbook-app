@@ -5,14 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel - Skillbook</title>
   <style>
-    /* [All your existing CSS remains unchanged] */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f3f4f6;
+    }
+
+    nav {
+      background-color: #065f46;
+      padding: 1rem 2rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #d1fae5;
+      padding: 1rem;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #065f46;
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
   </style>
 </head>
 <body>
-  <nav style="background-color:#065f46; padding: 2rem;">
-    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-      <li><a href="login.html" style="color: white; text-decoration: none;">Login</a></li>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
     </ul>
   </nav>
 
@@ -31,14 +83,41 @@
     </nav>
 
     <div class="main" id="content">
-      
+      <p>Welcome to the admin panel. Choose a section from the sidebar.</p>
     </div>
   </div>
 
+  <!-- Firebase Integration -->
   <script type="module">
-  import { auth } from './firebase.js';
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-  // Example check:
-  console.log('Firebase Auth ready:', auth);
-</script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+      authDomain: "skillbook-3fa41.firebaseapp.com",
+      projectId: "skillbook-3fa41",
+      storageBucket: "skillbook-3fa41.appspot.com",
+      messagingSenderId: "599549421075",
+      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+      measurementId: "G-3VKK01HXE6"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("You must be logged in to access the admin panel.");
+        window.location.href = "login.html";
+      } else {
+        console.log("Admin authenticated:", user.email);
+      }
+    });
+
+    function showSection(section) {
+      const content = document.getElementById('content');
+      content.innerHTML = `<h2>${section.charAt(0).toUpperCase() + section.slice(1)}</h2><p>Content for ${section}</p>`;
+    }
+  </script>
+</body>
+</html>
