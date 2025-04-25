@@ -47,8 +47,6 @@
       margin: 0;
     }
 
-    
-
     .profile-pic {
       width: 24px;
       height: 24px;
@@ -175,17 +173,18 @@
   </div>
 
   <script>
-    function updateTime() {
-      const now = new Date();
-      document.getElementById("current-time").textContent = now.toLocaleTimeString();
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-
     // Add event listener for logout
-    document.getElementById("logout").addEventListener("click", function() {
-      // Redirect to login page after logout
-      window.location.href = "login.html"; // replace with your login page URL
+    document.getElementById("logout").addEventListener("click", function(event) {
+      event.preventDefault(); // Prevent default link behavior if any
+      
+      // Clear session/cookie/localStorage if you are managing login state
+      // Example with Firebase Auth (if you're using Firebase):
+      firebase.auth().signOut().then(function() {
+        // Redirect to login page after successful logout
+        window.location.href = "login.html"; // replace with your login page URL
+      }).catch(function(error) {
+        console.error("Error signing out: ", error);
+      });
     });
   </script>
 </body>
