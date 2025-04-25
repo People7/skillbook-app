@@ -2,91 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skillbook - Admin Login</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Skillbook</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { height: 100%; font-family: 'Segoe UI', sans-serif; }
-    #main {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-      text-align: center;
-      background: linear-gradient(135deg, #34d399, #065f46);
-      color: white;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f3f4f6;
     }
-    h2 { margin-top: 2rem; }
-    input, button {
-      width: 250px;
-      margin: 0.5rem;
-      padding: 0.6rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: none;
-    }
-    button {
+
+    nav {
       background-color: #065f46;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+      padding: 1rem 2rem;
     }
-    button:hover { background-color: #34d399; }
-    .intl-tel-input { width: 250px; margin: 0.5rem; }
-    .password-wrapper {
-      position: relative;
+
+    nav ul {
+      list-style: none;
       display: flex;
       justify-content: center;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
     }
-    .password-wrapper input {
-      padding-right: 40px;
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
     }
-    .toggle-password {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 18px;
-      color: black;
+
+    header {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #d1fae5;
+      padding: 1rem;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #065f46;
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
     }
   </style>
 </head>
 <body>
-  <div id="main">
-    <div id="auth-section">
-      <h2>Email Login</h2>
-      <input type="email" id="login-email" placeholder="Email" />
-      <div class="password-wrapper">
-        <input type="password" id="login-password" placeholder="Password" />
-        <span class="toggle-password" onclick="togglePassword('login-password', this)">👁️</span>
-      </div>
-      <button onclick="emailLogin()">Login</button>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
 
-      <h2>Phone Login</h2>
-      <input id="phone" type="tel" placeholder="Phone Number" />
-      <button onclick="phoneLogin()">Send OTP</button>
+  <header>
+    <h1>Admin Panel - Skillbook</h1>
+  </header>
 
-      <h2>Google Login</h2>
-      <button onclick="googleLogin()">Login with Google</button>
+  <div class="container">
+    <nav class="sidebar">
+      <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+      <a href="#" onclick="showSection('users')">Users</a>
+      <a href="#" onclick="showSection('services')">Services</a>
+      <a href="#" onclick="showSection('bookings')">Bookings</a>
+      <a href="#" onclick="showSection('reports')">Reports</a>
+      <a href="#" onclick="showSection('settings')">Settings</a>
+    </nav>
 
-      <p>Don't have an account? <a href="signup.html" style="color: #34d399;">Sign Up</a></p>
+    <div class="main" id="content">
+      <p>Welcome to the admin panel. Choose a section from the sidebar.</p>
     </div>
-
-    <button id="logout-btn" onclick="logout()" style="display:none;">Logout</button>
   </div>
 
-  <div id="recaptcha-container"></div>
-
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-
+  <!-- Firebase Integration -->
   <script type="module">
-    // Your Firebase configuration
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
     const firebaseConfig = {
       apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
       authDomain: "skillbook-3fa41.firebaseapp.com",
@@ -97,81 +102,23 @@
       measurementId: "G-3VKK01HXE6"
     };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    // Function to toggle password visibility
-    function togglePassword(id, element) {
-      const input = document.getElementById(id);
-      input.type = input.type === 'password' ? 'text' : 'password';
-      element.textContent = element.textContent === '👁️' ? '🙈' : '👁️';
-    }
+    // Check if user is authenticated
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("You must be logged in to access the admin panel.");
+        window.location.href = "login.html";
+      } else {
+        console.log("Admin authenticated:", user.email);
+      }
+    });
 
-    // Email login
-    function emailLogin() {
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          alert('Logged in as ' + user.email);
-          window.location.href = 'admin-panel.html'; // Redirect to admin panel
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(`Error: ${errorMessage}`);
-        });
-    }
-
-    // Google login
-    function googleLogin() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          alert('Logged in as ' + user.displayName);
-          window.location.href = 'admin-panel.html'; // Redirect to admin panel
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(`Error: ${errorMessage}`);
-        });
-    }
-
-    // Phone login
-    function phoneLogin() {
-      const phoneNumber = document.getElementById('phone').value;
-      const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        size: 'invisible',
-      });
-
-      auth.signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          const code = prompt('Enter the OTP sent to your phone');
-          confirmationResult.confirm(code)
-            .then((result) => {
-              alert('Phone authentication successful');
-              window.location.href = 'admin-panel.html'; // Redirect to admin panel
-            })
-            .catch((error) => {
-              alert('Error: ' + error.message);
-            });
-        })
-        .catch((error) => {
-          alert('Error: ' + error.message);
-        });
-    }
-
-    // Logout function
-    function logout() {
-      auth.signOut().then(() => {
-        window.location.href = 'login.html'; // Redirect to login page
-      });
+    // Function to show sections dynamically
+    function showSection(section) {
+      const content = document.getElementById('content');
+      content.innerHTML = `<h2>${section.charAt(0).toUpperCase() + section.slice(1)}</h2><p>Content for ${section}</p>`;
     }
   </script>
 </body>
