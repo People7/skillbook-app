@@ -22,6 +22,7 @@
 
     .form-group {
       margin-bottom: 15px;
+      position: relative; /* for suggestions positioning */
     }
 
     label {
@@ -171,28 +172,47 @@
     .time-slot input {
       width: 48%;
     }
+
+    /* Service Title Suggestions Styling */
+    .suggestions {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: none;
+    }
+    .suggestions div {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .suggestions div:hover {
+      background-color: #f1f1f1;
+    }
   </style>
 </head>
 <body>
   <!-- Header with Logo, Icons, and Profile Picture -->
   <header>
     <div class="logo">
-      <img src="your-logo-url.png" alt="Skillbook Logo" /> <!-- Change logo URL -->
+      <img src="your-logo-url.png" alt="Skillbook Logo" />
       <span>Skillbook</span>
     </div>
-
-    <!-- Profile Picture on the Right -->
     <div class="profile-pic">
-      <img src="your-profile-pic-url.jpg" alt="Profile Picture" /> <!-- Change to actual profile picture -->
+      <img src="your-profile-pic-url.jpg" alt="Profile Picture" />
     </div>
   </header>
 
   <!-- Icons Below the Skillbook Name -->
   <div class="nav-icons">
-    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a> <!-- Dashboard Icon -->
-    <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a> <!-- Profile Icon -->
-    <a href="subscription.html"><i class="fas fa-cogs"></i><span>Subscription</span></a> <!-- Subscription Icon -->
-    <!-- Add more icons here as you expand -->
+    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+    <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a>
+    <a href="subscription.html"><i class="fas fa-cogs"></i><span>Subscription</span></a>
   </div>
 
   <h1>Offer Your Services</h1>
@@ -201,54 +221,38 @@
   <form id="serviceForm">
     <div class="form-group">
       <label for="title">Service Title</label>
-      <input type="text" id="title" placeholder="e.g. Personal Fitness Trainer" />
+      <input
+        type="text"
+        id="title"
+        placeholder="e.g. Personal Fitness Trainer"
+        onkeyup="showSuggestions(this.value)"
+        autocomplete="off"
+      />
+      <div id="suggestionsList" class="suggestions"></div>
     </div>
 
     <div class="form-group">
       <label for="category">Select Category</label>
       <div class="category-scroll">
-        <select id="category">
-          <option>Personal</option>
-          <option>Social</option>
-          <option>Environmental</option>
-          <option>Household</option>
-          <option>Business</option>
-          <option>Health</option>
-          <option>Entertainment</option>
-          <option>Repair and Maintenance</option>
-          <option>Innovation</option>
-          <option>Consultancy</option>
-          <option>Engineering</option>
-          <option>Educational</option>
-          <option>Political</option>
-          <option>Safety and Security</option>
-          <option>Helping</option>
-          <option>Religious</option>
-          <option>Legal</option>
-          <option>Financial</option>
-          <option>Creative Arts</option>
-          <option>Media</option>
-          <option>Transportation</option>
-          <option>Hospitality</option>
-          <option>Technical Support</option>
-          <option>Fitness and Sports</option>
-          <option>Marketing and Sales</option>
-          <option>Event Management</option>
-          <option>Agricultural</option>
-          <option>Writing & Editing</option>
-          <option>Real Estate</option>
-          <option>Technology</option>
-          <option>Travel & Tourism</option>
-          <option>Human Resources</option>
-          <option>Fashion & Beauty</option>
-          <option>Art & Design</option>
-          <option>Photography</option>
-          <option>Training & Coaching</option>
-          <option>Translation Services</option>
-          <option>Data Entry</option>
-          <option>IT Services</option>
-          <option>Research & Analysis</option>
-          <option>Logistics</option>
+        <select id="category" name="category" multiple size="10">
+          <option>Personal</option><option>Social</option><option>Environmental</option>
+          <option>Household</option><option>Business</option><option>Health</option>
+          <option>Entertainment</option><option>Repair and Maintenance</option>
+          <option>Innovation</option><option>Consultancy</option><option>Engineering</option>
+          <option>Educational</option><option>Political</option>
+          <option>Safety and Security</option><option>Helping</option>
+          <option>Religious</option><option>Legal</option><option>Financial</option>
+          <option>Creative Arts</option><option>Media</option><option>Transportation</option>
+          <option>Hospitality</option><option>Technical Support</option>
+          <option>Fitness and Sports</option><option>Marketing and Sales</option>
+          <option>Event Management</option><option>Agricultural</option>
+          <option>Writing & Editing</option><option>Real Estate</option>
+          <option>Technology</option><option>Travel & Tourism</option>
+          <option>Human Resources</option><option>Fashion & Beauty</option>
+          <option>Art & Design</option><option>Photography</option>
+          <option>Training & Coaching</option><option>Translation Services</option>
+          <option>Data Entry</option><option>IT Services</option>
+          <option>Research & Analysis</option><option>Logistics</option>
           <option>Other</option>
         </select>
       </div>
@@ -277,21 +281,15 @@
       <input type="text" placeholder="State" />
     </div>
 
-    <!-- Availability: Multiple Days Selection -->
     <div class="form-group">
       <label for="availabilityDays">Available Days</label>
       <select id="availabilityDays" multiple>
-        <option>Monday</option>
-        <option>Tuesday</option>
-        <option>Wednesday</option>
-        <option>Thursday</option>
-        <option>Friday</option>
-        <option>Saturday</option>
+        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+        <option>Thursday</option><option>Friday</option><option>Saturday</option>
         <option>Sunday</option>
       </select>
     </div>
 
-    <!-- Time Slots: Multiple Times with Start and End -->
     <div class="form-group">
       <label>Time Slots</label>
       <div id="timeSlotsContainer">
@@ -303,45 +301,72 @@
       <button type="button" onclick="addTimeSlot()">Add Another Time Slot</button>
     </div>
 
-    <!-- Preferred Contact Method -->
     <div class="form-group contact-options">
       <label><input type="checkbox" name="contactMethod" value="Phone" /> Phone</label>
       <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
       <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
     </div>
 
-    <!-- Upload Certificate -->
     <div class="form-group">
       <label for="certificate">Upload Certificate</label>
       <input type="file" id="certificate" />
     </div>
 
-    <!-- Upload Video -->
     <div class="form-group">
       <label for="video">Upload Video</label>
       <input type="file" id="video" />
     </div>
 
-    <!-- Terms and Conditions -->
     <div class="form-group terms">
       <input type="checkbox" id="terms" />
       <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
     </div>
 
-    <button type="submit">Submit Service</button>
+    <button type="submit">Submit Your Service</button>
   </form>
 
   <script>
-    // Function to add more time slots
+    const serviceTitles = [
+      'Accountant','Accounts Manager','Admin Assistant','Advertising Consultant','Aesthetician',
+      'Air Conditioning Technician','Animator','Architect','Artist','Babysitter','Baker','Barber',
+      'Bartender','Beautician','Bookkeeper','Business Consultant','Business Coach',
+      'Business Development Manager','Carpenter','Chef','Cleaner','Consultant','Content Writer',
+      'Corporate Trainer','Data Entry Specialist','Diet Consultant','Electrician','Event Planner',
+      'Fashion Designer','Fitness Coach','Gardener','Graphic Designer','Hair Stylist','Health Coach',
+      'Housekeeper','Interior Designer','Life Coach','Massage Therapist','Mechanic','Nutritionist'
+    ];
+
+    function showSuggestions(query) {
+      const list = document.getElementById('suggestionsList');
+      list.innerHTML = '';
+      if (!query) { list.style.display = 'none'; return; }
+      const matches = serviceTitles
+        .filter(s => s.toLowerCase().includes(query.toLowerCase()))
+        .sort();
+      if (!matches.length) { list.style.display = 'none'; return; }
+      list.style.display = 'block';
+      matches.forEach(s => {
+        const div = document.createElement('div');
+        div.textContent = s;
+        div.onclick = () => selectService(s);
+        list.appendChild(div);
+      });
+    }
+
+    function selectService(s) {
+      document.getElementById('title').value = s;
+      document.getElementById('suggestionsList').style.display = 'none';
+    }
+
     function addTimeSlot() {
-      const container = document.getElementById('timeSlotsContainer');
-      const newSlot = document.createElement('div');
-      newSlot.classList.add('time-slot');
-      newSlot.innerHTML = `
+      const c = document.getElementById('timeSlotsContainer');
+      const d = document.createElement('div');
+      d.className = 'time-slot';
+      d.innerHTML = `
         <input type="time" name="startTime" placeholder="Start Time" />
         <input type="time" name="endTime" placeholder="End Time" />
       `;
-      container.appendChild(newSlot);
+      c.appendChild(d);
     }
   </script>
 </body>
