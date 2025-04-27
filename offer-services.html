@@ -325,49 +325,214 @@
     <button type="submit">Submit Your Service</button>
   </form>
 
-  <script>
-    const serviceTitles = [
-      'Accountant','Accounts Manager','Admin Assistant','Advertising Consultant','Aesthetician',
-      'Air Conditioning Technician','Animator','Architect','Artist','Babysitter','Baker','Barber',
-      'Bartender','Beautician','Bookkeeper','Business Consultant','Business Coach',
-      'Business Development Manager','Carpenter','Chef','Cleaner','Consultant','Content Writer',
-      'Corporate Trainer','Data Entry Specialist','Diet Consultant','Electrician','Event Planner',
-      'Fashion Designer','Fitness Coach','Gardener','Graphic Designer','Hair Stylist','Health Coach',
-      'Housekeeper','Interior Designer','Life Coach','Massage Therapist','Mechanic','Nutritionist'
-    ];
+ <script>
+  const serviceTitlesByCategory = {
+    "Agriculture Services": [
+      'Crop Farming','Livestock Farming','Organic Farming','Dairy Farming','Poultry Farming',
+      'Horticulture','Fish Farming','Farm Machinery Operation','Irrigation','Agricultural Assistant',
+      'Seed Production','Fertilizer Application','Harvesting','Farm Management',
+      'Greenhouse Management','Crop Protection'
+    ],
+    "Art & Craft": [
+      'Pottery','Calligraphy','Sculpture','Origami','Painting','Drawing','Leather Craft',
+      'Woodworking','Textile Design','Jewelry Making','Knitting','Weaving','Embroidery',
+      'Glassblowing','Custom Art Design'
+    ],
+    "Beauty & Personal Care": [
+      'Hair Cutting','Hair Styling','Manicure','Pedicure','Makeup Artist','Skin Care Specialist',
+      'Massage Therapist','Nail Art','Eyelash Extensions','Beauty Therapy','Barbering',
+      'Facial Treatment','Waxing','Body Piercing','Cosmetic Sales'
+    ],
+    "Business Services": [
+      'Project Management','Sales Management','Business Consulting','Market Research',
+      'Human Resources','Virtual Assistant','Customer Support','Business Development',
+      'Event Planning','Data Entry','Business Analytics','Office Administration','Employee Training',
+      'Contract Negotiation','Franchise Management'
+    ],
+    "Construction": [
+      'Carpenter','Electrician','Plumber','Painter','Bricklayer','Welder','Mason','Builder',
+      'Construction Supervisor','Crane Operator','Demolition Worker','Concrete Worker',
+      'Construction Labourer','Site Engineer','Surveyor'
+    ],
+    "Cooking & Catering": [
+      'Chef','Baker','Pastry Chef','Sous Chef','Line Cook','Catering Services','Food Preparation',
+      'Waitstaff','Bartender','Dishwashing','Butcher','Barista','Personal Chef',
+      'Catering Coordinator','Kitchen Assistant'
+    ],
+    "Education & Training": [
+      'Teacher','Tutor','Educational Consultant','Special Education Teacher','Language Instructor',
+      'Childcare Provider','Exam Preparation','Corporate Trainer','Online Course Creator',
+      'Test Prep Tutor','Educational Assistant','School Administrator','Instructor (Various Fields)',
+      'Career Counselor','E-Learning Developer'
+    ],
+    "Engineering & Tech": [
+      'Software Developer','Mechanical Engineer','Electrical Engineer','Civil Engineer','IT Support',
+      'Network Engineer','Robotics Engineer','Web Developer','Database Administrator',
+      'Graphic Designer','CAD Technician','Data Scientist','Full Stack Developer',
+      'Cloud Computing Specialist','Quality Assurance Analyst'
+    ],
+    "Environmental Services": [
+      'Environmental Consultant','Sustainability Specialist','Waste Management',
+      'Renewable Energy Technician','Environmental Engineer','Conservationist',
+      'Environmental Educator','Green Building Consultant','Recycling Specialist',
+      'Climate Change Expert','Greenhouse Gas Auditor','Eco-Friendly Product Designer',
+      'Tree Planting','Soil Scientist','Water Quality Analyst'
+    ],
+    "Finance & Accounting": [
+      'Accountant','Bookkeeper','Financial Analyst','Investment Banker','Tax Consultant','Auditor',
+      'Payroll Clerk','Financial Planner','Insurance Agent','Mortgage Broker','Wealth Manager',
+      'Risk Management Analyst','Budget Analyst','CFO','Tax Preparer'
+    ],
+    "Food Delivery & Hospitality": [
+      'Delivery Driver','Waiter/Waitress','Housekeeper','Cook','Room Service Attendant','Bartender',
+      'Hotel Manager','Concierge','Front Desk Receptionist','House Maid','Bellboy',
+      'Event Coordinator','Cook Helper','Food Delivery Driver','Host/Hostess'
+    ],
+    "Healthcare": [
+      'Doctor','Nurse','Pharmacist','Medical Assistant','Lab Technician','Radiology Technician',
+      'Physiotherapist','Occupational Therapist','Paramedic','Dentist','Optometrist',
+      'Healthcare Administrator','Dietician','Psychologist','Home Health Aide'
+    ],
+    "Household Services": [
+      'House Cleaner','Laundry Service','Ironing','Personal Assistant','Gardener','Baby Sitter',
+      'Dog Walker','Home Organizer','Home Maintenance','Pest Control','Pool Cleaning','Handyman',
+      'Painter (Interior)','Decorator','House Moving Assistant'
+    ],
+    "Information Technology": [
+      'IT Support','System Administrator','Network Administrator','Software Engineer','IT Consultant',
+      'Web Developer','Application Developer','Security Specialist','Cloud Solutions Architect',
+      'Blockchain Developer','Artificial Intelligence Specialist','IT Project Manager','Data Analyst',
+      'Business Intelligence Analyst','Cybersecurity Specialist'
+    ],
+    "Marketing & Advertising": [
+      'Social Media Manager','SEO Specialist','Content Creator','Copywriter','Digital Marketing Expert',
+      'Brand Strategist','Marketing Consultant','Email Marketing Specialist','Affiliate Marketing',
+      'PPC Specialist','Event Marketing','Public Relations Specialist','Graphic Designer',
+      'Video Production','Influencer Marketing'
+    ],
+    "Media & Entertainment": [
+      'Film Director','Camera Operator','Video Editor','Screenwriter','Voice Actor','Musician',
+      'Music Producer','Video Game Developer','Animator','Graphic Designer','Art Director',
+      'Public Relations','Content Creator','Social Media Influencer','Event Host'
+    ],
+    "Manufacturing & Production": [
+      'Factory Worker','Machine Operator','Production Planner','Assembly Line Worker',
+      'Quality Control Inspector','Forklift Operator','Product Designer','Industrial Engineer',
+      'Packaging Specialist','CNC Operator','Maintenance Technician','Supply Chain Manager',
+      'Manufacturing Manager','Production Supervisor','Safety Officer'
+    ],
+    "Marketing, Sales & Retail": [
+      'Sales Representative','Retail Associate','Sales Manager','Marketing Researcher',
+      'Customer Service Representative','Lead Generation Specialist','Product Specialist',
+      'Brand Ambassador','Visual Merchandiser','Retail Manager','E-commerce Specialist',
+      'Advertising Specialist','Sales Consultant','Telemarketer','Event Coordinator'
+    ],
+    "Real Estate": [
+      'Real Estate Agent','Property Manager','Real Estate Developer','Real Estate Consultant',
+      'Appraiser','Leasing Agent','Property Inspector','Property Staging','Home Inspector',
+      'Real Estate Lawyer','Rent Collection Specialist','Property Marketing Specialist',
+      'Commercial Real Estate Broker','Residential Property Sales','Real Estate Investment'
+    ],
+    "Research & Development": [
+      'Research Scientist','Product Development Manager','Market Research Analyst',
+      'Clinical Research Coordinator','Biotech Researcher','Innovation Specialist',
+      'Technical Writer','R&D Technician','Lab Technician','Data Scientist','Chemist','Psychologist',
+      'Biologist','Software Researcher','Engineering Researcher'
+    ],
+    "Security & Protection": [
+      'Security Guard','Cybersecurity Specialist','Personal Security','Alarm Technician',
+      'Private Investigator','Bodyguard','Safety Officer','Security Consultant','Fire Safety Officer',
+      'Surveillance Operator','Loss Prevention Specialist','Building Security',
+      'Security Systems Installation','Anti-Terrorism Specialist','Event Security Personnel'
+    ],
+    "Shipping, Logistics & Transportation": [
+      'Truck Driver','Delivery Driver','Warehouse Manager','Supply Chain Analyst','Logistics Coordinator',
+      'Cargo Specialist','Freight Forwarder','Air Cargo Handler','Shipping Clerk','Marine Engineer',
+      'Dispatcher','Transportation Planner','Customs Broker','Inventory Control Specialist','Fleet Manager'
+    ],
+    "Social Work & Counseling": [
+      'Social Worker','Marriage Counselor','Substance Abuse Counselor','Family Therapist',
+      'Child Welfare Worker','Mental Health Counselor','Case Manager','Rehabilitation Specialist',
+      'Social Work Assistant','Career Counselor','Psychotherapist','Support Worker','Grief Counselor',
+      'Community Service Coordinator','Addiction Specialist'
+    ],
+    "Sports & Fitness": [
+      'Personal Trainer','Fitness Instructor','Yoga Instructor','Pilates Trainer','Sports Coach',
+      'Athletic Trainer','Swimming Instructor','Sports Nutritionist','Physical Therapist',
+      'Sports Psychologist','Zumba Instructor','Fitness Model','Martial Arts Instructor',
+      'Physical Education Teacher','Sports Official'
+    ],
+    "Technology & Development": [
+      'Software Developer','App Developer','Web Developer','Mobile App Developer','Game Developer',
+      'Database Administrator','Blockchain Developer','AI Developer','Cybersecurity Analyst',
+      'Network Engineer','UI/UX Designer','IT Project Manager','System Architect','Cloud Engineer',
+      'Hardware Developer'
+    ],
+    "Tourism & Travel": [
+      'Travel Agent','Tour Guide','Travel Blogger','Travel Consultant','Hotel Management',
+      'Event Planner','Flight Attendant','Cruise Staff','Concierge Services','Travel Planner',
+      'Tourist Information Specialist','Adventure Guide','Travel Writer','Tour Manager',
+      'Hospitality Consultant'
+    ],
+    "Writing, Editing & Translation": [
+      'Copywriter','Technical Writer','Freelance Writer','Proofreader','Editor','Ghostwriter',
+      'Content Writer','Blogger','Translator','Transcriptionist','SEO Content Writer',
+      'Content Strategist','Creative Writer','Copyeditor','Proofreader'
+    ],
+    "Volunteer & Charity Work": [
+      'Fundraiser','Volunteer Coordinator','Charity Consultant','Event Volunteer','Program Manager',
+      'Nonprofit Administrator','Social Worker','Community Outreach Coordinator','Grant Writer',
+      'Awareness Campaign Specialist','Disaster Relief Worker','Youth Counselor','NGO Specialist',
+      'Volunteer Facilitator','Philanthropist'
+    ],
+    "Web & Graphic Design": [
+      'Web Designer','Graphic Designer','Illustrator','UI/UX Designer','Motion Graphics Artist',
+      'Print Designer','Logo Designer','3D Modeler','Digital Artist','Brand Designer',
+      'Product Designer','Digital Illustrator','Photography','Banner Design','Web Developer'
+    ],
+    "Writing & Editing": [
+      'Author','Copywriter','Content Writer','Editor','Proofreader','SEO Content Writer',
+      'Transcriptionist','Technical Writer','Blogger','Essay Writer','Creative Writer',
+      'Screenwriter','Ghostwriter','Script Editor','Columnist'
+    ]
+  };
 
-    function showSuggestions(query) {
-      const list = document.getElementById('suggestionsList');
-      list.innerHTML = '';
-      if (!query) { list.style.display = 'none'; return; }
-      const matches = serviceTitles
-        .filter(s => s.toLowerCase().includes(query.toLowerCase()))
-        .sort();
-      if (!matches.length) { list.style.display = 'none'; return; }
-      list.style.display = 'block';
-      matches.forEach(s => {
-        const div = document.createElement('div');
-        div.textContent = s;
-        div.onclick = () => selectService(s);
-        list.appendChild(div);
-      });
-    }
+  // Flatten and sort for suggestions
+  const allTitles = Object.values(serviceTitlesByCategory).flat().sort();
 
-    function selectService(s) {
-      document.getElementById('title').value = s;
-      document.getElementById('suggestionsList').style.display = 'none';
-    }
+  function showSuggestions(query) {
+    const list = document.getElementById('suggestionsList');
+    list.innerHTML = '';
+    if (!query) { list.style.display = 'none'; return; }
+    const matches = allTitles.filter(title =>
+      title.toLowerCase().includes(query.toLowerCase())
+    );
+    if (!matches.length) { list.style.display = 'none'; return; }
+    list.style.display = 'block';
+    matches.forEach(s => {
+      const div = document.createElement('div');
+      div.textContent = s;
+      div.onclick = () => selectService(s);
+      list.appendChild(div);
+    });
+  }
 
-    function addTimeSlot() {
-      const c = document.getElementById('timeSlotsContainer');
-      const d = document.createElement('div');
-      d.className = 'time-slot';
-      d.innerHTML = `
-        <input type="time" name="startTime" placeholder="Start Time" />
-        <input type="time" name="endTime" placeholder="End Time" />
-      `;
-      c.appendChild(d);
-    }
-  </script>
+  function selectService(s) {
+    document.getElementById('title').value = s;
+    document.getElementById('suggestionsList').style.display = 'none';
+  }
+
+  function addTimeSlot() {
+    const c = document.getElementById('timeSlotsContainer');
+    const d = document.createElement('div');
+    d.className = 'time-slot';
+    d.innerHTML = `
+      <input type="time" name="startTime" placeholder="Start Time" />
+      <input type="time" name="endTime" placeholder="End Time" />
+    `;
+    c.appendChild(d);
+  }
+</script>
+
 </body>
 </html>
