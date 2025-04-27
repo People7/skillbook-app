@@ -115,10 +115,12 @@
       height: 40px;
     }
 
-    /* Icons Section to the Right */
+    /* Icons Section Below Skillbook Name */
     .nav-icons {
       display: flex;
       gap: 20px;
+      justify-content: center;
+      margin-top: 10px;
     }
 
     .nav-icons a {
@@ -144,6 +146,21 @@
       color: #0f4a37;
     }
 
+    /* Profile Picture on the Right */
+    .profile-pic {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .profile-pic img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      cursor: pointer;
+    }
+
     /* Time Slot Styling */
     .time-slot {
       display: flex;
@@ -157,21 +174,26 @@
   </style>
 </head>
 <body>
-  <!-- Header with Logo and Icons on Right -->
+  <!-- Header with Logo, Icons, and Profile Picture -->
   <header>
     <div class="logo">
       <img src="your-logo-url.png" alt="Skillbook Logo" /> <!-- Change logo URL -->
       <span>Skillbook</span>
     </div>
 
-    <!-- Icons on the Right of the Header -->
-    <div class="nav-icons">
-      <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a> <!-- Dashboard Icon -->
-      <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a> <!-- Profile Icon -->
-      <a href="subscription.html"><i class="fas fa-cogs"></i><span>Subscription</span></a> <!-- Subscription Icon -->
-      <!-- Add more icons here as you expand -->
+    <!-- Profile Picture on the Right -->
+    <div class="profile-pic">
+      <img src="your-profile-pic-url.jpg" alt="Profile Picture" /> <!-- Change to actual profile picture -->
     </div>
   </header>
+
+  <!-- Icons Below the Skillbook Name -->
+  <div class="nav-icons">
+    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a> <!-- Dashboard Icon -->
+    <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a> <!-- Profile Icon -->
+    <a href="subscription.html"><i class="fas fa-cogs"></i><span>Subscription</span></a> <!-- Subscription Icon -->
+    <!-- Add more icons here as you expand -->
+  </div>
 
   <h1>Offer Your Services</h1>
 
@@ -269,29 +291,23 @@
       </select>
     </div>
 
-    <!-- Time Slot: Start and End Time with Multiple Slots -->
-    <div class="form-group" id="timeSlotsContainer">
-      <label for="timeSlots">Available Time Slots</label>
-      <div class="time-slot">
-        <input type="time" name="startTime" placeholder="Start Time" />
-        <input type="time" name="endTime" placeholder="End Time" />
+    <!-- Time Slots: Multiple Times with Start and End -->
+    <div class="form-group">
+      <label>Time Slots</label>
+      <div id="timeSlotsContainer">
+        <div class="time-slot">
+          <input type="time" name="startTime" placeholder="Start Time" />
+          <input type="time" name="endTime" placeholder="End Time" />
+        </div>
       </div>
       <button type="button" onclick="addTimeSlot()">Add Another Time Slot</button>
     </div>
 
-    <div class="form-group">
-      <label for="whatsappNumber">WhatsApp Number</label>
-      <input type="tel" id="whatsappNumber" placeholder="Enter your WhatsApp Number" />
-    </div>
-
     <!-- Preferred Contact Method -->
-    <div class="form-group">
-      <label>Preferred Contact Method</label>
-      <div class="contact-options">
-        <label><input type="checkbox" name="contactMethod" value="Phone" /> Phone</label>
-        <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
-        <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
-      </div>
+    <div class="form-group contact-options">
+      <label><input type="checkbox" name="contactMethod" value="Phone" /> Phone</label>
+      <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
+      <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
     </div>
 
     <!-- Upload Certificate -->
