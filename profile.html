@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Skillbook - User Profile</title>
   <style>
-  	
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -14,7 +13,6 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     .header {
       background: white;
       color: #065f46;
@@ -24,19 +22,16 @@
       align-items: center;
       border-bottom: 2px solid #e5e7eb;
     }
-
     .header img {
       height: 40px;
       margin-right: 10px;
     }
-
     .main {
       margin: 2rem auto;
       padding: 2rem;
-      max-width: 900px; /* or 1000px if you want it wider */
+      max-width: 900px;
       width: 100%;
     }
-
     .container {
       background: white;
       border-radius: 12px;
@@ -45,14 +40,12 @@
       max-width: 800px;
       margin: auto;
     }
-
     label {
       display: block;
       margin-top: 1.5rem;
       font-weight: bold;
       color: #065f46;
     }
-
     input, select, textarea, button {
       width: 100%;
       padding: 0.8rem;
@@ -62,40 +55,18 @@
       font-size: 1rem;
       outline: none;
     }
-
     input[type="file"] {
       background: #f9fafb;
     }
-
     input[type="checkbox"] {
       width: auto;
       margin-right: 10px;
     }
-
-    .availability-section, .ratings {
-      margin-top: 2rem;
-      background: #f0fdf4;
-      padding: 1rem;
-      border: 1px dashed #065f46;
-      border-radius: 10px;
-    }
-
-    .slot {
-      display: flex;
-      gap: 10px;
-      margin-top: 0.5rem;
-    }
-
-    .slot input {
-      flex: 1;
-    }
-
     #locationDisplay {
       margin-top: 0.5rem;
       font-size: 0.9rem;
       color: #10b981;
     }
-
     iframe {
       width: 100%;
       height: 300px;
@@ -103,7 +74,6 @@
       border-radius: 10px;
       margin-top: 1rem;
     }
-
     button {
       background-color: #065f46;
       color: white;
@@ -112,9 +82,15 @@
       transition: background-color 0.3s;
       margin-top: 1.5rem;
     }
-
     button:hover {
       background-color: #047857;
+    }
+
+    /* Updated style for User Profile heading */
+    .header h2 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #065f46;
     }
   </style>
 </head>
@@ -134,7 +110,9 @@
 
 <!-- Main Content -->
 <div class="main">
-  <div class="header">User Profile</div>
+  <div class="header">
+    <h2>User Profile</h2>
+  </div>
 
   <div class="container">
     <!-- Profile Picture Upload -->
@@ -150,7 +128,6 @@
     <label for="name">Full Name</label>
     <input type="text" id="name" placeholder="Enter your name" />
 
-    <!-- New Fields Start -->
     <label for="dob">Date of Birth</label>
     <input type="date" id="dob" />
 
@@ -184,7 +161,6 @@
 
     <label for="email">Email</label>
     <input type="email" id="email" placeholder="Enter your email" />
-    <!-- New Fields End -->
 
     <label for="bio">Short Bio</label>
     <textarea id="bio" placeholder="Write about yourself..." rows="3"></textarea>
@@ -195,30 +171,7 @@
     <label for="video">Upload Service Video (1 max)</label>
     <input type="file" id="video" accept="video/*" onchange="limitVideo()" />
 
-    <div class="availability-section">
-      <label for="days">Select Available Days</label>
-      <select id="days" multiple>
-        <option>Monday</option>
-        <option>Tuesday</option>
-        <option>Wednesday</option>
-        <option>Thursday</option>
-        <option>Friday</option>
-        <option>Saturday</option>
-        <option>Sunday</option>
-      </select>
-
-      <label>Time Slots</label>
-      <div id="timeSlots">
-        <div class="slot">
-          <input type="time" />
-          <input type="time" />
-        </div>
-      </div>
-      <button type="button" onclick="addTimeSlot()">+ Add Another Slot</button>
-    </div>
-
     <button onclick="saveProfile()">Save Profile</button>
-
   </div>
 </div>
 
@@ -245,20 +198,78 @@
   const db = firebase.firestore();
 
   document.getElementById("availability").addEventListener("change", function() {
-    document.getElementById("availabilityText").innerText = this.checked ? "Available" : "Not Available";
+    document.getElementById("availabilityText")?.innerText = this.checked ? "Available" : "Not Available";
   });
-
-  function addTimeSlot() {
-    const slot = document.createElement("div");
-    slot.className = "slot";
-    slot.innerHTML = `
-      <input type="time" />
-      <input type="time" />
-    `;
-    document.getElementById("timeSlots").appendChild(slot);
-  }
 
   function limitDocuments() {
     const files = document.getElementById("documents").files;
     if (files.length > 10) {
-      alert("You can upload
+      alert("You can upload a maximum of 10 documents.");
+      document.getElementById("documents").value = "";
+    }
+  }
+
+  function limitVideo() {
+    const files = document.getElementById("video").files;
+    if (files.length > 1) {
+      alert("You can upload only 1 video.");
+      document.getElementById("video").value = "";
+    }
+  }
+
+  function uploadProfilePic() {
+    const file = document.getElementById("profilePic").files[0];
+    if (!file) return;
+
+    const storageRef = storage.ref('profile_pictures/' + file.name);
+    const uploadTask = storageRef.put(file);
+
+    uploadTask.on('state_changed', 
+      (snapshot) => {
+        // progress if needed
+      }, 
+      (error) => {
+        alert("Error uploading profile picture: " + error.message);
+      }, 
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          document.getElementById("profilePicImage").src = downloadURL;
+          document.getElementById("profilePicImage").style.display = "block";
+        });
+      }
+    );
+  }
+
+  function saveProfile() {
+    const profile = {
+      name: document.getElementById("name").value,
+      dob: document.getElementById("dob").value,
+      gender: document.getElementById("gender").value,
+      address: document.getElementById("address").value,
+      area: document.getElementById("area").value,
+      district: document.getElementById("district").value,
+      city: document.getElementById("city").value,
+      state: document.getElementById("state").value,
+      country: document.getElementById("country").value,
+      mobile: document.getElementById("mobile").value,
+      email: document.getElementById("email").value,
+      bio: document.getElementById("bio").value,
+      availableDays: Array.from(document.getElementById("days").selectedOptions).map(opt => opt.value),
+      timeSlots: Array.from(document.getElementById("timeSlots").children).map(slot => ({
+        start: slot.children[0].value,
+        end: slot.children[1].value
+      }))
+    };
+
+    db.collection("profiles").add(profile)
+      .then(() => {
+        alert("Profile saved successfully!");
+      })
+      .catch((error) => {
+        alert("Error saving profile: " + error.message);
+      });
+  }
+</script>
+
+</body>
+</html>
