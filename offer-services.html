@@ -4,18 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Offer Services - Skillbook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Icons -->
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #34d399, #065f46);
-      color: white;
+      background-color: white; /* White background */
+      color: #333; /* Dark text color for readability */
       padding: 20px;
     }
 
     h1 {
       text-align: center;
       margin-bottom: 20px;
+      color: #0f4a37; /* Skillbook brand color */
     }
 
     .form-group {
@@ -25,14 +27,18 @@
     label {
       display: block;
       margin-bottom: 5px;
+      color: #0f4a37; /* Darker label color */
+      font-weight: bold; /* Make label text bold */
     }
 
     input, select, textarea {
       width: 100%;
       padding: 10px;
-      border: none;
+      border: 1px solid #ddd;
       border-radius: 8px;
       font-size: 1rem;
+      background-color: #f9f9f9; /* Light background for input fields */
+      color: #333; /* Dark text color */
     }
 
     button {
@@ -84,21 +90,92 @@
     .terms input[type="checkbox"] {
       margin: 0;
     }
+
+    /* Header Styling */
+    header {
+      background-color: #ffffff; /* White background for the header */
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      color: #0f4a37; /* Skillbook brand color */
+      font-size: 1.5rem;
+      font-weight: bold;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* Icons Section to the Right */
+    .nav-icons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-icons a {
+      text-decoration: none;
+      color: #333;
+      font-size: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .nav-icons a:hover {
+      color: #10b981; /* Hover color */
+    }
+
+    .nav-icons a i {
+      font-size: 2rem;
+    }
+
+    .nav-icons a span {
+      font-size: 0.8rem;
+      margin-top: 5px;
+      color: #0f4a37;
+    }
+
+    /* Time Slot Styling */
+    .time-slot {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .time-slot input {
+      width: 48%;
+    }
   </style>
 </head>
 <body>
-  <nav style="background-color:#065f46; padding: 1rem;">
-    <ul style="list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0; padding: 0;">
-      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-      <li><a href="login.html" style="color: white; text-decoration: none;">Login</a></li>
-      <li><a href="sign-up.html" style="color: white; text-decoration: none;">Sign Up</a></li>
-      <li><a href="booking-schedule.html" style="color: white; text-decoration: none;">Booking Schedule</a></li>
-      <li><a href="subscription.html" style="color: white; text-decoration: none;">Subscription</a></li>
-    </ul>
-  </nav>
+  <!-- Header with Logo and Icons on Right -->
+  <header>
+    <div class="logo">
+      <img src="your-logo-url.png" alt="Skillbook Logo" /> <!-- Change logo URL -->
+      <span>Skillbook</span>
+    </div>
+
+    <!-- Icons on the Right of the Header -->
+    <div class="nav-icons">
+      <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a> <!-- Dashboard Icon -->
+      <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a> <!-- Profile Icon -->
+      <a href="subscription.html"><i class="fas fa-cogs"></i><span>Subscription</span></a> <!-- Subscription Icon -->
+      <!-- Add more icons here as you expand -->
+    </div>
+  </header>
 
   <h1>Offer Your Services</h1>
 
+  <!-- Service Form -->
   <form id="serviceForm">
     <div class="form-group">
       <label for="title">Service Title</label>
@@ -178,101 +255,78 @@
       <input type="text" placeholder="State" />
     </div>
 
+    <!-- Availability: Multiple Days Selection -->
     <div class="form-group">
-      <label>Availability</label>
-      <input type="text" placeholder="e.g. Mon-Fri 10AM - 6PM" />
+      <label for="availabilityDays">Available Days</label>
+      <select id="availabilityDays" multiple>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+        <option>Sunday</option>
+      </select>
+    </div>
+
+    <!-- Time Slot: Start and End Time with Multiple Slots -->
+    <div class="form-group" id="timeSlotsContainer">
+      <label for="timeSlots">Available Time Slots</label>
+      <div class="time-slot">
+        <input type="time" name="startTime" placeholder="Start Time" />
+        <input type="time" name="endTime" placeholder="End Time" />
+      </div>
+      <button type="button" onclick="addTimeSlot()">Add Another Time Slot</button>
     </div>
 
     <div class="form-group">
       <label for="whatsappNumber">WhatsApp Number</label>
-      <input type="tel" id="whatsappNumber" placeholder="e.g. +911234567890" />
+      <input type="tel" id="whatsappNumber" placeholder="Enter your WhatsApp Number" />
     </div>
 
+    <!-- Preferred Contact Method -->
     <div class="form-group">
-      <label>Preferred Contact Method(s)</label>
+      <label>Preferred Contact Method</label>
       <div class="contact-options">
-        <label><input type="checkbox" name="contact" value="chat" /> Chat</label>
-        <label><input type="checkbox" name="contact" value="whatsapp" /> WhatsApp</label>
-        <label><input type="checkbox" name="contact" value="phone" /> Phone</label>
-        <label><input type="checkbox" name="contact" value="email" /> Email</label>
+        <label><input type="checkbox" name="contactMethod" value="Phone" /> Phone</label>
+        <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
+        <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
       </div>
     </div>
 
-    <div class="form-group terms">
-      <input type="checkbox" id="terms" required />
-      <label for="terms">I agree to the <a href="#" style="color: #bbf7d0;">terms & conditions</a></label>
-    </div>
-
-    <label for="documents">Upload Certificates / Resume (Max 10)</label>
-    <input type="file" id="documents" multiple accept=".pdf,.doc,.jpg,.jpeg,.png" onchange="limitDocuments()" />
-
-    <label for="video">Upload Introduction Video (1 max)</label>
-    <input type="file" id="video" accept="video/*" onchange="limitVideo()" />
-
-    <button type="submit">Post Service</button>
-
+    <!-- Upload Certificate -->
     <div class="form-group">
-      <button type="button" onclick="makePhoneCall()">Call Now</button>
-      <button type="button" onclick="openWhatsApp()">Message on WhatsApp</button>
+      <label for="certificate">Upload Certificate</label>
+      <input type="file" id="certificate" />
     </div>
+
+    <!-- Upload Video -->
+    <div class="form-group">
+      <label for="video">Upload Video</label>
+      <input type="file" id="video" />
+    </div>
+
+    <!-- Terms and Conditions -->
+    <div class="form-group terms">
+      <input type="checkbox" id="terms" />
+      <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
+    </div>
+
+    <button type="submit">Submit Service</button>
   </form>
 
-  <script type="module">
-    // Firebase v9+ Config
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-      authDomain: "skillbook-3fa41.firebaseapp.com",
-      projectId: "skillbook-3fa41",
-      storageBucket: "skillbook-3fa41.appspot.com",
-      messagingSenderId: "599549421075",
-      appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-      measurementId: "G-3VKK01HXE6"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Form submission handler
-    document.getElementById('serviceForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-
-      const serviceData = {
-        title: document.getElementById('title').value,
-        category: document.getElementById('category').value,
-        description: document.getElementById('description').value,
-        tags: document.getElementById('tags').value,
-        location: {
-          address: document.querySelector('input[placeholder="Address"]').value,
-          area: document.querySelector('input[placeholder="Area"]').value,
-          pincode: document.querySelector('input[placeholder="Pincode"]').value,
-          city: document.querySelector('input[placeholder="City"]').value,
-          state: document.querySelector('input[placeholder="State"]').value
-        },
-        availability: document.querySelector('input[placeholder="e.g. Mon-Fri 10AM - 6PM"]').value,
-        whatsappNumber: document.getElementById('whatsappNumber').value,
-        contactMethods: Array.from(document.querySelectorAll('input[name="contact"]:checked')).map(e => e.value),
-        termsAccepted: document.getElementById('terms').checked
-      };
-
-      try {
-        const docRef = await addDoc(collection(db, "services"), serviceData);
-        alert('Service posted successfully!');
-      } catch (e) {
-        alert('Error posting service: ' + e.message);
-      }
-    });
-
-    function limitDocuments() {
-      let files = document.getElementById('documents').files;
-      if (files.length > 10) {
-        alert('You can only upload a maximum of 10 files');
-        document.getElementById('documents').value = '';
-      }
+  <script>
+    // Function to add more time slots
+    function addTimeSlot() {
+      const container = document.getElementById('timeSlotsContainer');
+      const newSlot = document.createElement('div');
+      newSlot.classList.add('time-slot');
+      newSlot.innerHTML = `
+        <input type="time" name="startTime" placeholder="Start Time" />
+        <input type="time" name="endTime" placeholder="End Time" />
+      `;
+      container.appendChild(newSlot);
     }
-
-    function limitVideo() {
-      let videoFile =
+  </script>
+</body>
+</html>
