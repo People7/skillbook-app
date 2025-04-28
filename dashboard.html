@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Skillbook Dashboard</title>
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
@@ -13,6 +12,7 @@
       background: white;
       color: black;
     }
+
     .header {
       position: fixed;
       top: 0;
@@ -27,7 +27,7 @@
     .header-top {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
     }
 
     .logo-title {
@@ -48,10 +48,9 @@
     }
 
     .profile-pic {
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      margin-bottom: 5px;
     }
 
     .icon-bar {
@@ -59,6 +58,7 @@
       overflow-x: auto;
       white-space: nowrap;
       padding: 10px 0;
+      margin-top: 10px;
     }
 
     .icon-bar::-webkit-scrollbar {
@@ -83,17 +83,15 @@
     }
 
     /* Different icon colors */
-    .icon-item:nth-child(1) i { background-color: #4285F4; } /* Profile */
-    .icon-item:nth-child(2) i { background-color: #34A853; } /* Offer Service */
-    .icon-item:nth-child(3) i { background-color: #FBBC05; } /* Search Service */
-    .icon-item:nth-child(4) i { background-color: #EA4335; } /* Alerts */
-    .icon-item:nth-child(5) i { background-color: #FF7F50; } /* Schedule */
-    .icon-item:nth-child(6) i { background-color: #8A2BE2; } /* Upcoming Bookings */
-    .icon-item:nth-child(7) i { background-color: #00CED1; } /* Subscription */
-    .icon-item:nth-child(8) i { background-color: #FFD700; } /* Messages */
-    .icon-item:nth-child(9) i { background-color: #FF6347; } /* Chats */
-    .icon-item:nth-child(10) i { background-color: #32CD32; } /* Settings */
-    .icon-item:nth-child(11) i { background-color: #FF4500; } /* Logout */
+    .icon-item:nth-child(1) i { background-color: #4285F4; }
+    .icon-item:nth-child(2) i { background-color: #EA4335; }
+    .icon-item:nth-child(3) i { background-color: #FF7F50; }
+    .icon-item:nth-child(4) i { background-color: #8A2BE2; }
+    .icon-item:nth-child(5) i { background-color: #00CED1; }
+    .icon-item:nth-child(6) i { background-color: #FFD700; }
+    .icon-item:nth-child(7) i { background-color: #FF6347; }
+    .icon-item:nth-child(8) i { background-color: #32CD32; }
+    .icon-item:nth-child(9) i { background-color: #FF4500; }
 
     .icon-item span {
       margin-top: 5px;
@@ -103,60 +101,124 @@
 
     .container {
       padding: 20px;
-      padding-top: 140px;
+      padding-top: 220px; /* extra padding for fixed header, icons */
     }
 
-    /* To adjust profile pic below the time */
-    .header-top .profile-pic-wrapper {
+    /* Full-Width Windows for Booking Schedule and Upcoming Bookings */
+    .window-container {
+      margin-top: 20px;
+    }
+
+    .window {
+      background-color: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
+      cursor: pointer; /* Make it clickable */
+      transition: all 0.3s ease;
     }
 
-    .header-top .profile-pic-wrapper img {
-      width: 30px;
-      height: 30px;
-      margin-top: 5px;
+    /* Hover Effect for Booking Schedule and Upcoming Bookings */
+    .window:hover {
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+      transform: scale(1.05);
     }
+
+    .window-header {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #065f46;
+      margin-bottom: 15px;
+      text-transform: uppercase; /* Makes it more prominent */
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    /* Add Icon to Headers */
+    .window-header::before {
+      content: '\f0e0'; /* FontAwesome Icon Unicode for "calendar" */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.6rem;
+      color: #065f46;
+    }
+
+    .window-body {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .window .real-time-info {
+      background-color: #ffffff;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+
+    .window-footer {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    /* Styling for the Offer and Search Buttons */
+    .buttons-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      color: white;
+      width: 48%;
+    }
+
+    .search-button {
+      background-color: #4CAF50; /* Green */
+    }
+
+    .offer-button {
+      background-color: #FF6347; /* Tomato */
+    }
+
   </style>
 </head>
 <body>
+
   <div class="header">
     <div class="header-top">
       <div class="logo-title">
         <img src="your-logo-url.png" alt="Skillbook Logo" />
         <h1>Skillbook</h1>
       </div>
-      <div class="profile-pic-wrapper">
-        <img src="profile-pic-url.png" alt="Profile Pic" class="profile-pic">
-      </div>
+      <img src="profile-pic-url.png" alt="Profile Pic" class="profile-pic">
     </div>
 
+    <!-- ICONS Row -->
     <div class="icon-bar">
       <a href="profile.html" class="icon-item" title="Profile">
         <i class="fas fa-user"></i>
         <span>Profile</span>
       </a>
-      <a href="offer-services.html" class="icon-item" title="Offer Services">
-        <i class="fas fa-plus"></i>
-        <span>Offer Service</span>
-      </a>
-      <a href="search-services.html" class="icon-item" title="Search Services">
-        <i class="fas fa-search"></i>
-        <span>Search Service</span>
-      </a>
       <a href="notifications.html" class="icon-item" title="Notifications">
         <i class="fas fa-bell"></i>
         <span>Alerts</span>
-      </a>
-      <a href="booking-schedule.html" class="icon-item" title="Booking Schedule">
-        <i class="fas fa-calendar-check"></i>
-        <span>Schedule</span>
-      </a>
-      <a href="upcoming-bookings.html" class="icon-item" title="Upcoming Bookings">
-        <i class="fas fa-clock"></i>
-        <span>Upcoming bookings</span>
       </a>
       <a href="subscription.html" class="icon-item" title="Subscription">
         <i class="fas fa-star"></i>
@@ -182,23 +244,41 @@
   </div>
 
   <div class="container">
-    <!-- Main content goes here -->
-  </div>
+    <!-- Search and Offer Buttons -->
+    <div class="buttons-container">
+      <a href="search-services.html" class="button search-button">Search Services</a>
+      <a href="offer-services.html" class="button offer-button">Offer Services</a>
+    </div>
 
-  <script>
-    // Add event listener for logout
-    document.getElementById("logout").addEventListener("click", function(event) {
-      event.preventDefault(); // Prevent default link behavior if any
-      
-      // Clear session/cookie/localStorage if you are managing login state
-      // Example with Firebase Auth (if you're using Firebase):
-      firebase.auth().signOut().then(function() {
-        // Redirect to login page after successful logout
-        window.location.href = "login.html"; // replace with your login page URL
-      }).catch(function(error) {
-        console.error("Error signing out: ", error);
-      });
-    });
-  </script>
-</body>
-</html>
+    <!-- Booking Schedule and Upcoming Bookings as Full-width Windows -->
+    <div class="window-container">
+      <!-- Booking Schedule Window -->
+      <div class="window" onclick="window.location.href='booking-schedule.html'">
+        <div class="window-header">Service Booking Schedule</div>
+        <div class="window-body">
+          <div class="real-time-info">
+            <p><strong>Upcoming Service:</strong> House Cleaning Service</p>
+            <p><strong>Time:</strong> 2:00 PM, 28th April 2025</p>
+            <p><strong>Status:</strong> Confirmed</p>
+          </div>
+        </div>
+        <div class="window-footer">Last updated: 10 minutes ago</div>
+      </div>
+
+      <!-- Upcoming Service Requests Window -->
+      <div class="window" onclick="window.location.href='upcoming-bookings.html'">
+        <div class="window-header">Upcoming Service Requests</div>
+        <div class="window-body">
+          <div class="real-time-info">
+            <p><strong>Service #1:</strong> Car Repair</p>
+            <p><strong>Scheduled Time:</strong> 3:00 PM, 29th April 2025</p>
+            <p><strong>Status:</strong> Pending</p>
+          </div>
+          <div class="real-time-info">
+            <p><strong>Service #2:</strong> Plumbing</p>
+            <p><strong>Scheduled Time:</strong> 10:00 AM, 1st May 2025</p>
+            <p><strong>Status:</strong> Confirmed</p>
+          </div>
+        </div>
+        <div class="window-footer">Last updated: 5 minutes ago</div>
+      </div>
