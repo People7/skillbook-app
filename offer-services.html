@@ -66,7 +66,7 @@
 
     .contact-options label {
       flex: 1;
-      background-color: #047857;
+      background-color: white;
       padding: 10px;
       border-radius: 8px;
       text-align: center;
@@ -210,9 +210,9 @@
 
   <!-- Icons Below the Skillbook Name -->
   <div class="nav-icons">
-    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+    <a href="dashboard.html"><i class="fas fa-dashboard"></i><span>Dashboard</span></a>
     <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a>
-    <a href="subscription.html"><i class="fas fa-cogs"></i><span>Subscription</span></a>
+    <a href="subscription.html"><i class="fas fa-star"></i><span>Subscription</span></a>
   </div>
 
   <h1>Offer Your Services</h1>
@@ -270,16 +270,23 @@
 
     <div class="form-group">
       <label>Your Location</label>
-      <input type="text" placeholder="Address" />
+          </div>
+        <label>Building/ street</label>  
+      <input type="text" placeholder="Building/Street" />
+            <label>Locality</label>
+      <input type="text" placeholder="Locality" />
       <label>Area</label>
       <input type="text" placeholder="Area" />
-      <label>Pincode</label>
+      <label>pincode</label>
       <input type="text" placeholder="Pincode" />
       <label>City</label>
       <input type="text" placeholder="City" />
       <label>State</label>
       <input type="text" placeholder="State" />
+      <label>Country</label>
+      <input type="text" placeholder="Country" />
     </div>
+        </div>
 
     <div class="form-group">
       <label for="availabilityDays">Available Days</label>
@@ -298,14 +305,19 @@
           <input type="time" name="endTime" placeholder="End Time" />
         </div>
       </div>
-      <button type="button" onclick="addTimeSlot()">Add Another Time Slot</button>
+      <button type="button" onclick="addTimeSlot()">+ More Time slots</button>
     </div>
 
     <div class="form-group contact-options">
+    <label>Contact Options</label>
+    
+      <div id="contact-options">	
+    	<label><input type="checkbox" name="contactMethod" value="Message" /> Message</label>
       <label><input type="checkbox" name="contactMethod" value="Phone" /> Phone</label>
-      <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
       <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
+      <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
     </div>
+        </div>
 
     <div class="form-group">
       <label for="certificate">Upload Certificate</label>
@@ -331,7 +343,10 @@
       'Crop Farming','Livestock Farming','Organic Farming','Dairy Farming','Poultry Farming',
       'Horticulture','Fish Farming','Farm Machinery Operation','Irrigation','Agricultural Assistant',
       'Seed Production','Fertilizer Application','Harvesting','Farm Management',
-      'Greenhouse Management','Crop Protection'
+      'Greenhouse Management','Crop Protection', 'Farmer', 'Crop Grower', 'Livestock Farmer', 'Agronomist', 'Agricultural Engineer', 'Farm Manager',
+    'Soil Scientist', 'Irrigation Specialist', 'Agricultural Technician', 'Greenhouse Operator',
+    'Agricultural Machinery Operator', 'Poultry Farmer', 'Dairy Farmer', 'Organic Farming Consultant',
+    'Horticulturist'
     ],
     "Art & Craft": [
       'Pottery','Calligraphy','Sculpture','Origami','Painting','Drawing','Leather Craft',
@@ -341,7 +356,9 @@
     "Beauty & Personal Care": [
       'Hair Cutting','Hair Styling','Manicure','Pedicure','Makeup Artist','Skin Care Specialist',
       'Massage Therapist','Nail Art','Eyelash Extensions','Beauty Therapy','Barbering',
-      'Facial Treatment','Waxing','Body Piercing','Cosmetic Sales'
+      'Facial Treatment','Waxing','Body Piercing','Cosmetic Sales', 'Hairstylist', 'Makeup Artist', 'Nail Technician', 'Esthetician', 'Barber', 'Cosmetologist', 'Beauty Consultant',
+    'Massage Therapist', 'Spa Technician', 'Waxing Specialist', 'Skin Care Specialist', 'Manicurist', 'Pedicurist',
+    'Hair Colorist', 'Eyelash Technician'
     ],
     "Business Services": [
       'Project Management','Sales Management','Business Consulting','Market Research',
@@ -495,12 +512,6 @@
       'Transcriptionist','Technical Writer','Blogger','Essay Writer','Creative Writer',
       'Screenwriter','Ghostwriter','Script Editor','Columnist'
     ],
-  "Agriculture & Farming": [
-    'Farmer', 'Crop Grower', 'Livestock Farmer', 'Agronomist', 'Agricultural Engineer', 'Farm Manager',
-    'Soil Scientist', 'Irrigation Specialist', 'Agricultural Technician', 'Greenhouse Operator',
-    'Agricultural Machinery Operator', 'Poultry Farmer', 'Dairy Farmer', 'Organic Farming Consultant',
-    'Horticulturist'
-  ],
 
   "Animal Care & Veterinary": [
     'Veterinarian', 'Animal Groomer', 'Pet Trainer', 'Dog Walker', 'Pet Sitter', 'Veterinary Technician',
@@ -520,12 +531,8 @@
     'Motorcycle Mechanic', 'Car Salesperson', 'Diesel Mechanic', 'Vehicle Inspector', 'Auto Upholsterer',
     'Tire Technician', 'Auto Parts Manager', 'Fleet Maintenance Specialist', 'Garage Owner', 'Auto Parts Salesperson'
   ],
-
-  "Beauty & Cosmetology": [
-    'Hairstylist', 'Makeup Artist', 'Nail Technician', 'Esthetician', 'Barber', 'Cosmetologist', 'Beauty Consultant',
-    'Massage Therapist', 'Spa Technician', 'Waxing Specialist', 'Skin Care Specialist', 'Manicurist', 'Pedicurist',
-    'Hair Colorist', 'Eyelash Technician'
-  ],
+    
+  
 
   "Business & Finance": [
     'Accountant', 'Financial Analyst', 'Business Consultant', 'Investment Advisor', 'Financial Planner', 'Bookkeeper',
