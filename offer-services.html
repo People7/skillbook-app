@@ -4,709 +4,387 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Offer Services - Skillbook</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: white; /* White background */
-      color: #333; /* Dark text color for readability */
-      padding: 20px;
+      background: white;
+      color: black;
+      padding-bottom: 80px;
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #0f4a37; /* Skillbook brand color */
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-      position: relative; /* for suggestions positioning */
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #0f4a37; /* Darker label color */
-      font-weight: bold; /* Make label text bold */
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      background-color: #f9f9f9; /* Light background for input fields */
-      color: #333; /* Dark text color */
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #10b981;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #059669;
-    }
-
-    .contact-options {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .contact-options label {
-      flex: 1;
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       background-color: white;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
     }
 
-    .contact-options input[type="checkbox"] {
-      margin-right: 8px;
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .category-scroll {
-      max-height: 200px;
-      overflow-y: scroll;
-    }
-
-    .terms {
+    .logo-title {
       display: flex;
       align-items: center;
-      gap: 10px;
     }
 
-    .terms input[type="checkbox"] {
+    .header img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .header h1 {
+      color: #065f46;
+      font-size: 1.8rem;
+      font-weight: bold;
       margin: 0;
     }
 
-    /* Header Styling */
-    header {
-      background-color: #ffffff; /* White background for the header */
-      padding: 15px;
+    .profile-pic {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
+    .icon-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
+      justify-content: space-around;
+      background-color: white;
+      padding: 10px 0;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      color: #0f4a37; /* Skillbook brand color */
-      font-size: 1.5rem;
-      font-weight: bold;
-      gap: 10px;
-    }
-
-    .logo img {
-      width: 40px;
-      height: 40px;
-    }
-
-    /* Icons Section Below Skillbook Name */
-    .nav-icons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    .nav-icons a {
-      text-decoration: none;
-      color: #333;
-      font-size: 1.5rem;
+    .icon-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-
-    .nav-icons a:hover {
-      color: #10b981; /* Hover color */
-    }
-
-    .nav-icons a i {
-      font-size: 2rem;
-    }
-
-    .nav-icons a span {
+      text-decoration: none;
       font-size: 0.8rem;
-      margin-top: 5px;
-      color: #0f4a37;
+      color: #333;
     }
 
-    /* Profile Picture on the Right */
-    .profile-pic {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .profile-pic img {
-      width: 40px;
-      height: 40px;
+    .icon-item i {
+      font-size: 1.4rem;
+      padding: 8px;
       border-radius: 50%;
-      border: 2px solid #ddd;
-      cursor: pointer;
+      color: white;
+      background-color: #4CAF50;
     }
 
-    /* Time Slot Styling */
-    .time-slot {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+    .container {
+      padding: 20px;
+      padding-top: 20px;
     }
 
-    .time-slot input {
-      width: 48%;
+    h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #065f46;
+      margin-bottom: 20px;
     }
 
-    /* Service Title Suggestions Styling */
-    .suggestions {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #fff;
-      max-height: 150px;
-      overflow-y: auto;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      display: none;
-    }
-    .suggestions div {
-      padding: 10px;
-      cursor: pointer;
-    }
-    .suggestions div:hover {
-      background-color: #f1f1f1;
-    }
+    <style>
+  /* General Form Styling */
+  form {
+    max-width: 500px;
+    margin: auto;
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  input[type="file"] {
+    margin-top: 10px;
+  }
+
+  button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #388e3c;
+  }
+
+  /* New Fields Specific Styles */
+  <style>
+.offer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.time-slot {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.time-slot input {
+  flex: 1; /* Make the input take full width */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.available-toggle-label {
+  font-size: 1rem;
+  margin-left: 10px;
+  font-weight: bold;
+  color: #333;
+}
+</style>
+
   </style>
 </head>
 <body>
-  <!-- Header with Logo, Icons, and Profile Picture -->
-  <header>
-    <div class="logo">
-      <img src="your-logo-url.png" alt="Skillbook Logo" />
-      <span>Skillbook</span>
-    </div>
-    <div class="profile-pic">
-      <img src="your-profile-pic-url.jpg" alt="Profile Picture" />
-    </div>
-  </header>
 
-  <!-- Icons Below the Skillbook Name -->
-  <div class="nav-icons">
-    <a href="dashboard.html"><i class="fas fa-dashboard"></i><span>Dashboard</span></a>
-    <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a>
-    <a href="subscription.html"><i class="fas fa-star"></i><span>Subscription</span></a>
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-title">
+        <img src="your-logo-url.png" alt="Skillbook Logo" />
+        <h1>Skillbook</h1>
+      </div>
+      <img src="profile-pic-url.png" alt="Profile Pic" class="profile-pic">
+    </div>
   </div>
+  
+<div class="container">
+  <div class="form-container">
+    <h2 style="margin-top: 80px; color: #065f46;">Offer Your Skills and Earn</h2>
+    <form>
+      <label for="serviceTitle">Service Title</label>
+      <input type="text" id="serviceTitle" name="serviceTitle" placeholder="Enter your service title" required>
 
-  <h1>Offer Your Services</h1>
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4" placeholder="Describe your service" required></textarea>
 
-  <!-- Service Form -->
-  <form id="serviceForm">
-    <div class="form-group">
-      <label for="title">Service Title</label>
-      <input
-        type="text"
-        id="title"
-        placeholder="e.g. Personal Fitness Trainer"
-        onkeyup="showSuggestions(this.value)"
-        autocomplete="off"
-      />
-      <div id="suggestionsList" class="suggestions"></div>
-    </div>
-
-    <div class="form-group">
-      <label for="category">Select Category</label>
-      <div class="category-scroll">
-        <select id="category" name="category" multiple size="10">
-          <option>Personal</option><option>Social</option><option>Environmental</option>
-          <option>Household</option><option>Business</option><option>Health</option>
-          <option>Entertainment</option><option>Repair and Maintenance</option>
-          <option>Innovation</option><option>Consultancy</option><option>Engineering</option>
-          <option>Educational</option><option>Political</option>
-          <option>Safety and Security</option><option>Helping</option>
-          <option>Religious</option><option>Legal</option><option>Financial</option>
-          <option>Creative Arts</option><option>Media</option><option>Transportation</option>
-          <option>Hospitality</option><option>Technical Support</option>
-          <option>Fitness and Sports</option><option>Marketing and Sales</option>
-          <option>Event Management</option><option>Agricultural</option>
-          <option>Writing & Editing</option><option>Real Estate</option>
-          <option>Technology</option><option>Travel & Tourism</option>
-          <option>Human Resources</option><option>Fashion & Beauty</option>
-          <option>Art & Design</option><option>Photography</option>
-          <option>Training & Coaching</option><option>Translation Services</option>
-          <option>Data Entry</option><option>IT Services</option>
-          <option>Research & Analysis</option><option>Logistics</option>
-          <option>Other</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="description">Service Description</label>
-      <textarea id="description" rows="4" placeholder="Describe your experience and offering..."></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="tags">Tags (keywords separated by commas)</label>
-      <input type="text" id="tags" placeholder="e.g. yoga, home trainer, diet consultant" />
-    </div>
-
-    <div class="form-group">
-      <label>Your Location</label>
-          </div>
-        <label>Building/ street</label>  
-      <input type="text" placeholder="Building/Street" />
-            <label>Locality</label>
-      <input type="text" placeholder="Locality" />
-      <label>Area</label>
-      <input type="text" placeholder="Area" />
-      <label>pincode</label>
-      <input type="text" placeholder="Pincode" />
-      <label>City</label>
-      <input type="text" placeholder="City" />
-      <label>State</label>
-      <input type="text" placeholder="State" />
-      <label>Country</label>
-      <input type="text" placeholder="Country" />
-    </div>
-        </div>
-
-    <div class="form-group">
-      <label for="availabilityDays">Available Days</label>
-      <select id="availabilityDays" multiple>
-        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
-        <option>Thursday</option><option>Friday</option><option>Saturday</option>
-        <option>Sunday</option>
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="">Select a category</option>
+        <option value="education">Education</option>
+        <option value="repair">Repair</option>
+        <option value="design">Design</option>
+        <option value="tech">Tech Support</option>
       </select>
+
+      <label for="tags">Tags</label>
+      <input type="text" id="tags" name="tags" placeholder="e.g., plumbing, tutoring, design">
+
+      <fieldset>
+        <legend>Your Location</legend>
+
+        <label for="building">Building/Street</label>
+        <input type="text" id="building" name="building" placeholder="e.g., 123 Main Street">
+
+        <label for="locality">Locality</label>
+        <input type="text" id="locality" name="locality" placeholder="e.g., Near ABC Park">
+
+        <label for="area">Area</label>
+        <input type="text" id="area" name="area" placeholder="e.g., Sector 12">
+
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" name="pincode" placeholder="e.g., 110001">
+
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" placeholder="e.g., Delhi">
+
+        <label for="state">State</label>
+        <input type="text" id="state" name="state" placeholder="e.g., Delhi">
+      </fieldset>
+
+      <label for="imageUpload">Upload Image</label>
+      <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
+
+<!-- Available Container -->
+  <label for="availableContainer">Available Container</label>
+  <input type="text" id="availableContainer" name="availableContainer" required>
+
+  <!-- Available Days -->
+  <label for="availableDays">Available Days</label>
+  <select id="availableDays" name="availableDays" multiple required>
+    <option value="monday">Monday</option>
+    <option value="tuesday">Tuesday</option>
+    <option value="wednesday">Wednesday</option>
+    <option value="thursday">Thursday</option>
+    <option value="friday">Friday</option>
+    <option value="saturday">Saturday</option>
+    <option value="sunday">Sunday</option>
+  </select>
+
+  <!-- Time Slots -->
+  <div id="timeSlots">
+    <label>Time Slot</label>
+    <div class="time-slot">
+      <input type="time" name="startTime[]" required> to
+      <input type="time" name="endTime[]" required>
     </div>
+  </div>
+  <button type="button" onclick="addTimeSlot()">+ Add Slot</button>
 
-    <div class="form-group">
-      <label>Time Slots</label>
-      <div id="timeSlotsContainer">
-        <div class="time-slot">
-          <input type="time" name="startTime" placeholder="Start Time" />
-          <input type="time" name="endTime" placeholder="End Time" />
-        </div>
-      </div>
-      <button type="button" onclick="addTimeSlot()">+ More Time slots</button>
-    </div>
+  <!-- Available/Engaged Toggle -->
+  <div class="form-field">
+  <label for="available-toggle">Availability</label>
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <label class="switch">
+      <input type="checkbox" id="available-toggle">
+      <span class="slider"></span>
+    </label>
+    <span id="availability-text">Available</span>
+  </div>
+</div>
 
-    <div class="form-group contact-options">
-    <label>Contact Options</label>
-    
-      <div id="contact-options">	
-    	<label><input type="checkbox" name="contactMethod" value="Message" /> Message</label>
-      <label><input type="checkbox" name="contactMethod" value="Phone" /> Phone</label>
-      <label><input type="checkbox" name="contactMethod" value="WhatsApp" /> WhatsApp</label>
-      <label><input type="checkbox" name="contactMethod" value="Email" /> Email</label>
-    </div>
-        </div>
 
-    <div class="form-group">
-      <label for="certificate">Upload Certificate</label>
-      <input type="file" id="certificate" />
-    </div>
 
-    <div class="form-group">
-      <label for="video">Upload Video</label>
-      <input type="file" id="video" />
-    </div>
+      <button type="submit">Submit</button>
+      <h2 s
 
-    <div class="form-group terms">
-      <input type="checkbox" id="terms" />
-      <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
-    </div>
-
-    <button type="submit">Submit Your Service</button>
-  </form>
-
- <script>
-  const serviceTitlesByCategory = {
-    "Agriculture Services": [
-      'Crop Farming','Livestock Farming','Organic Farming','Dairy Farming','Poultry Farming',
-      'Horticulture','Fish Farming','Farm Machinery Operation','Irrigation','Agricultural Assistant',
-      'Seed Production','Fertilizer Application','Harvesting','Farm Management',
-      'Greenhouse Management','Crop Protection', 'Farmer', 'Crop Grower', 'Livestock Farmer', 'Agronomist', 'Agricultural Engineer', 'Farm Manager',
-    'Soil Scientist', 'Irrigation Specialist', 'Agricultural Technician', 'Greenhouse Operator',
-    'Agricultural Machinery Operator', 'Poultry Farmer', 'Dairy Farmer', 'Organic Farming Consultant',
-    'Horticulturist'
-    ],
-    "Art & Craft": [
-      'Pottery','Calligraphy','Sculpture','Origami','Painting','Drawing','Leather Craft',
-      'Woodworking','Textile Design','Jewelry Making','Knitting','Weaving','Embroidery',
-      'Glassblowing','Custom Art Design'
-    ],
-    "Beauty & Personal Care": [
-      'Hair Cutting','Hair Styling','Manicure','Pedicure','Makeup Artist','Skin Care Specialist',
-      'Massage Therapist','Nail Art','Eyelash Extensions','Beauty Therapy','Barbering',
-      'Facial Treatment','Waxing','Body Piercing','Cosmetic Sales', 'Hairstylist', 'Makeup Artist', 'Nail Technician', 'Esthetician', 'Barber', 'Cosmetologist', 'Beauty Consultant',
-    'Massage Therapist', 'Spa Technician', 'Waxing Specialist', 'Skin Care Specialist', 'Manicurist', 'Pedicurist',
-    'Hair Colorist', 'Eyelash Technician'
-    ],
-    "Business Services": [
-      'Project Management','Sales Management','Business Consulting','Market Research',
-      'Human Resources','Virtual Assistant','Customer Support','Business Development',
-      'Event Planning','Data Entry','Business Analytics','Office Administration','Employee Training',
-      'Contract Negotiation','Franchise Management'
-    ],
-    "Construction": [
-      'Carpenter','Electrician','Plumber','Painter','Bricklayer','Welder','Mason','Builder',
-      'Construction Supervisor','Crane Operator','Demolition Worker','Concrete Worker',
-      'Construction Labourer','Site Engineer','Surveyor'
-    ],
-    "Cooking & Catering": [
-      'Chef','Baker','Pastry Chef','Sous Chef','Line Cook','Catering Services','Food Preparation',
-      'Waitstaff','Bartender','Dishwashing','Butcher','Barista','Personal Chef',
-      'Catering Coordinator','Kitchen Assistant'
-    ],
-    "Education & Training": [
-      'Teacher','Tutor','Educational Consultant','Special Education Teacher','Language Instructor',
-      'Childcare Provider','Exam Preparation','Corporate Trainer','Online Course Creator',
-      'Test Prep Tutor','Educational Assistant','School Administrator','Instructor (Various Fields)',
-      'Career Counselor','E-Learning Developer'
-    ],
-    "Engineering & Tech": [
-      'Software Developer','Mechanical Engineer','Electrical Engineer','Civil Engineer','IT Support',
-      'Network Engineer','Robotics Engineer','Web Developer','Database Administrator',
-      'Graphic Designer','CAD Technician','Data Scientist','Full Stack Developer',
-      'Cloud Computing Specialist','Quality Assurance Analyst'
-    ],
-    "Environmental Services": [
-      'Environmental Consultant','Sustainability Specialist','Waste Management',
-      'Renewable Energy Technician','Environmental Engineer','Conservationist',
-      'Environmental Educator','Green Building Consultant','Recycling Specialist',
-      'Climate Change Expert','Greenhouse Gas Auditor','Eco-Friendly Product Designer',
-      'Tree Planting','Soil Scientist','Water Quality Analyst'
-    ],
-    "Finance & Accounting": [
-      'Accountant','Bookkeeper','Financial Analyst','Investment Banker','Tax Consultant','Auditor',
-      'Payroll Clerk','Financial Planner','Insurance Agent','Mortgage Broker','Wealth Manager',
-      'Risk Management Analyst','Budget Analyst','CFO','Tax Preparer'
-    ],
-    "Food Delivery & Hospitality": [
-      'Delivery Driver','Waiter/Waitress','Housekeeper','Cook','Room Service Attendant','Bartender',
-      'Hotel Manager','Concierge','Front Desk Receptionist','House Maid','Bellboy',
-      'Event Coordinator','Cook Helper','Food Delivery Driver','Host/Hostess'
-    ],
-    "Healthcare": [
-      'Doctor','Nurse','Pharmacist','Medical Assistant','Lab Technician','Radiology Technician',
-      'Physiotherapist','Occupational Therapist','Paramedic','Dentist','Optometrist',
-      'Healthcare Administrator','Dietician','Psychologist','Home Health Aide'
-    ],
-    "Household Services": [
-      'House Cleaner','Laundry Service','Ironing','Personal Assistant','Gardener','Baby Sitter',
-      'Dog Walker','Home Organizer','Home Maintenance','Pest Control','Pool Cleaning','Handyman',
-      'Painter (Interior)','Decorator','House Moving Assistant'
-    ],
-    "Information Technology": [
-      'IT Support','System Administrator','Network Administrator','Software Engineer','IT Consultant',
-      'Web Developer','Application Developer','Security Specialist','Cloud Solutions Architect',
-      'Blockchain Developer','Artificial Intelligence Specialist','IT Project Manager','Data Analyst',
-      'Business Intelligence Analyst','Cybersecurity Specialist'
-    ],
-    "Marketing & Advertising": [
-      'Social Media Manager','SEO Specialist','Content Creator','Copywriter','Digital Marketing Expert',
-      'Brand Strategist','Marketing Consultant','Email Marketing Specialist','Affiliate Marketing',
-      'PPC Specialist','Event Marketing','Public Relations Specialist','Graphic Designer',
-      'Video Production','Influencer Marketing'
-    ],
-    "Media & Entertainment": [
-      'Film Director','Camera Operator','Video Editor','Screenwriter','Voice Actor','Musician',
-      'Music Producer','Video Game Developer','Animator','Graphic Designer','Art Director',
-      'Public Relations','Content Creator','Social Media Influencer','Event Host'
-    ],
-    "Manufacturing & Production": [
-      'Factory Worker','Machine Operator','Production Planner','Assembly Line Worker',
-      'Quality Control Inspector','Forklift Operator','Product Designer','Industrial Engineer',
-      'Packaging Specialist','CNC Operator','Maintenance Technician','Supply Chain Manager',
-      'Manufacturing Manager','Production Supervisor','Safety Officer'
-    ],
-    "Marketing, Sales & Retail": [
-      'Sales Representative','Retail Associate','Sales Manager','Marketing Researcher',
-      'Customer Service Representative','Lead Generation Specialist','Product Specialist',
-      'Brand Ambassador','Visual Merchandiser','Retail Manager','E-commerce Specialist',
-      'Advertising Specialist','Sales Consultant','Telemarketer','Event Coordinator'
-    ],
-    "Real Estate": [
-      'Real Estate Agent','Property Manager','Real Estate Developer','Real Estate Consultant',
-      'Appraiser','Leasing Agent','Property Inspector','Property Staging','Home Inspector',
-      'Real Estate Lawyer','Rent Collection Specialist','Property Marketing Specialist',
-      'Commercial Real Estate Broker','Residential Property Sales','Real Estate Investment'
-    ],
-    "Research & Development": [
-      'Research Scientist','Product Development Manager','Market Research Analyst',
-      'Clinical Research Coordinator','Biotech Researcher','Innovation Specialist',
-      'Technical Writer','R&D Technician','Lab Technician','Data Scientist','Chemist','Psychologist',
-      'Biologist','Software Researcher','Engineering Researcher'
-    ],
-    "Security & Protection": [
-      'Security Guard','Cybersecurity Specialist','Personal Security','Alarm Technician',
-      'Private Investigator','Bodyguard','Safety Officer','Security Consultant','Fire Safety Officer',
-      'Surveillance Operator','Loss Prevention Specialist','Building Security',
-      'Security Systems Installation','Anti-Terrorism Specialist','Event Security Personnel'
-    ],
-    "Shipping, Logistics & Transportation": [
-      'Truck Driver','Delivery Driver','Warehouse Manager','Supply Chain Analyst','Logistics Coordinator',
-      'Cargo Specialist','Freight Forwarder','Air Cargo Handler','Shipping Clerk','Marine Engineer',
-      'Dispatcher','Transportation Planner','Customs Broker','Inventory Control Specialist','Fleet Manager'
-    ],
-    "Social Work & Counseling": [
-      'Social Worker','Marriage Counselor','Substance Abuse Counselor','Family Therapist',
-      'Child Welfare Worker','Mental Health Counselor','Case Manager','Rehabilitation Specialist',
-      'Social Work Assistant','Career Counselor','Psychotherapist','Support Worker','Grief Counselor',
-      'Community Service Coordinator','Addiction Specialist'
-    ],
-    "Sports & Fitness": [
-      'Personal Trainer','Fitness Instructor','Yoga Instructor','Pilates Trainer','Sports Coach',
-      'Athletic Trainer','Swimming Instructor','Sports Nutritionist','Physical Therapist',
-      'Sports Psychologist','Zumba Instructor','Fitness Model','Martial Arts Instructor',
-      'Physical Education Teacher','Sports Official'
-    ],
-    "Technology & Development": [
-      'Software Developer','App Developer','Web Developer','Mobile App Developer','Game Developer',
-      'Database Administrator','Blockchain Developer','AI Developer','Cybersecurity Analyst',
-      'Network Engineer','UI/UX Designer','IT Project Manager','System Architect','Cloud Engineer',
-      'Hardware Developer'
-    ],
-    "Tourism & Travel": [
-      'Travel Agent','Tour Guide','Travel Blogger','Travel Consultant','Hotel Management',
-      'Event Planner','Flight Attendant','Cruise Staff','Concierge Services','Travel Planner',
-      'Tourist Information Specialist','Adventure Guide','Travel Writer','Tour Manager',
-      'Hospitality Consultant'
-    ],
-    "Writing, Editing & Translation": [
-      'Copywriter','Technical Writer','Freelance Writer','Proofreader','Editor','Ghostwriter',
-      'Content Writer','Blogger','Translator','Transcriptionist','SEO Content Writer',
-      'Content Strategist','Creative Writer','Copyeditor','Proofreader'
-    ],
-    "Volunteer & Charity Work": [
-      'Fundraiser','Volunteer Coordinator','Charity Consultant','Event Volunteer','Program Manager',
-      'Nonprofit Administrator','Social Worker','Community Outreach Coordinator','Grant Writer',
-      'Awareness Campaign Specialist','Disaster Relief Worker','Youth Counselor','NGO Specialist',
-      'Volunteer Facilitator','Philanthropist'
-    ],
-    "Web & Graphic Design": [
-      'Web Designer','Graphic Designer','Illustrator','UI/UX Designer','Motion Graphics Artist',
-      'Print Designer','Logo Designer','3D Modeler','Digital Artist','Brand Designer',
-      'Product Designer','Digital Illustrator','Photography','Banner Design','Web Developer'
-    ],
-    "Writing & Editing": [
-      'Author','Copywriter','Content Writer','Editor','Proofreader','SEO Content Writer',
-      'Transcriptionist','Technical Writer','Blogger','Essay Writer','Creative Writer',
-      'Screenwriter','Ghostwriter','Script Editor','Columnist'
-    ],
-
-  "Animal Care & Veterinary": [
-    'Veterinarian', 'Animal Groomer', 'Pet Trainer', 'Dog Walker', 'Pet Sitter', 'Veterinary Technician',
-    'Animal Shelter Worker', 'Pet Breeder', 'Animal Behavior Specialist', 'Wildlife Rehabilitator', 'Aquarist',
-    'Horse Trainer', 'Zookeeper', 'Animal Nutritionist', 'Equine Veterinarian'
-  ],
-
-  "Architecture & Interior Design": [
-    'Architect', 'Interior Designer', 'Urban Planner', 'Landscape Architect', 'Structural Engineer', '3D Visualizer',
-    'CAD Designer', 'Construction Project Manager', 'Building Information Modeling (BIM) Specialist',
-    'Set Designer', 'Lighting Designer', 'Furniture Designer', 'Sustainability Consultant', 'Building Inspector',
-    'Space Planner'
-  ],
-
-  "Automotive & Mechanics": [
-    'Auto Mechanic', 'Car Detailer', 'Automotive Engineer', 'Auto Body Repair Specialist', 'Auto Electrician',
-    'Motorcycle Mechanic', 'Car Salesperson', 'Diesel Mechanic', 'Vehicle Inspector', 'Auto Upholsterer',
-    'Tire Technician', 'Auto Parts Manager', 'Fleet Maintenance Specialist', 'Garage Owner', 'Auto Parts Salesperson'
-  ],
-    
   
 
-  "Business & Finance": [
-    'Accountant', 'Financial Analyst', 'Business Consultant', 'Investment Advisor', 'Financial Planner', 'Bookkeeper',
-    'Auditor', 'Tax Specialist', 'Risk Manager', 'Wealth Manager', 'Insurance Broker', 'Tax Preparer', 'Business Analyst',
-    'Portfolio Manager', 'Controller'
-  ],
+    </form>
+  </div>
+</div>
 
-  "Cleaning & Maintenance": [
-    'House Cleaner', 'Office Cleaner', 'Carpet Cleaner', 'Window Washer', 'Handyman', 'Maintenance Technician',
-    'Janitor', 'Pool Cleaner', 'Pressure Washer', 'Pest Control Technician', 'Residential Cleaner', 'Building Cleaner',
-    'Commercial Cleaner', 'Appliance Repair Technician', 'Maintenance Manager'
-  ],
 
-  "Communication & Public Speaking": [
-    'Public Speaker', 'Communications Specialist', 'Corporate Trainer', 'Speechwriter', 'Media Relations Specialist',
-    'Communications Director', 'Speech Therapist', 'Event MC', 'Radio Host', 'Podcaster', 'PR Specialist',
-    'Motivational Speaker', 'Conference Speaker', 'Presentation Coach', 'Brand Spokesperson'
-  ],
 
-  "Data & Analytics": [
-    'Data Scientist', 'Data Analyst', 'Data Entry Specialist', 'Business Intelligence Analyst', 'Data Engineer',
-    'Statistician', 'Data Visualization Specialist', 'Database Administrator', 'Machine Learning Engineer',
-    'Big Data Engineer', 'Research Analyst', 'Excel Specialist', 'Data Mining Specialist', 'Digital Marketing Analyst',
-    'Operations Analyst'
-  ],
-
-  "Education & Tutoring": [
-    'Teacher', 'Tutor', 'Educational Consultant', 'Principal', 'Special Education Teacher', 'Online Tutor',
-    'School Counselor', 'Teaching Assistant', 'Test Preparation Tutor', 'Childcare Worker', 'Adult Education Specialist',
-    'School Administrator', 'Music Teacher', 'Language Teacher', 'Mathematics Tutor'
-  ],
-
-  "Engineering & Technology": [
-    'Civil Engineer', 'Mechanical Engineer', 'Electrical Engineer', 'Software Engineer', 'Structural Engineer',
-    'Chemical Engineer', 'Aerospace Engineer', 'Robotics Engineer', 'Industrial Engineer', 'Petroleum Engineer',
-    'Environmental Engineer', 'Biomedical Engineer', 'Telecommunications Engineer', 'Computer Systems Engineer',
-    'Manufacturing Engineer'
-  ],
-
-  "Environment & Sustainability": [
-    'Environmental Consultant', 'Sustainability Manager', 'Renewable Energy Specialist', 'Waste Management Specialist',
-    'Environmental Scientist', 'Conservationist', 'Carbon Footprint Analyst', 'Climate Change Consultant',
-    'Recycling Coordinator', 'Green Building Consultant', 'Energy Auditor', 'Urban Sustainability Planner',
-    'Solar Panel Installer', 'Environmental Health Specialist', 'Environmental Policy Analyst'
-  ],
-
-  "Food & Hospitality": [
-    'Chef', 'Baker', 'Pastry Chef', 'Waiter/Waitress', 'Restaurant Manager', 'Catering Manager', 'Sous Chef',
-    'Line Cook', 'Bartender', 'Barista', 'Catering Assistant', 'Food Delivery Driver', 'Banquet Manager',
-    'Catering Coordinator', 'Housekeeper'
-  ],
-
-  "Health & Medical": [
-    'Doctor', 'Nurse', 'Dentist', 'Surgeon', 'Pharmacist', 'Medical Assistant', 'Chiropractor', 'Physical Therapist',
-    'Psychologist', 'Radiologist', 'Medical Laboratory Technician', 'Dietitian', 'Optometrist', 'Medical Coder',
-    'Medical Receptionist'
-  ],
-
-  "Human Resources & Recruitment": [
-    'HR Manager', 'Recruitment Specialist', 'HR Assistant', 'Payroll Administrator', 'HR Consultant', 'Talent Acquisition Specialist',
-    'Employee Relations Manager', 'HR Director', 'Compensation Analyst', 'Organizational Development Specialist', 'HR Generalist',
-    'Onboarding Specialist', 'Training Coordinator', 'HR Coordinator', 'Learning & Development Manager'
-  ],
-
-  "Import/Export & International Business": [
-    'Import/Export Manager', 'International Business Consultant', 'Freight Forwarder', 'Logistics Manager', 'Customs Broker',
-    'International Trade Analyst', 'Global Supply Chain Manager', 'Export Sales Manager', 'Shipping Coordinator',
-    'International Marketing Specialist', 'Import/Export Specialist', 'Freight Broker', 'Customs Compliance Specialist',
-    'International Tax Consultant', 'Export Documentation Specialist'
-  ],
-
-  "IT & Computer Services": [
-    'IT Support Specialist', 'Network Administrator', 'System Administrator', 'IT Consultant', 'Cloud Computing Specialist',
-    'Cybersecurity Expert', 'Database Administrator', 'Software Tester', 'Computer Programmer', 'IT Manager',
-    'Web Developer', 'IT Helpdesk Technician', 'Cloud Architect', 'Software Developer', 'IT Project Manager'
-  ],
-
-  "Legal & Compliance": [
-    'Lawyer', 'Paralegal', 'Legal Secretary', 'Compliance Officer', 'Corporate Lawyer', 'Intellectual Property Lawyer',
-    'Contract Manager', 'Legal Consultant', 'Mediator', 'Legal Researcher', 'Family Lawyer', 'Criminal Defense Lawyer',
-    'Real Estate Lawyer', 'Bankruptcy Specialist', 'Employment Lawyer'
-  ],
-
-  "Logistics & Supply Chain": [
-    'Logistics Coordinator', 'Supply Chain Manager', 'Warehouse Manager', 'Inventory Manager', 'Operations Manager',
-    'Procurement Specialist', 'Shipping Clerk', 'Freight Manager', 'Distribution Manager', 'Supply Chain Analyst',
-    'Transportation Planner', 'Stock Controller', 'Fleet Manager', 'Import/Export Coordinator', 'Warehouse Worker'
-  ],
-
-  "Marketing, Advertising & PR": [
-    'Marketing Manager', 'Digital Marketing Specialist', 'Brand Manager', 'Public Relations Manager', 'Advertising Specialist',
-    'Content Strategist', 'SEO Specialist', 'Social Media Manager', 'Copywriter', 'Graphic Designer', 'Event Planner',
-    'Marketing Research Analyst', 'Marketing Assistant', 'Public Relations Specialist', 'Marketing Coordinator'
-  ],
-
-  "Manufacturing & Production": [
-    'Production Manager', 'Manufacturing Engineer', 'Assembly Line Worker', 'Factory Worker', 'Machine Operator',
-    'CNC Programmer', 'Production Planner', 'Quality Control Inspector', 'Manufacturing Technician', 'Industrial Designer',
-    'Process Engineer', 'Supply Chain Planner', 'Packaging Specialist', 'Warehouse Associate', 'Product Development Engineer'
-  ],
-
-  "Media & Entertainment": [
-    'Actor/Actress', 'Director', 'Producer', 'Cinematographer', 'Screenwriter', 'Editor', 'Sound Engineer', 'Film Critic',
-    'Television Presenter', 'Musician', 'DJ', 'Radio Host', 'Videographer', 'Animator', 'Event Organizer'
-  ],
-
-  "Mental Health & Counseling": [
-    'Psychologist', 'Psychotherapist', 'Counselor', 'Marriage and Family Therapist', 'Mental Health Nurse', 'Addiction Counselor',
-    'Life Coach', 'Social Worker', 'Clinical Psychologist', 'Behavioral Health Technician', 'Career Coach', 'Grief Counselor',
-    'Trauma Specialist', 'Psychiatrist', 'Art Therapist'
-  ],
-
-  "Mining & Energy": [
-    'Mining Engineer', 'Geologist', 'Petroleum Engineer', 'Drilling Technician', 'Energy Consultant', 'Safety Manager',
-    'Geophysicist', 'Environmental Technician', 'Mine Surveyor', 'Coal Miner', 'Energy Manager', 'Environmental Health and Safety Officer',
-    'Wind Energy Technician', 'Solar Energy Specialist', 'Offshore Engineer'
-  ],
-
-  "Music & Audio Production": [
-    'Sound Engineer', 'Music Producer', 'Audio Technician', 'Recording Engineer', 'Composer', 'Sound Designer', 'DJ',
-    'Music Teacher', 'Singer/Songwriter', 'Studio Manager', 'Audio Editor', 'Musician', 'Music Arranger', 'Voice Over Artist',
-    'Music Composer'
-  ],
-
-  "Non-Profit & Social Work": [
-    'Social Worker', 'Non-Profit Fundraiser', 'Volunteer Coordinator', 'Program Manager', 'Charity Organizer', 'NGO Consultant',
-    'Outreach Coordinator', 'Social Justice Advocate', 'Case Worker', 'Youth Worker', 'Community Organizer', 'Non-Profit Director',
-    'Public Health Educator', 'Program Coordinator', 'Disaster Relief Specialist'
-  ],
-
-  "Online Services & E-Commerce": [
-    'E-commerce Manager', 'Online Store Owner', 'Digital Store Manager', 'Dropshipping Specialist', 'Affiliate Marketer',
-    'Online Sales Consultant', 'Amazon FBA Specialist', 'Shopify Expert', 'E-commerce SEO Specialist', 'Online Customer Service Representative',
-    'Product Lister', 'Online Business Coach', 'Marketplace Manager', 'Virtual Assistant', 'Web Store Designer'
-  ], 
-
-  };
-
-  // Flatten and sort for suggestions
-  const allTitles = Object.values(serviceTitlesByCategory).flat().sort();
-
-  function showSuggestions(query) {
-    const list = document.getElementById('suggestionsList');
-    list.innerHTML = '';
-    if (!query) { list.style.display = 'none'; return; }
-    const matches = allTitles.filter(title =>
-      title.toLowerCase().includes(query.toLowerCase())
-    );
-    if (!matches.length) { list.style.display = 'none'; return; }
-    list.style.display = 'block';
-    matches.forEach(s => {
-      const div = document.createElement('div');
-      div.textContent = s;
-      div.onclick = () => selectService(s);
-      list.appendChild(div);
-    });
-  }
-
-  function selectService(s) {
-    document.getElementById('title').value = s;
-    document.getElementById('suggestionsList').style.display = 'none';
-  }
-
-  function addTimeSlot() {
-    const c = document.getElementById('timeSlotsContainer');
-    const d = document.createElement('div');
-    d.className = 'time-slot';
-    d.innerHTML = `
-      <input type="time" name="startTime" placeholder="Start Time" />
-      <input type="time" name="endTime" placeholder="End Time" />
-    `;
-    c.appendChild(d);
-  }
+  <div class="icon-bar">
+    <a href="profile.html" class="icon-item" title="Profile">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </a>
+    <a href="notifications.html" class="icon-item" title="Notifications">
+      <i class="fas fa-bell"></i>
+      <span>Alerts</span>
+    </a>
+    <a href="chatlist.html" class="icon-item" title="Chatlist">
+      <i class="fas fa-comments"></i>
+      <span>Chats</span>
+    </a>
+    <a href="subscription.html" class="icon-item" title="Subscription">
+      <i class="fas fa-receipt"></i>
+      <span>Subscription</span>
+    </a>
+    <a href="setting-support-feedback.html" class="icon-item" title="Settings">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </a>
+    <a href="#" id="logout" class="icon-item" title="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </a>
+  </div>
+  
+  <script>
+function addTimeSlot() {
+  const timeSlots = document.getElementById("timeSlots");
+  const slot = document.createElement("div");
+  slot.className = "time-slot";
+  slot.innerHTML = `
+    <input type="time" name="startTime[]" required> to
+    <input type="time" name="endTime[]" required>
+  `;
+  timeSlots.appendChild(slot);
+}
 </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('available-toggle');
+    const label = document.getElementById('availability-text');
+
+    toggle.addEventListener('change', function () {
+      label.textContent = this.checked ? 'Engaged' : 'Available';
+    });
+  });
+</script>
+
 
 </body>
 </html>
