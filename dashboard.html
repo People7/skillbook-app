@@ -11,6 +11,7 @@
       font-family: 'Segoe UI', sans-serif;
       background: white;
       color: black;
+      padding-bottom: 70px; /* space for bottom nav */
     }
 
     .header {
@@ -54,124 +55,46 @@
     }
 
     .icon-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       display: flex;
-      overflow-x: auto;
-      white-space: nowrap;
+      justify-content: space-around;
+      background-color: white;
       padding: 10px 0;
-      margin-top: 10px;
-    }
-
-    .icon-bar::-webkit-scrollbar {
-      display: none;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
     }
 
     .icon-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      margin-right: 20px;
       text-decoration: none;
+      font-size: 0.8rem;
+      color: #333;
     }
 
     .icon-item i {
-      font-size: 1.6rem;
-      padding: 10px;
+      font-size: 1.4rem;
+      padding: 8px;
       border-radius: 50%;
       color: white;
     }
 
-    /* Different icon colors */
     .icon-item:nth-child(1) i { background-color: #4285F4; }
     .icon-item:nth-child(2) i { background-color: #EA4335; }
     .icon-item:nth-child(3) i { background-color: #FF7F50; }
     .icon-item:nth-child(4) i { background-color: #8A2BE2; }
     .icon-item:nth-child(5) i { background-color: #00CED1; }
-    .icon-item:nth-child(6) i { background-color: #FFD700; }
-    .icon-item:nth-child(7) i { background-color: #FF6347; }
-    .icon-item:nth-child(8) i { background-color: #32CD32; }
-    .icon-item:nth-child(9) i { background-color: #FF4500; }
-
-    .icon-item span {
-      margin-top: 5px;
-      font-size: 0.9rem;
-      color: #333;
-    }
+    .icon-item:nth-child(6) i { background-color: #FF6347; }
 
     .container {
-      padding: 20px;
-      padding-top: 220px; /* extra padding for fixed header, icons */
+      padding: 10px;
+      padding-top: 60px;
     }
 
-    /* Full-Width Windows for Booking Schedule and Upcoming Bookings */
-    .window-container {
-      margin-top: 20px;
-    }
-
-    .window {
-      background-color: #f5f5f5;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      cursor: pointer; /* Make it clickable */
-      transition: all 0.3s ease;
-    }
-
-    /* Hover Effect for Booking Schedule and Upcoming Bookings */
-    .window:hover {
-      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-      transform: scale(1.05);
-    }
-
-    .window-header {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #065f46;
-      margin-bottom: 15px;
-      text-transform: uppercase; /* Makes it more prominent */
-      letter-spacing: 1px;
-      position: relative;
-    }
-
-    /* Add Icon to Headers */
-    .window-header::before {
-      content: '\f0e0'; /* FontAwesome Icon Unicode for "calendar" */
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      position: absolute;
-      left: -30px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.6rem;
-      color: #065f46;
-    }
-
-    .window-body {
-      font-size: 1.1rem;
-      color: #555;
-    }
-
-    .window .real-time-info {
-      background-color: #ffffff;
-      padding: 15px;
-      margin-top: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 10px;
-    }
-
-    .window-footer {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #999;
-    }
-
-    /* Styling for the Offer and Search Buttons */
     .buttons-container {
       display: flex;
       justify-content: space-between;
@@ -188,15 +111,32 @@
       color: white;
       width: 48%;
     }
+    .buttons-container-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 80px; /* positions buttons below the header */
+  align-items: center;
+}
+
+.buttons-container-vertical .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 90%;
+  padding: 15px;
+  font-size: 1.1rem;
+}
+
 
     .search-button {
-      background-color: #4CAF50; /* Green */
+      background-color: #4CAF50;
     }
 
     .offer-button {
-      background-color: #FF6347; /* Tomato */
+      background-color: #4CAF50;
     }
-
   </style>
 </head>
 <body>
@@ -209,76 +149,47 @@
       </div>
       <img src="profile-pic-url.png" alt="Profile Pic" class="profile-pic">
     </div>
-
-    <!-- ICONS Row -->
-    <div class="icon-bar">
-      <a href="profile.html" class="icon-item" title="Profile">
-        <i class="fas fa-user"></i>
-        <span>Profile</span>
-      </a>
-      <a href="notifications.html" class="icon-item" title="Notifications">
-        <i class="fas fa-bell"></i>
-        <span>Alerts</span>
-      </a>
-      <a href="subscription.html" class="icon-item" title="Subscription">
-        <i class="fas fa-star"></i>
-        <span>Subscription</span>
-      </a>
-      <a href="messages.html" class="icon-item" title="Messages">
-        <i class="fas fa-envelope"></i>
-        <span>Messages</span>
-      </a>
-      <a href="chatlist.html" class="icon-item" title="Chatlist">
-        <i class="fas fa-comments"></i>
-        <span>Chats</span>
-      </a>
-      <a href="setting-support-feedback.html" class="icon-item" title="Settings">
-        <i class="fas fa-cog"></i>
-        <span>Settings</span>
-      </a>
-      <a href="#" id="logout" class="icon-item" title="Logout">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Logout</span>
-      </a>
-    </div>
   </div>
 
   <div class="container">
-    <!-- Search and Offer Buttons -->
-    <div class="buttons-container">
-      <a href="search-services.html" class="button search-button">Search Services</a>
-      <a href="offer-services.html" class="button offer-button">Offer Services</a>
-    </div>
+    <div class="buttons-container-vertical">
+  <a href="search-services.html" class="button search-button">
+    <i class="fas fa-search"></i> Search Skills you want
+  </a>
+  <a href="offer-services.html" class="button offer-button">
+    <i class="fas fa-plus"></i> Offer Your Skills and Earn
+  </a>
+</div>
 
-    <!-- Booking Schedule and Upcoming Bookings as Full-width Windows -->
-    <div class="window-container">
-      <!-- Booking Schedule Window -->
-      <div class="window" onclick="window.location.href='booking-schedule.html'">
-        <div class="window-header">Service Booking Schedule</div>
-        <div class="window-body">
-          <div class="real-time-info">
-            <p><strong>Upcoming Service:</strong> House Cleaning Service</p>
-            <p><strong>Time:</strong> 2:00 PM, 28th April 2025</p>
-            <p><strong>Status:</strong> Confirmed</p>
-          </div>
-        </div>
-        <div class="window-footer">Last updated: 10 minutes ago</div>
-      </div>
+  </div>
 
-      <!-- Upcoming Service Requests Window -->
-      <div class="window" onclick="window.location.href='upcoming-bookings.html'">
-        <div class="window-header">Upcoming Service Requests</div>
-        <div class="window-body">
-          <div class="real-time-info">
-            <p><strong>Service #1:</strong> Car Repair</p>
-            <p><strong>Scheduled Time:</strong> 3:00 PM, 29th April 2025</p>
-            <p><strong>Status:</strong> Pending</p>
-          </div>
-          <div class="real-time-info">
-            <p><strong>Service #2:</strong> Plumbing</p>
-            <p><strong>Scheduled Time:</strong> 10:00 AM, 1st May 2025</p>
-            <p><strong>Status:</strong> Confirmed</p>
-          </div>
-        </div>
-        <div class="window-footer">Last updated: 5 minutes ago</div>
-      </div>
+  <!-- Icon Bar Moved to Bottom -->
+  <div class="icon-bar">
+    <a href="profile.html" class="icon-item" title="Profile">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </a>
+    <a href="notifications.html" class="icon-item" title="Notifications">
+      <i class="fas fa-bell"></i>
+      <span>Alerts</span>
+        </a>
+      <a href="chatlist.html" class="icon-item" title="Chatlist">
+      <i class="fas fa-comments"></i>
+      <span>Chats</span>
+    </a>
+    <a href="subscription.html" class="icon-item" title="Subscription">
+      <i class="fas fa-star"></i>
+      <span>Subscription</span>
+    </a>
+    <a href="setting-support-feedback.html" class="icon-item" title="Settings">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </a>
+    <a href="#" id="logout" class="icon-item" title="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </a>
+  </div>
+
+</body>
+</html>
