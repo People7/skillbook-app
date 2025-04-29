@@ -86,7 +86,7 @@
 
     .container {
       padding: 20px;
-      padding-top: 20px;
+      padding-top: 80px;
     }
 
     h2 {
@@ -96,132 +96,126 @@
       margin-bottom: 20px;
     }
 
-    <style>
-  /* General Form Styling */
-  form {
-    max-width: 500px;
-    margin: auto;
-    background: #f5f5f5;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
 
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-  }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
 
-  input[type="text"],
-  input[type="number"],
-  select,
-  textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
 
-  input[type="file"] {
-    margin-top: 10px;
-  }
+    input[type="file"] {
+      margin-top: 10px;
+    }
 
-  button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 12px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-  }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
 
-  button:hover {
-    background-color: #388e3c;
-  }
+    button:hover {
+      background-color: #388e3c;
+    }
 
-  /* New Fields Specific Styles */
-  <style>
-.offer-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+    .offer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-.time-slot {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  width: 100%;
-}
+    .time-slot {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+    }
 
-.time-slot input {
-  flex: 1; /* Make the input take full width */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
+    .time-slot input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 30px;
-}
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 24px;
-}
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
 
-input:checked + .slider {
-  background-color: #4CAF50;
-}
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
 
-input:checked + .slider:before {
-  transform: translateX(30px);
-}
+    input:checked + .slider:before {
+      transform: translateX(30px);
+    }
 
-.available-toggle-label {
-  font-size: 1rem;
-  margin-left: 10px;
-  font-weight: bold;
-  color: #333;
-}
-</style>
-
+    .available-toggle-label {
+      font-size: 1rem;
+      margin-left: 10px;
+      font-weight: bold;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -236,103 +230,85 @@ input:checked + .slider:before {
     </div>
   </div>
   
-<div class="container">
-  <div class="form-container">
-    <h2 style="margin-top: 80px; color: #065f46;">Offer Your Skills and Earn</h2>
-    <form>
-      <label for="serviceTitle">Service Title</label>
-      <input type="text" id="serviceTitle" name="serviceTitle" placeholder="Enter your service title" required>
+  <div class="container">
+    <div class="form-container">
+      <h2>Offer Your Skills and Earn</h2>
+      <form onsubmit="handleSubmit(event)">
+        <label for="serviceTitle">Service Title</label>
+        <input type="text" id="serviceTitle" name="serviceTitle" placeholder="Enter your service title" required>
 
-      <label for="description">Description</label>
-      <textarea id="description" name="description" rows="4" placeholder="Describe your service" required></textarea>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" placeholder="Describe your service" required></textarea>
 
-      <label for="category">Category</label>
-      <select id="category" name="category" required>
-        <option value="">Select a category</option>
-        <option value="education">Education</option>
-        <option value="repair">Repair</option>
-        <option value="design">Design</option>
-        <option value="tech">Tech Support</option>
-      </select>
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select a category</option>
+          <option value="education">Education</option>
+          <option value="repair">Repair</option>
+          <option value="design">Design</option>
+          <option value="tech">Tech Support</option>
+        </select>
 
-      <label for="tags">Tags</label>
-      <input type="text" id="tags" name="tags" placeholder="e.g., plumbing, tutoring, design">
+        <label for="tags">Tags</label>
+        <input type="text" id="tags" name="tags" placeholder="e.g., plumbing, tutoring, design">
 
-      <fieldset>
-        <legend>Your Location</legend>
+        <fieldset>
+          <legend>Your Location</legend>
+          <label for="building">Building/Street</label>
+          <input type="text" id="building" name="building" placeholder="e.g., 123 Main Street">
+          <label for="locality">Locality</label>
+          <input type="text" id="locality" name="locality" placeholder="e.g., Near ABC Park">
+          <label for="area">Area</label>
+          <input type="text" id="area" name="area" placeholder="e.g., Sector 12">
+          <label for="pincode">Pincode</label>
+          <input type="text" id="pincode" name="pincode" placeholder="e.g., 110001">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="e.g., Delhi">
+          <label for="state">State</label>
+          <input type="text" id="state" name="state" placeholder="e.g., Delhi">
+        </fieldset>
 
-        <label for="building">Building/Street</label>
-        <input type="text" id="building" name="building" placeholder="e.g., 123 Main Street">
+        <label for="imageUpload">Upload Image</label>
+        <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
 
-        <label for="locality">Locality</label>
-        <input type="text" id="locality" name="locality" placeholder="e.g., Near ABC Park">
+        <label for="availableContainer">Available Container</label>
+        <input type="text" id="availableContainer" name="availableContainer" required>
 
-        <label for="area">Area</label>
-        <input type="text" id="area" name="area" placeholder="e.g., Sector 12">
+        <label for="availableDays">Available Days</label>
+        <select id="availableDays" name="availableDays" multiple required>
+          <option value="monday">Monday</option>
+          <option value="tuesday">Tuesday</option>
+          <option value="wednesday">Wednesday</option>
+          <option value="thursday">Thursday</option>
+          <option value="friday">Friday</option>
+          <option value="saturday">Saturday</option>
+          <option value="sunday">Sunday</option>
+        </select>
 
-        <label for="pincode">Pincode</label>
-        <input type="text" id="pincode" name="pincode" placeholder="e.g., 110001">
+        <div id="timeSlots">
+          <label>Time Slot</label>
+          <div class="time-slot">
+            <input type="time" name="startTime[]" required> to
+            <input type="time" name="endTime[]" required>
+          </div>
+        </div>
+        <button type="button" onclick="addTimeSlot()">+ Add Slot</button>
 
-        <label for="city">City</label>
-        <input type="text" id="city" name="city" placeholder="e.g., Delhi">
+        <div class="form-field">
+          <label for="available-toggle">Availability</label>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <label class="switch">
+              <input type="checkbox" id="available-toggle">
+              <span class="slider"></span>
+            </label>
+            <span id="availability-text">Available</span>
+          </div>
+        </div>
 
-        <label for="state">State</label>
-        <input type="text" id="state" name="state" placeholder="e.g., Delhi">
-      </fieldset>
-
-      <label for="imageUpload">Upload Image</label>
-      <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
-
-<!-- Available Container -->
-  <label for="availableContainer">Available Container</label>
-  <input type="text" id="availableContainer" name="availableContainer" required>
-
-  <!-- Available Days -->
-  <label for="availableDays">Available Days</label>
-  <select id="availableDays" name="availableDays" multiple required>
-    <option value="monday">Monday</option>
-    <option value="tuesday">Tuesday</option>
-    <option value="wednesday">Wednesday</option>
-    <option value="thursday">Thursday</option>
-    <option value="friday">Friday</option>
-    <option value="saturday">Saturday</option>
-    <option value="sunday">Sunday</option>
-  </select>
-
-  <!-- Time Slots -->
-  <div id="timeSlots">
-    <label>Time Slot</label>
-    <div class="time-slot">
-      <input type="time" name="startTime[]" required> to
-      <input type="time" name="endTime[]" required>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   </div>
-  <button type="button" onclick="addTimeSlot()">+ Add Slot</button>
-
-  <!-- Available/Engaged Toggle -->
-  <div class="form-field">
-  <label for="available-toggle">Availability</label>
-  <div style="display: flex; align-items: center; justify-content: space-between;">
-    <label class="switch">
-      <input type="checkbox" id="available-toggle">
-      <span class="slider"></span>
-    </label>
-    <span id="availability-text">Available</span>
-  </div>
-</div>
-
-
-
-      <button type="submit">Submit</button>
-      <h2 s
-
-  
-
-    </form>
-  </div>
-</div>
-
-
 
   <div class="icon-bar">
     <a href="profile.html" class="icon-item" title="Profile">
@@ -343,46 +319,46 @@ input:checked + .slider:before {
       <i class="fas fa-bell"></i>
       <span>Alerts</span>
     </a>
-    <a href="chatlist.html" class="icon-item" title="Chatlist">
-      <i class="fas fa-comments"></i>
-      <span>Chats</span>
-    </a>
-    <a href="subscription.html" class="icon-item" title="Subscription">
-      <i class="fas fa-receipt"></i>
-      <span>Subscription</span>
-    </a>
-    <a href="setting-support-feedback.html" class="icon-item" title="Settings">
-      <i class="fas fa-cog"></i>
-      <span>Settings</span>
-    </a>
-    <a href="#" id="logout" class="icon-item" title="Logout">
-      <i class="fas fa-sign-out-alt"></i>
-      <span>Logout</span>
+    <a href="home.html" class="icon-item" title="Home">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
     </a>
   </div>
-  
+
   <script>
-function addTimeSlot() {
-  const timeSlots = document.getElementById("timeSlots");
-  const slot = document.createElement("div");
-  slot.className = "time-slot";
-  slot.innerHTML = `
-    <input type="time" name="startTime[]" required> to
-    <input type="time" name="endTime[]" required>
-  `;
-  timeSlots.appendChild(slot);
-}
-</script>
+    function addTimeSlot() {
+      const container = document.getElementById("timeSlots");
+      const div = document.createElement("div");
+      div.className = "time-slot";
+      div.innerHTML = `
+        <input type="time" name="startTime[]" required> to
+        <input type="time" name="endTime[]" required>
+      `;
+      container.appendChild(div);
+    }
+  </script>
+  <script>
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevent default form submission
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const toggle = document.getElementById('available-toggle');
-    const label = document.getElementById('availability-text');
+    alert("Submitted successfully!"); // Show success message
 
-    toggle.addEventListener('change', function () {
-      label.textContent = this.checked ? 'Engaged' : 'Available';
-    });
-  });
+    // Redirect to dashboard.html after 2 seconds
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 2000);
+  }
+
+  function addTimeSlot() {
+    const timeSlotsContainer = document.getElementById("timeSlots");
+    const newSlot = document.createElement("div");
+    newSlot.className = "time-slot";
+    newSlot.innerHTML = `
+      <input type="time" name="startTime[]" required> to
+      <input type="time" name="endTime[]" required>
+    `;
+    timeSlotsContainer.appendChild(newSlot);
+  }
 </script>
 
 
