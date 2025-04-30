@@ -242,6 +242,63 @@
     .autocomplete-suggestions div:hover {
       background-color: #f1f1f1;
     }
+    
+    .contact-form {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            margin: auto;
+        }
+
+        .contact-form h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact-form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form input[type="tel"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .contact-form .checkbox-group {
+            display: flex;
+            justify-content: space-evenly;
+            margin-bottom: 10px;
+        }
+
+        .contact-form .checkbox-group label {
+            margin: 0;
+        }
+
+        .contact-form button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: #45a049;
+        }
   </style>
 </head>
 <body>
@@ -330,6 +387,34 @@
           </label>
           <span id="availabilityStatus" class="available-toggle-label">Not Available</span>
         </div>
+        
+        <div class="contact-form">
+       
+        <form id="contactForm">
+            <!-- Contact Method -->
+            <label>Contact Method:</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="chat" name="contactMethod" value="Chat"> Chat</label>
+                <label><input type="checkbox" id="call" name="contactMethod" value="Call"> Call</label>
+                <label><input type="checkbox" id="whatsapp" name="contactMethod" value="WhatsApp"> WhatsApp</label>
+                <label><input type="checkbox" id="email" name="contactMethod" value="Email"> Email</label>
+            </div>
+
+            <!-- Phone/WhatsApp Number (shown if Call or WhatsApp is selected) -->
+            <div id="phoneNumberField" style="display: none;">
+                <label for="phoneNumber">Phone/WhatsApp Number:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber">
+            </div>
+
+            <!-- Email (shown if Email is selected) -->
+            <div id="emailField" style="display: none;">
+                <label for="emailDetails">Email Address:</label>
+                <input type="email" id="emailDetails" name="emailDetails">
+            </div>
+
+            
+        </form>
+    </div>
 
         <button type="submit">Submit</button>
       </form>
@@ -440,7 +525,38 @@
     });
     
   </script>
+<script>
+        // Toggle visibility of Phone/WhatsApp and Email fields based on checkboxes
+        document.querySelectorAll('input[name="contactMethod"]').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const phoneField = document.getElementById('phoneNumberField');
+                const emailField = document.getElementById('emailField');
+                const phoneChecked = document.getElementById('call').checked || document.getElementById('whatsapp').checked;
+                const emailChecked = document.getElementById('email').checked;
 
+                phoneField.style.display = phoneChecked ? 'block' : 'none';
+                emailField.style.display = emailChecked ? 'block' : 'none';
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const contactMethods = [];
+            document.querySelectorAll('input[name="contactMethod"]:checked').forEach(function (checkbox) {
+                contactMethods.push(checkbox.value);
+            });
+
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const emailDetails = document.getElementById('emailDetails').value;
+
+            // Output to console (you can modify this part for actual form submission)
+            console.log('Preferred Contact Methods: ' + contactMethods.join(', '));
+            if (phoneNumber) console.log('Phone/WhatsApp Number: ' + phoneNumber);
+            if (emailDetails) console.log('Email: ' + emailDetails);
+        });
+    </script>
 
 </body>
 </html>
