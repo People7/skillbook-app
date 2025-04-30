@@ -210,11 +210,37 @@
       transform: translateX(30px);
     }
 
+    .available-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .available-toggle-label {
       font-size: 1rem;
-      margin-left: 10px;
       font-weight: bold;
       color: #333;
+    }
+    
+    .autocomplete-suggestions {
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      background-color: white;
+      width: calc(100% - 22px);
+      z-index: 10;
+      margin-top: 5px;
+      border-radius: 6px;
+    }
+
+    .autocomplete-suggestions div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .autocomplete-suggestions div:hover {
+      background-color: #f1f1f1;
     }
   </style>
 </head>
@@ -235,7 +261,10 @@
       <h2>Offer Your Skills and Earn</h2>
       <form onsubmit="handleSubmit(event)">
         <label for="serviceTitle">Service Title</label>
-        <input type="text" id="serviceTitle" name="serviceTitle" placeholder="Enter your service title" required>
+        <input type="text" id="serviceTitle" name="serviceTitle" placeholder="Enter your service title" oninput="showSuggestions(event)" autocomplete="off" required>
+
+        <div id="suggestions" class="autocomplete-suggestions"></div>
+
 
         <label for="description">Description</label>
         <textarea id="description" name="description" rows="4" placeholder="Describe your service" required></textarea>
@@ -271,8 +300,7 @@
         <label for="imageUpload">Upload Image</label>
         <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
 
-        <label for="availableContainer">Available Container</label>
-        <input type="text" id="availableContainer" name="availableContainer" required>
+        
 
         <label for="availableDays">Available Days</label>
         <select id="availableDays" name="availableDays" multiple required>
@@ -294,15 +322,13 @@
         </div>
         <button type="button" onclick="addTimeSlot()">+ Add Slot</button>
 
-        <div class="form-field">
-          <label for="available-toggle">Availability</label>
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <label class="switch">
-              <input type="checkbox" id="available-toggle">
-              <span class="slider"></span>
-            </label>
-            <span id="availability-text">Available</span>
-          </div>
+        <div class="available-toggle">
+          <label class="available-toggle-label" for="available">Availability:</label>
+          <label class="switch">
+            <input type="checkbox" id="available" name="available">
+            <span class="slider"></span>
+          </label>
+          <span id="availabilityStatus" class="available-toggle-label">Not Available</span>
         </div>
 
         <button type="submit">Submit</button>
@@ -350,29 +376,70 @@
       container.appendChild(div);
     }
   </script>
+  
+  
   <script>
-  function handleSubmit(event) {
-    event.preventDefault(); // Prevent default form submission
+    const suggestionsList = [
+      "CCTV Monitoring Services",
+      "Facility Management Services",
+      "Fire Safety and Emergency Training",
+      "Interior Design Services",
+      "Tech Support Services",
+      "Plumbing Services",
+      "Tutoring and Educational Services",
+      "Graphic Design Services"
+    ];
 
-    alert("Submitted successfully!"); // Show success message
+    function showSuggestions(event) {
+      const input = event.target.value;
+      const suggestions = suggestionsList.filter(item =>
+        item.toLowerCase().includes(input.toLowerCase())
+      ).sort(); // Sort suggestions alphabetically
 
-    // Redirect to dashboard.html after 2 seconds
-    setTimeout(() => {
-      window.location.href = "dashboard.html";
-    }, 2000);
-  }
+      const suggestionsContainer = document.getElementById("suggestions");
+      suggestionsContainer.innerHTML = '';
 
-  function addTimeSlot() {
-    const timeSlotsContainer = document.getElementById("timeSlots");
-    const newSlot = document.createElement("div");
-    newSlot.className = "time-slot";
-    newSlot.innerHTML = `
-      <input type="time" name="startTime[]" required> to
-      <input type="time" name="endTime[]" required>
-    `;
-    timeSlotsContainer.appendChild(newSlot);
-  }
-</script>
+      suggestions.forEach(suggestion => {
+        const div = document.createElement("div");
+        div.textContent = suggestion;
+        div.onclick = () => {
+          document.getElementById("serviceTitle").value = suggestion;
+          suggestionsContainer.innerHTML = '';
+        };
+        suggestionsContainer.appendChild(div);
+      });
+    }
+
+// Availability toggle handling
+    document.getElementById('available').addEventListener('change', function() {
+      const availabilityStatus = document.getElementById('availabilityStatus');
+      if (this.checked) {
+        availabilityStatus.textContent = 'Available';
+      } else {
+        availabilityStatus.textContent = 'Not Available';
+      }
+    });
+
+    function handleSubmit(event) {
+      event.preventDefault(); // Prevent default form submission
+      alert("Submitted successfully!"); // Show success message
+
+      // Redirect to dashboard.html after 2 seconds
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 2000);
+    }
+    // Availability toggle handling
+    document.getElementById('available').addEventListener('change', function() {
+      const availabilityStatus = document.getElementById('availabilityStatus');
+      if (this.checked) {
+        availabilityStatus.textContent = 'Available';
+      } else {
+        availabilityStatus.textContent = 'Not Available';
+      }
+    });
+    
+  </script>
 
 
 </body>
