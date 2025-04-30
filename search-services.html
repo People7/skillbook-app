@@ -86,10 +86,41 @@
       cursor: pointer;
       font-size: 1rem;
     }
+    
+    input[type="text"] {
+  width: 100%;
+  padding: 14px 12px; /* Increased padding for thickness */
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
 
     .search-box button i {
       font-size: 1rem;
     }
+    .autocomplete-suggestions {
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      background-color: white;
+      width: calc(100% - 22px);
+      z-index: 10;
+      margin-top: 5px;
+      border-radius: 6px;
+    }
+
+    .autocomplete-suggestions div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .autocomplete-suggestions div:hover {
+      background-color: #f1f1f1;
+    }
+    
 
     .suggestions {
       width: 75%;
@@ -206,7 +237,7 @@
   <div class="search-container">
     <h2>Search what you want</h2>
     <div style="display: flex; align-items: center; width: 80%;">
-      <input type="text" id="search-input" placeholder="Enter search term..." aria-label="Search Services" style="flex: 1; padding: 12px 14px; font-size: 1rem; border: 2px solid #065f46; border-radius: 5px; outline: none;" />
+      <input type="text" id="searchInput" name="searchInput" placeholder="Enter your serv..." oninput="showSuggestions(event)" autocomplete="off" required> 
       <button id="search-button" style="margin-left: 10px; background-color: #065f46; color: white; border: none; padding: 10px; border-radius: 5px;">
         <i class="fas fa-search"></i>
       </button>
@@ -281,6 +312,39 @@
 
   <!-- Script -->
   <script>
+  const suggestionsList = [
+      "CCTV Monitoring Services",
+      "Facility Management Services",
+      "Fire Safety and Emergency Training",
+      "Interior Design Services",
+      "Tech Support Services",
+      "Plumbing Services",
+      "Tutoring and Educational Services",
+      "Graphic Design Services"
+    ];
+
+    function showSuggestions(event) {
+      const input = event.target.value;
+      const suggestions = suggestionsList.filter(item =>
+        item.toLowerCase().includes(input.toLowerCase())
+      ).sort(); // Sort suggestions alphabetically
+
+      const suggestionsContainer = document.getElementById("suggestions");
+      suggestionsContainer.innerHTML = '';
+
+      suggestions.forEach(suggestion => {
+        const div = document.createElement("div");
+        div.textContent = suggestion;
+        div.onclick = () => {
+          document.getElementById("searcgInput").value = suggestion;
+          suggestionsContainer.innerHTML = '';
+        };
+        suggestionsContainer.appendChild(div);
+      });
+    }
+	
+  
+  
     // Filter Modal functionality
     const filterBtn = document.getElementById('filter-btn');
     const filterModal = document.getElementById('filter-modal');
