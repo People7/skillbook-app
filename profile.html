@@ -3,273 +3,275 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skillbook - User Profile</title>
+  <title>Offer Services - Skillbook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    .header {
       background: white;
-      color: #065f46;
-      padding: 1rem 2rem;
+      color: black;
+      padding-bottom: 80px;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .header-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #e5e7eb;
     }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+    }
+
     .header img {
       height: 40px;
       margin-right: 10px;
     }
-    .main {
-      margin: 2rem auto;
-      padding: 2rem;
-      max-width: 900px;
-      width: 100%;
-    }
-    .container {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      max-width: 800px;
-      margin: auto;
-    }
-    label {
-      display: block;
-      margin-top: 1.5rem;
-      font-weight: bold;
-      color: #065f46;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 0.8rem;
-      margin-top: 0.5rem;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-    }
-    input[type="file"] {
-      background: #f9fafb;
-    }
-    input[type="checkbox"] {
-      width: auto;
-      margin-right: 10px;
-    }
-    #locationDisplay {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #10b981;
-    }
-    iframe {
-      width: 100%;
-      height: 300px;
-      border: none;
-      border-radius: 10px;
-      margin-top: 1rem;
-    }
-    button {
-      background-color: #065f46;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      margin-top: 1.5rem;
-    }
-    button:hover {
-      background-color: #047857;
-    }
 
-    /* Updated style for User Profile heading */
-    .header h2 {
+    .header h1 {
+      color: #065f46;
       font-size: 1.8rem;
       font-weight: bold;
-      color: #065f46;
+      margin: 0;
     }
+
+    .profile-pic {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
+    .icon-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      background-color: white;
+      padding: 10px 0;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      font-size: 0.8rem;
+      color: #333;
+    }
+
+    .icon-item i {
+      font-size: 1.4rem;
+      padding: 8px;
+      border-radius: 50%;
+      color: white;
+    }
+
+    .icon-item:nth-child(1) i,
+    .icon-item:nth-child(2) i,
+    .icon-item:nth-child(3) i,
+    .icon-item:nth-child(4) i,
+    .icon-item:nth-child(5) i,
+    .icon-item:nth-child(6) i {
+      background-color: #065f46;
+    }
+
+    .container {
+      padding: 20px;
+      padding-top: 80px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #065f46;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #065f46;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    .success-message {
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+
   </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="header">
-  <div style="display: flex; align-items: center;">
-    <img src="your-logo.png" alt="Skillbook Logo"> 
-    <span style="font-size: 1.5rem; font-weight: bold;">Skillbook</span>
-  </div>
-  <div style="display: flex; align-items: center;">
-    <label for="availability" style="margin-right: 10px;">Available</label>
-    <input type="checkbox" id="availability" checked />
-  </div>
-</header>
-
-<!-- Main Content -->
-<div class="main">
   <div class="header">
-    <h2>User Profile</h2>
+    <div class="header-top">
+      <div class="logo-title">
+        <img src="your-logo-url.png" alt="Skillbook Logo" />
+        <h1>Skillbook</h1>
+      </div>
+      <img src="profile-pic-url.png" alt="Profile Pic" class="profile-pic">
+    </div>
   </div>
 
   <div class="container">
-    <!-- Profile Picture Upload -->
-    <label for="profilePic">Upload Profile Picture</label>
-    <input type="file" id="profilePic" accept="image/*" onchange="uploadProfilePic()" />
+    <div class="form-container">
+      <h2>Your Profile</h2>
+      <form id="profileForm">
 
-    <!-- Display Profile Picture -->
-    <div id="profilePicDisplay" style="margin-top: 1rem;">
-      <label>Profile Picture</label>
-      <img id="profilePicImage" src="#" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; display: none;" />
+        <label for="imageUpload">Upload Profile Pic</label>
+        <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
+
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob" required>
+
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" required>
+          <option value="">Select Gender</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+        </select>
+
+        <label for="qualification">Qualifications</label>
+        <input type="text" id="qualification" name="qualification" placeholder="Enter qualifications (if any)">
+
+        <label for="shortBio"><strong>Make your profile readable</strong></label>
+        <textarea id="shortBio" name="shortBio" placeholder="Write a short bio (8–10 lines)..."></textarea>
+
+        <fieldset>
+          <legend>Your Location</legend>
+          <label for="building">Building/Street</label>
+          <input type="text" id="building" name="building" placeholder="e.g., 123 Main Street">
+          <label for="locality">Locality</label>
+          <input type="text" id="locality" name="locality" placeholder="e.g., Near ABC Park">
+          <label for="area">Area</label>
+          <input type="text" id="area" name="area" placeholder="e.g., Sector 12">
+          <label for="pincode">Pincode</label>
+          <input type="text" id="pincode" name="pincode" placeholder="e.g., 110001">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="e.g., Delhi">
+          <label for="state">State</label>
+          <input type="text" id="state" name="state" placeholder="e.g., Delhi">
+        </fieldset>
+
+        <button type="submit">SAVE</button>
+      </form>
+
+      <div id="successMessage" class="success-message">
+        Profile created successfully!
+      </div>
     </div>
-
-    <label for="name">Full Name</label>
-    <input type="text" id="name" placeholder="Enter your name" />
-
-    <label for="dob">Date of Birth</label>
-    <input type="date" id="dob" />
-
-    <label for="gender">Gender</label>
-    <select id="gender">
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select>
-
-    <label for="address">Address</label>
-    <textarea id="address" placeholder="Enter your address..." rows="3"></textarea>
-
-    <label for="area">Area / Pincode</label>
-    <input type="text" id="area" placeholder="Enter your area or pincode" />
-
-    <label for="district">District</label>
-    <input type="text" id="district" placeholder="Enter your district" />
-
-    <label for="city">City</label>
-    <input type="text" id="city" placeholder="Enter your city" />
-
-    <label for="state">State</label>
-    <input type="text" id="state" placeholder="Enter your state" />
-
-    <label for="country">Country</label>
-    <input type="text" id="country" placeholder="Enter your country" />
-
-    <label for="mobile">Mobile</label>
-    <input type="text" id="mobile" placeholder="Enter your mobile number" />
-
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="Enter your email" />
-
-    <label for="bio">Short Bio</label>
-    <textarea id="bio" placeholder="Write about yourself..." rows="3"></textarea>
-
-    <label for="documents">Upload Certificates / Work pics (Max 10)</label>
-    <input type="file" id="documents" multiple accept=".pdf,.doc,.jpg,.jpeg,.png" onchange="limitDocuments()" />
-
-    <label for="video">Upload Service Video (1 max)</label>
-    <input type="file" id="video" accept="video/*" onchange="limitVideo()" />
-
-    <button onclick="saveProfile()">Save Profile</button>
   </div>
-</div>
 
-<!-- Firebase + Script -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <div class="icon-bar">
+    <a href="dashboard.html" class="icon-item" title="Dashboard ">
+      <i class="fas fa-dashboard"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="notifications.html" class="icon-item" title="Notifications">
+      <i class="fas fa-bell"></i>
+      <span>Alerts</span>
+    </a>
+    <a href="chatlist.html" class="icon-item" title="Chatlist">
+      <i class="fas fa-comments"></i>
+      <span>Chats</span>
+    </a>
+    <a href="subscription.html" class="icon-item" title="Subscription">
+      <i class="fas fa-receipt"></i>
+      <span>Subscription</span>
+    </a>
+    <a href="setting-support-feedback.html" class="icon-item" title="Settings">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </a>
+    <a href="#" id="logout" class="icon-item" title="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </a>
+  </div>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-    authDomain: "skillbook-3fa41.firebaseapp.com",
-    projectId: "skillbook-3fa41",
-    storageBucket: "skillbook-3fa41.appspot.com",
-    messagingSenderId: "599549421075",
-    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-    measurementId: "G-3VKK01HXE6"
-  };
+  <script>
+    document.getElementById("profileForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-  const app = firebase.initializeApp(firebaseConfig);
-  const storage = firebase.storage();
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+      // Show success message
+      document.getElementById("successMessage").style.display = "block";
 
-  document.getElementById("availability").addEventListener("change", function() {
-    document.getElementById("availabilityText")?.innerText = this.checked ? "Available" : "Not Available";
-  });
-
-  function limitDocuments() {
-    const files = document.getElementById("documents").files;
-    if (files.length > 10) {
-      alert("You can upload a maximum of 10 documents.");
-      document.getElementById("documents").value = "";
-    }
-  }
-
-  function limitVideo() {
-    const files = document.getElementById("video").files;
-    if (files.length > 1) {
-      alert("You can upload only 1 video.");
-      document.getElementById("video").value = "";
-    }
-  }
-
-  function uploadProfilePic() {
-    const file = document.getElementById("profilePic").files[0];
-    if (!file) return;
-
-    const storageRef = storage.ref('profile_pictures/' + file.name);
-    const uploadTask = storageRef.put(file);
-
-    uploadTask.on('state_changed', 
-      (snapshot) => {
-        // progress if needed
-      }, 
-      (error) => {
-        alert("Error uploading profile picture: " + error.message);
-      }, 
-      () => {
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          document.getElementById("profilePicImage").src = downloadURL;
-          document.getElementById("profilePicImage").style.display = "block";
-        });
-      }
-    );
-  }
-
-  function saveProfile() {
-    const profile = {
-      name: document.getElementById("name").value,
-      dob: document.getElementById("dob").value,
-      gender: document.getElementById("gender").value,
-      address: document.getElementById("address").value,
-      area: document.getElementById("area").value,
-      district: document.getElementById("district").value,
-      city: document.getElementById("city").value,
-      state: document.getElementById("state").value,
-      country: document.getElementById("country").value,
-      mobile: document.getElementById("mobile").value,
-      email: document.getElementById("email").value,
-      bio: document.getElementById("bio").value,
-      availableDays: Array.from(document.getElementById("days").selectedOptions).map(opt => opt.value),
-      timeSlots: Array.from(document.getElementById("timeSlots").children).map(slot => ({
-        start: slot.children[0].value,
-        end: slot.children[1].value
-      }))
-    };
-
-    db.collection("profiles").add(profile)
-      .then(() => {
-        alert("Profile saved successfully!");
-      })
-      .catch((error) => {
-        alert("Error saving profile: " + error.message);
-      });
-  }
-</script>
+      // Redirect to dashboard after 2 seconds
+      setTimeout(function() {
+        window.location.href = "dashboard.html";
+      }, 2000);
+    });
+  </script>
 
 </body>
 </html>
