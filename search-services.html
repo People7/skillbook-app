@@ -55,21 +55,63 @@
     }
 
     .search-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 40px;
-      padding: 20px;
+      margin-top: 80px;
+      padding: 10px 20px;
+      text-align: center;
     }
 
-    .search-container input {
-      width: 80%;
+    .search-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 75%;
       padding: 10px;
       font-size: 1rem;
       border: 2px solid #065f46;
-      border-radius: 5px;
+      border-radius: 5px 0 0 5px;
       outline: none;
-      margin-top: 10px;
+    }
+
+    .search-box button {
+      padding: 10px 15px;
+      background-color: #065f46;
+      color: white;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .search-box button i {
+      font-size: 1rem;
+    }
+
+    .suggestions {
+      width: 75%;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      position: absolute;
+      z-index: 99;
+      text-align: left;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
     }
 
     .icon-bar {
@@ -99,19 +141,53 @@
       padding: 8px;
       border-radius: 50%;
       color: white;
-      background-color: #4CAF50;
+      background-color: #065f46;
     }
 
-    .container {
+    /* Filter Modal */
+    .filter-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 101;
+    }
+
+    .filter-modal-content {
+      background: white;
       padding: 20px;
+      border-radius: 8px;
+      width: 300px;
     }
 
-    h2 {
-      text-align: center;
-      font-size: 1.5rem;
-      color: #065f46;
-      margin-bottom: 20px;
+    .filter-modal select,
+    .filter-modal button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 2px solid #065f46;
     }
+
+    .filter-modal button {
+      background-color: #065f46;
+      color: white;
+      cursor: pointer;
+    }
+    .filter-modal input {
+  width: 100%;
+  padding: 14px; /* Increased from 10px */
+  font-size: 1.1rem; /* Increased font size */
+  border-radius: 5px;
+  border: 2px solid #065f46;
+}
+
   </style>
 </head>
 <body>
@@ -129,8 +205,51 @@
   <!-- Search bar section -->
   <div class="search-container">
     <h2>Search what you want</h2>
-    <input type="text" placeholder="Enter search term..." aria-label="Search Services" />
+    <div style="display: flex; align-items: center; width: 80%;">
+      <input type="text" id="search-input" placeholder="Enter search term..." aria-label="Search Services" style="flex: 1; padding: 12px 14px; font-size: 1rem; border: 2px solid #065f46; border-radius: 5px; outline: none;" />
+      <button id="search-button" style="margin-left: 10px; background-color: #065f46; color: white; border: none; padding: 10px; border-radius: 5px;">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <div id="suggestions" class="suggestions"></div>
+    <div id="results-btn-container" style="margin-top: 15px;"></div>
   </div>
+
+  <!-- Filter Button -->
+<div style="text-align: center; margin-top: 10px;">
+  <button id="filter-btn" style="background-color: #065f46; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer;">
+    Filter
+  </button>
+</div>
+
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="filter-modal">
+    <div class="filter-modal-content">
+      <h3>Select Filters</h3>
+      <select id="state-select">
+        <option value="">Select State</option>
+        <option value="California">California</option>
+        <option value="Texas">Texas</option>
+        <option value="New York">New York</option>
+      </select>
+      <select id="city-select">
+        <option value="">Select City</option>
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="San Francisco">San Francisco</option>
+        <option value="New York City">New York City</option>
+      </select>
+      <input type="text" id="pincode-input" placeholder="Enter Pincode" />
+      <div id="pincode-suggestions" class="autocomplete-items"></div>
+      <button id="apply-filters-btn">Apply Filters</button>
+    </div>
+  </div>
+  
+ <!-- Results Container (This section will show filtered results) -->
+  <div id="results-container" class="results-container">
+    <h2>Results</h2>
+    <!-- Filtered results will be shown here -->
+  </div> 
 
   <!-- Bottom Navigation -->
   <div class="icon-bar">
@@ -162,14 +281,96 @@
 
   <!-- Script -->
   <script>
+    // Filter Modal functionality
+    const filterBtn = document.getElementById('filter-btn');
+    const filterModal = document.getElementById('filter-modal');
+    const applyFiltersBtn = document.getElementById('apply-filters-btn');
+    const resultsContainer = document.getElementById('results-container');
+    const pincodeInput = document.getElementById('pincode-input');
+    const pincodeSuggestions = document.getElementById('pincode-suggestions');
+
+    // Sample data (replace this with your actual data)
+    const servicesData = [
+      { name: 'Web Development', state: 'California', city: 'Los Angeles', pincode: '90001' },
+      { name: 'App Development', state: 'California', city: 'San Francisco', pincode: '94101' },
+      { name: 'SEO Services', state: 'Texas', city: 'Dallas', pincode: '75001' },
+      { name: 'Graphic Design', state: 'New York', city: 'New York City', pincode: '10001' },
+      { name: 'Photography', state: 'California', city: 'Los Angeles', pincode: '90001' }
+    ];
+
+    // Pincode suggestions
+    const pincodes = ['90001', '94101', '75001', '10001', '90210', '94102', '94103', '75002'];
+
+    // Open filter modal when the filter button is clicked
+    filterBtn.addEventListener('click', () => {
+      filterModal.style.display = 'flex';
+    });
+
+    // Show suggestions when user types in the pincode input
+    pincodeInput.addEventListener('input', function() {
+      const query = pincodeInput.value;
+      pincodeSuggestions.innerHTML = ''; // Clear previous suggestions
+      if (query.length >= 3) { // Show suggestions when at least 3 characters are typed
+        const filteredPincodes = pincodes.filter(pincode => pincode.startsWith(query));
+        filteredPincodes.forEach(pincode => {
+          const suggestionItem = document.createElement('div');
+          suggestionItem.textContent = pincode;
+          suggestionItem.addEventListener('click', () => {
+            pincodeInput.value = pincode;
+            pincodeSuggestions.innerHTML = ''; // Hide suggestions after selection
+          });
+          pincodeSuggestions.appendChild(suggestionItem);
+        });
+      }
+    });
+
+    // Apply filters and update results
+    applyFiltersBtn.addEventListener('click', () => {
+      const selectedState = document.getElementById('state-select').value;
+      const selectedCity = document.getElementById('city-select').value;
+      const selectedPincode = pincodeInput.value;
+
+      // Filter the services based on selected filters
+      const filteredResults = servicesData.filter(service => {
+        return (
+          (!selectedState || service.state === selectedState) &&
+          (!selectedCity || service.city === selectedCity) &&
+          (!selectedPincode || service.pincode === selectedPincode)
+        );
+      });
+
+      // Clear previous results
+      resultsContainer.innerHTML = '<h2>Results</h2>';
+
+      // Display filtered results
+      if (filteredResults.length > 0) {
+        filteredResults.forEach(service => {
+          const resultItem = document.createElement('div');
+          resultItem.classList.add('result-item');
+          resultItem.innerHTML = `<strong>${service.name}</strong><br>State: ${service.state}<br>City: ${service.city}<br>Pincode: ${service.pincode}`;
+          resultsContainer.appendChild(resultItem);
+        });
+      } else {
+        resultsContainer.innerHTML += '<p>No results found for the selected filters.</p>';
+      }
+
+      // Close the filter modal after applying filters
+      filterModal.style.display = 'none';
+    });
+
+    // Hide filter modal if clicked outside
+    window.addEventListener('click', (event) => {
+      if (event.target === filterModal) {
+        filterModal.style.display = 'none';
+      }
+    });
+
     // Logout functionality
     document.getElementById('logout').addEventListener('click', function(e) {
       e.preventDefault();
       alert("Logged out successfully!");
       window.location.href = "login.html";
     });
-
-    
   </script>
 
 </body>
