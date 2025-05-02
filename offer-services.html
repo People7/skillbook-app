@@ -19,7 +19,7 @@
       top: 0;
       left: 0;
       right: 0;
-      background-color: white;
+      background-color: #065f46;
       padding: 10px 20px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       z-index: 100;
@@ -42,7 +42,7 @@
     }
 
     .header h1 {
-      color: #065f46;
+      color: white;
       font-size: 1.8rem;
       font-weight: bold;
       margin: 0;
@@ -299,6 +299,28 @@
         .contact-form button:hover {
             background-color: #45a049;
         }
+        
+        .autocomplete-suggestions {
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      background-color: white;
+      width: calc(100% - 22px);
+      z-index: 10;
+      margin-top: 5px;
+      border-radius: 6px;
+    }
+
+    .autocomplete-suggestions div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .autocomplete-suggestions div:hover {
+      background-color: #f1f1f1;
+    }
+        
   </style>
 </head>
 <body>
@@ -389,32 +411,56 @@
         </div>
         
         <div class="contact-form">
-       
-        <form id="contactForm">
-            <!-- Contact Method -->
-            <label>Contact Method:</label>
-            <div class="checkbox-group">
-                <label><input type="checkbox" id="chat" name="contactMethod" value="Chat"> Chat</label>
-                <label><input type="checkbox" id="call" name="contactMethod" value="Call"> Call</label>
-                <label><input type="checkbox" id="whatsapp" name="contactMethod" value="WhatsApp"> WhatsApp</label>
-                <label><input type="checkbox" id="email" name="contactMethod" value="Email"> Email</label>
-            </div>
+    <form id="contactForm">
+        <!-- Contact Method -->
+        <label>Contact Method:</label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" id="chat" name="contactMethod" value="Chat"> Chat</label>
+            <label><input type="checkbox" id="call" name="contactMethod" value="Call"> Call</label>
+            <label><input type="checkbox" id="whatsapp" name="contactMethod" value="WhatsApp"> WhatsApp</label>
+            <label><input type="checkbox" id="email" name="contactMethod" value="Email"> Email</label>
+        </div>
 
-            <!-- Phone/WhatsApp Number (shown if Call or WhatsApp is selected) -->
-            <div id="phoneNumberField" style="display: none;">
-                <label for="phoneNumber">Phone/WhatsApp Number:</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber">
-            </div>
+        <!-- Hidden fields to store default contact info -->
+        <input type="hidden" id="defaultPhoneNumber" value="9876543210">
+        <input type="hidden" id="defaultWhatsApp" value="9876543210">
+        <input type="hidden" id="defaultEmail" value="user@example.com">
 
-            <!-- Email (shown if Email is selected) -->
-            <div id="emailField" style="display: none;">
-                <label for="emailDetails">Email Address:</label>
-                <input type="email" id="emailDetails" name="emailDetails">
-            </div>
+        <!-- Optional visible summary if needed -->
+        <div id="selectedContactInfo"></div>
+    </form>
+</div>
 
-            
-        </form>
-    </div>
+<script>
+    document.querySelectorAll('input[name="contactMethod"]').forEach(input => {
+        input.addEventListener('change', () => {
+            const selected = Array.from(document.querySelectorAll('input[name="contactMethod"]:checked')).map(i => i.value);
+            let summary = '';
+
+            if (selected.includes('Call')) {
+                const callNumber = document.getElementById('defaultPhoneNumber').value;
+                summary += `<p><strong>Call:</strong> ${callNumber}</p>`;
+            }
+
+            if (selected.includes('WhatsApp')) {
+                const whatsappNumber = document.getElementById('defaultWhatsApp').value;
+                summary += `<p><strong>WhatsApp:</strong> ${whatsappNumber}</p>`;
+            }
+
+            if (selected.includes('Email')) {
+                const email = document.getElementById('defaultEmail').value;
+                summary += `<p><strong>Email:</strong> ${email}</p>`;
+            }
+
+            if (selected.includes('Chat')) {
+                summary += `<p><strong>Chat:</strong> Enabled</p>`;
+            }
+
+            document.getElementById('selectedContactInfo').innerHTML = summary;
+        });
+    });
+</script>
+
 
         <button type="submit">Submit</button>
       </form>
@@ -514,15 +560,7 @@
         window.location.href = "dashboard.html";
       }, 2000);
     }
-    // Availability toggle handling
-    document.getElementById('available').addEventListener('change', function() {
-      const availabilityStatus = document.getElementById('availabilityStatus');
-      if (this.checked) {
-        availabilityStatus.textContent = 'Available';
-      } else {
-        availabilityStatus.textContent = 'Not Available';
-      }
-    });
+    
     
   </script>
 <script>
@@ -543,20 +581,38 @@
         document.getElementById('contactForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent form submission
 
-            const contactMethods = [];
-            document.querySelectorAll('input[name="contactMethod"]:checked').forEach(function (checkbox) {
-                contactMethods.push(checkbox.value);
-            });
+            const profile = {
+  mobile: document.getElementById('profileMobile').value,
+  whatsapp: document.getElementById('profileWhatsApp').value,
+  email: document.getElementById('profileEmail').value
+};
 
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            const emailDetails = document.getElementById('emailDetails').value;
 
-            // Output to console (you can modify this part for actual form submission)
-            console.log('Preferred Contact Methods: ' + contactMethods.join(', '));
-            if (phoneNumber) console.log('Phone/WhatsApp Number: ' + phoneNumber);
-            if (emailDetails) console.log('Email: ' + emailDetails);
-        });
-    </script>
+const contactMethod = document.getElementById('contact-method');
+const contactDisplay = document.getElementById('contact-display');
+const autoContact = document.getElementById('auto-contact');
+
+contactMethod.addEventListener('change', function () {
+  const method = contactMethod.value;
+  let value = '';
+
+  if (method === 'call') {
+    value = profile.mobile;
+  } else if (method === 'whatsapp') {
+    value = profile.whatsapp;
+  } else if (method === 'email') {
+    value = profile.email;
+  }
+
+  if (value) {
+    contactDisplay.style.display = 'block';
+    autoContact.textContent = `Contact via ${method.toUpperCase()}: ${value}`;
+  } else {
+    contactDisplay.style.display = 'none';
+    autoContact.textContent = '';
+  }
+});
+
 
 </body>
 </html>
