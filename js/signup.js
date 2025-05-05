@@ -1,17 +1,47 @@
-import app from './firebase-config.js';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  setPersistence,
-  browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { db, auth } from './firebase.js';
+import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-const auth = getAuth(app);
+// Handle Sign-Up
+const signUpButton = document.getElementById('signUpButton');
+signUpButton.addEventListener('click', async (e) => {
+  e.preventDefault();
 
-// Set session persistence
-setPersistence(auth, browserLocalPersistence);
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const phone = document.getElementById('phone').value.trim();
 
-// Helper to show message
+  // Check if all fields are filled
+  if (!name || !email || !password || !phone) {
+    showMessage('Please fill all fields.');
+    return;
+  }
+
+  try {
+    // Sign up with email and password
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Update user's profile with their name
+    await updateProfile(user, { displayName: name });
+
+    // Save user info to Firestore under 'users' collection
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      email: email,
+      phone: phone,
+      createdAt: new Date(),
+    });
+
+    // Redirect to dashboard after successful sign-up
+    window.location.href = 'dashboard.html';
+  } catch (error) {
+    showMessage(error.message);
+  }
+});
+
+// Show message helper function
 function showMessage(msg) {
   const messageDiv = document.getElementById('message');
   if (messageDiv) {
@@ -21,23 +51,3 @@ function showMessage(msg) {
     alert(msg);
   }
 }
-
-// Sign Up Logic
-const signupBtn = document.getElementById('signupBtn');
-signupBtn.addEventListener('click', async () => {
-  const email = document.getElementById('signupEmail').value.trim();
-  const password = document.getElementById('signupPassword').value.trim();
-
-  if (!email || !password) {
-    showMessage('Both email and password are required.');
-    return;
-  }
-
-  try {
-    showMessage('Creating account...');
-    await createUserWithEmailAndPassword(auth, email, password);
-    window.location.href = 'dashboard.html';
-  } catch (error) {
-    showMessage(error.message);
-  }
-});
