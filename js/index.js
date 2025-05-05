@@ -1,4 +1,4 @@
-import { auth } from './firebase.js';
+import { auth, db } from './firebase.js';
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -7,31 +7,52 @@ import {
   signInWithPhoneNumber,
   setPersistence,
   browserLocalPersistence,
-  onAuthStateChanged
+  onAuthStateChanged,
+  getAuth,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-const auth = getAuth(app);
+const appAuth = getAuth(); // Ensure it's initialized properly
+setPersistence(appAuth, browserLocalPersistence);
 
-// Session persistence
-setPersistence(auth, browserLocalPersistence);
+// --- Check if profile is complete ---
+async function checkProfile(user) {
+  const userRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
 
-// Redirect if already logged in
-onAuthStateChanged(auth, (user) => {
-  if (user) window.location.href = 'dashboard.html';
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    if (data.name && data.phone) {
+      window.location.href = 'dashboard.html';
+    } else {
+      window.location.href = 'complete-profile.html';
+    }
+  } else {
+    // No data — must complete profile
+    window.location.href = 'complete-profile.html';
+  }
+}
+
+// --- Redirect if already logged in ---
+onAuthStateChanged(appAuth, async (user) => {
+  if (user) await checkProfile(user);
 });
 
-// Show/hide splash and landing
+// --- Splash & Landing Display ---
 window.addEventListener('DOMContentLoaded', () => {
   const splash = document.getElementById('splash');
   const landing = document.getElementById('landing');
   setTimeout(() => {
     if (splash) splash.remove();
     if (landing) landing.classList.add('show');
-  }, 5000); // Adjust timing if needed
+  }, 5000);
 });
 
-// Helper to show error/success messages
+// --- Show Error/Info Messages ---
 function showMessage(msg) {
   const messageDiv = document.getElementById('message');
   if (messageDiv) {
@@ -45,20 +66,23 @@ function showMessage(msg) {
 // --- GOOGLE LOGIN ---
 const googleBtn = document.getElementById('googleLogin');
 if (googleBtn) {
-  googleBtn.addEventListener('click', (e) => {
+  googleBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     showMessage('Logging in with Google...');
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(() => window.location.href = 'dashboard.html')
-      .catch(err => showMessage(err.message));
+    try {
+      const result = await signInWithPopup(appAuth, provider);
+      await checkProfile(result.user);
+    } catch (err) {
+      showMessage(err.message);
+    }
   });
 }
 
 // --- EMAIL LOGIN ---
 const emailBtn = document.getElementById('emailLoginBtn');
 if (emailBtn) {
-  emailBtn.addEventListener('click', () => {
+  emailBtn.addEventListener('click', async () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
@@ -68,22 +92,22 @@ if (emailBtn) {
     }
 
     showMessage('Logging in...');
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => window.location.href = 'dashboard.html')
-      .catch(err => showMessage(err.message));
+    try {
+      const result = await signInWithEmailAndPassword(appAuth, email, password);
+      await checkProfile(result.user);
+    } catch (err) {
+      showMessage(err.message);
+    }
   });
 }
 
 // --- PHONE LOGIN ---
 let confirmationResult;
-let recaptchaVerifier;
 
 window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
   size: 'invisible',
-  callback: () => {
-    // reCAPTCHA solved
-  }
-}, auth);
+  callback: () => {}
+}, appAuth);
 
 const sendOtpBtn = document.getElementById('sendOtp');
 if (sendOtpBtn) {
@@ -96,7 +120,7 @@ if (sendOtpBtn) {
     }
 
     showMessage('Sending OTP...');
-    signInWithPhoneNumber(auth, phone, window.recaptchaVerifier)
+    signInWithPhoneNumber(appAuth, phone, window.recaptchaVerifier)
       .then((result) => {
         confirmationResult = result;
         document.getElementById('otp').style.display = 'block';
@@ -109,7 +133,7 @@ if (sendOtpBtn) {
 
 const verifyOtpBtn = document.getElementById('verifyOtp');
 if (verifyOtpBtn) {
-  verifyOtpBtn.addEventListener('click', () => {
+  verifyOtpBtn.addEventListener('click', async () => {
     const code = document.getElementById('otp').value.trim();
 
     if (!code) {
@@ -118,8 +142,11 @@ if (verifyOtpBtn) {
     }
 
     showMessage('Verifying OTP...');
-    confirmationResult.confirm(code)
-      .then(() => window.location.href = 'dashboard.html')
-      .catch(err => showMessage(err.message));
+    try {
+      const result = await confirmationResult.confirm(code);
+      await checkProfile(result.user);
+    } catch (err) {
+      showMessage(err.message);
+    }
   });
 }
