@@ -1,6 +1,5 @@
 import { auth } from './firebase.js';
 import {
-  getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
@@ -9,7 +8,8 @@ import {
   setPersistence,
   browserLocalPersistence,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
 
 const auth = getAuth(app);
 
