@@ -1,43 +1,37 @@
-import app from './firebase-config.js';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  setPersistence,
-  browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skillbook - Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
 
-const auth = getAuth(app);
+<!-- Signup Page -->
+<div id="landing" class="show">
+  <h1>Skillbook</h1>
+  <p>Join the skill-sharing network</p>
 
-// Set session persistence
-setPersistence(auth, browserLocalPersistence);
+  <!-- Inline Message -->
+  <div id="message" style="display:none; color: #dc2626; margin-bottom: 1rem;"></div>
 
-// Helper to show message
-function showMessage(msg) {
-  const messageDiv = document.getElementById('message');
-  if (messageDiv) {
-    messageDiv.textContent = msg;
-    messageDiv.style.display = 'block';
-  } else {
-    alert(msg);
-  }
-}
+  <!-- Signup Form -->
+  <div id="login-options">
+    <input type="email" id="signupEmail" placeholder="Email" required>
+    <input type="password" id="signupPassword" placeholder="Password" required>
+    <button id="signupBtn">
+      <i class="fas fa-user-plus"></i>
+      Sign Up
+    </button>
+    <p style="margin-top: 1rem; text-align: center;">
+      Already have an account?
+      <a href="index.html" style="color: #065f46; font-weight: bold;">Login</a>
+    </p>
+  </div>
+</div>
 
-// Sign Up Logic
-const signupBtn = document.getElementById('signupBtn');
-signupBtn.addEventListener('click', async () => {
-  const email = document.getElementById('signupEmail').value.trim();
-  const password = document.getElementById('signupPassword').value.trim();
-
-  if (!email || !password) {
-    showMessage('Both email and password are required.');
-    return;
-  }
-
-  try {
-    showMessage('Creating account...');
-    await createUserWithEmailAndPassword(auth, email, password);
-    window.location.href = 'dashboard.html';
-  } catch (error) {
-    showMessage(error.message);
-  }
-});
+<script type="module" src="js/signup.js"></script>
+</body>
+</html>
