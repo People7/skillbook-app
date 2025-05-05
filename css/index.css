@@ -172,6 +172,22 @@ body, html {
   display: none;
 }
 
+.signup-link {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 1rem;
+}
+.signup-link a {
+  color: #065f46;
+  text-decoration: none;
+  font-weight: 600;
+}
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+
 /* Media Query */
 @media (max-width: 480px) {
   #landing {
