@@ -1,4 +1,4 @@
-import app from './firebase.js';
+import { auth } from './firebase.js';
 import {
   getAuth,
   signInWithPopup,
