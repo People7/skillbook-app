@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";  // Import Firestore functions
 
 const firebaseConfig = {
   apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
@@ -18,9 +19,10 @@ const app = initializeApp(firebaseConfig);
 // Firebase Services
 const auth = getAuth(app);
 const messaging = getMessaging(app);
+const db = getFirestore(app);  // Initialize Firestore
 
 // Export Firebase services
-export { app, auth, messaging };
+export { app, auth, messaging, db };
 
 // Request permission and get FCM token
 export const requestForToken = async () => {
