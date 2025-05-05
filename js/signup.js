@@ -1,0 +1,43 @@
+import app from './firebase-config.js';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+const auth = getAuth(app);
+
+// Set session persistence
+setPersistence(auth, browserLocalPersistence);
+
+// Helper to show message
+function showMessage(msg) {
+  const messageDiv = document.getElementById('message');
+  if (messageDiv) {
+    messageDiv.textContent = msg;
+    messageDiv.style.display = 'block';
+  } else {
+    alert(msg);
+  }
+}
+
+// Sign Up Logic
+const signupBtn = document.getElementById('signupBtn');
+signupBtn.addEventListener('click', async () => {
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value.trim();
+
+  if (!email || !password) {
+    showMessage('Both email and password are required.');
+    return;
+  }
+
+  try {
+    showMessage('Creating account...');
+    await createUserWithEmailAndPassword(auth, email, password);
+    window.location.href = 'dashboard.html';
+  } catch (error) {
+    showMessage(error.message);
+  }
+});
