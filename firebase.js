@@ -3,11 +3,12 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-aut
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+// Updated Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
   authDomain: "skillbook-3fa41.firebaseapp.com",
   projectId: "skillbook-3fa41",
-  storageBucket: "skillbook-3fa41.appspot.com",
+  storageBucket: "skillbook-3fa41.appspot.com",  // Corrected bucket name
   messagingSenderId: "599549421075",
   appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
   measurementId: "G-3VKK01HXE6"
