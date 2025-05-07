@@ -1,4 +1,4 @@
-import { auth, db } from './firebase.js';
+import { auth, db, requestForToken } from './firebase.js';
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -13,10 +13,12 @@ import {
 
 import {
   doc,
-  getDoc
+  getDoc,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-const appAuth = getAuth(); // Ensure it's initialized properly
+// Initialize persistence
+const appAuth = getAuth();
 setPersistence(appAuth, browserLocalPersistence);
 
 // --- Check if profile is complete ---
@@ -27,20 +29,15 @@ async function checkProfile(user) {
   if (userSnap.exists()) {
     const data = userSnap.data();
     if (data.name && data.phone) {
+      await requestForToken(); // Ensure FCM token is updated
       window.location.href = 'dashboard.html';
     } else {
       window.location.href = 'complete-profile.html';
     }
   } else {
-    // No data — must complete profile
     window.location.href = 'complete-profile.html';
   }
 }
-
-// --- Redirect if already logged in ---
-onAuthStateChanged(appAuth, async (user) => {
-  if (user) await checkProfile(user);
-});
 
 // --- Splash & Landing Display ---
 window.addEventListener('DOMContentLoaded', () => {
@@ -72,8 +69,11 @@ if (googleBtn) {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(appAuth, provider);
-      await checkProfile(result.user);
+      if (result.user) {
+        await checkProfile(result.user);
+      }
     } catch (err) {
+      console.error(err);
       showMessage(err.message);
     }
   });
@@ -94,8 +94,11 @@ if (emailBtn) {
     showMessage('Logging in...');
     try {
       const result = await signInWithEmailAndPassword(appAuth, email, password);
-      await checkProfile(result.user);
+      if (result.user) {
+        await checkProfile(result.user);
+      }
     } catch (err) {
+      console.error(err);
       showMessage(err.message);
     }
   });
@@ -127,7 +130,10 @@ if (sendOtpBtn) {
         document.getElementById('verifyOtp').style.display = 'block';
         showMessage('OTP sent to your number.');
       })
-      .catch(err => showMessage(err.message));
+      .catch(err => {
+        console.error(err);
+        showMessage(err.message);
+      });
   });
 }
 
@@ -144,13 +150,17 @@ if (verifyOtpBtn) {
     showMessage('Verifying OTP...');
     try {
       const result = await confirmationResult.confirm(code);
-      await checkProfile(result.user);
+      if (result.user) {
+        await checkProfile(result.user);
+      }
     } catch (err) {
+      console.error(err);
       showMessage(err.message);
     }
   });
 }
 
+// --- Service Worker for Messaging ---
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')
     .then((registration) => {
@@ -159,3 +169,10 @@ if ('serviceWorker' in navigator) {
       console.error('Service Worker registration failed:', err);
     });
 }
+
+// --- Check auth state on load ---
+onAuthStateChanged(appAuth, async (user) => {
+  if (user) {
+    await checkProfile(user);
+  }
+});
