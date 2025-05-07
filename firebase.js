@@ -46,3 +46,13 @@ export const requestForToken = async () => {
 onMessage(messaging, (payload) => {
   console.log("Message received in foreground: ", payload);
 });
+
+if (currentToken) {
+  const user = auth.currentUser;
+  if (user) {
+    await setDoc(doc(db, "users", user.uid), {
+      fcmToken: currentToken
+    }, { merge: true });
+  }
+}
+
