@@ -24,3 +24,10 @@ onBackgroundMessage(messaging, (payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+const notificationTitle = payload.notification?.title || 'Skillbook Notification';
+const notificationOptions = {
+  body: payload.notification?.body || 'You have a new message.',
+  icon: '/logo.png'
+};
+
