@@ -66,6 +66,18 @@
 
 <div id="recaptcha-login" style="display:none;"></div>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then(function (registration) {
+        console.log('Service Worker registered with scope:', registration.scope);
+      }).catch(function (err) {
+        console.error('Service Worker registration failed:', err);
+      });
+  }
+</script>
+	
+
 <script type="module" src="js/auth-check.js"></script>
 <script type="module" src="js/index.js"></script>
 </body>
