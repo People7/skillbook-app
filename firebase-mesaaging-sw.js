@@ -11,23 +11,19 @@ const firebaseConfig = {
   measurementId: "G-3VKK01HXE6"
 };
 
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
+// Handle background messages
 onBackgroundMessage(messaging, (payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  const notificationTitle = payload.notification.title;
+
+  const notificationTitle = payload.notification?.title || 'Skillbook Notification';
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/logo.png'  // Update if your logo is in a different path
+    body: payload.notification?.body || 'You have a new message.',
+    icon: '/logo.png'  // Make sure logo.png is placed in your public root folder
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
-
-const notificationTitle = payload.notification?.title || 'Skillbook Notification';
-const notificationOptions = {
-  body: payload.notification?.body || 'You have a new message.',
-  icon: '/logo.png'
-};
-
