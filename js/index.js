@@ -1,4 +1,4 @@
-import { auth, db, requestForToken } from './firebase.js';
+import { auth, db } from './firebase.js';
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -8,20 +8,15 @@ import {
   setPersistence,
   browserLocalPersistence,
   onAuthStateChanged,
-  getAuth,
+  getAuth
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-import {
-  doc,
-  getDoc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Initialize persistence
 const appAuth = getAuth();
 setPersistence(appAuth, browserLocalPersistence);
 
-// --- Check if profile is complete ---
+// --- Check Profile Completeness ---
 async function checkProfile(user) {
   const userRef = doc(db, 'users', user.uid);
   const userSnap = await getDoc(userRef);
@@ -29,7 +24,6 @@ async function checkProfile(user) {
   if (userSnap.exists()) {
     const data = userSnap.data();
     if (data.name && data.phone) {
-      await requestForToken(); // Ensure FCM token is updated
       window.location.href = 'dashboard.html';
     } else {
       window.location.href = 'complete-profile.html';
@@ -39,7 +33,12 @@ async function checkProfile(user) {
   }
 }
 
-// --- Splash & Landing Display ---
+// --- Redirect if already logged in ---
+onAuthStateChanged(appAuth, async (user) => {
+  if (user) await checkProfile(user);
+});
+
+// --- Splash Screen Handling ---
 window.addEventListener('DOMContentLoaded', () => {
   const splash = document.getElementById('splash');
   const landing = document.getElementById('landing');
@@ -49,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 5000);
 });
 
-// --- Show Error/Info Messages ---
+// --- Display Message Helper ---
 function showMessage(msg) {
   const messageDiv = document.getElementById('message');
   if (messageDiv) {
@@ -69,11 +68,8 @@ if (googleBtn) {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(appAuth, provider);
-      if (result.user) {
-        await checkProfile(result.user);
-      }
+      await checkProfile(result.user);
     } catch (err) {
-      console.error(err);
       showMessage(err.message);
     }
   });
@@ -94,11 +90,8 @@ if (emailBtn) {
     showMessage('Logging in...');
     try {
       const result = await signInWithEmailAndPassword(appAuth, email, password);
-      if (result.user) {
-        await checkProfile(result.user);
-      }
+      await checkProfile(result.user);
     } catch (err) {
-      console.error(err);
       showMessage(err.message);
     }
   });
@@ -130,10 +123,7 @@ if (sendOtpBtn) {
         document.getElementById('verifyOtp').style.display = 'block';
         showMessage('OTP sent to your number.');
       })
-      .catch(err => {
-        console.error(err);
-        showMessage(err.message);
-      });
+      .catch(err => showMessage(err.message));
   });
 }
 
@@ -150,17 +140,14 @@ if (verifyOtpBtn) {
     showMessage('Verifying OTP...');
     try {
       const result = await confirmationResult.confirm(code);
-      if (result.user) {
-        await checkProfile(result.user);
-      }
+      await checkProfile(result.user);
     } catch (err) {
-      console.error(err);
       showMessage(err.message);
     }
   });
 }
 
-// --- Service Worker for Messaging ---
+// --- Register Service Worker for Notifications ---
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')
     .then((registration) => {
@@ -169,10 +156,3 @@ if ('serviceWorker' in navigator) {
       console.error('Service Worker registration failed:', err);
     });
 }
-
-// --- Check auth state on load ---
-onAuthStateChanged(appAuth, async (user) => {
-  if (user) {
-    await checkProfile(user);
-  }
-});
