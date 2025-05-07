@@ -15,20 +15,18 @@
   <p>Connecting People through Skills</p>
 </div>
 
+<!-- Header -->
 <div class="header">
-    <div class="header-top">
-      <div class="logo-title">
-        <img src="images/logo.jpg" alt="Skillbook Logo" />
-        <h1>Skillbook</h1>
-      </div>
-      <img src="images/profile-pic-url.png" alt="Profile Pic" class="profile-pic">
+  <div class="header-top">
+    <div class="logo-title">
+      <img src="images/logo.jpg" alt="Skillbook Logo" />
+      <h1>Skillbook</h1>
     </div>
+    <img src="images/profile-pic-url.png" alt="Profile Pic" class="profile-pic">
   </div>
+</div>
 
 <!-- Landing Page -->
-	
-	
-	
 <div id="landing" class="show">
   <h1>Welcome</h1>
   <p>Share your Skill and Earn.</p>
@@ -43,42 +41,33 @@
 
     <!-- Email Login -->
     <div class="email-login">
-      <input type="email" id="email" placeholder="Enter Email">
-      <input type="password" id="password" placeholder="Enter Password">
+      <input type="email" id="email" placeholder="Enter Email" autocomplete="off">
+      <input type="password" id="password" placeholder="Enter Password" autocomplete="off">
       <button id="emailLoginBtn"><i class="fas fa-envelope"></i> Login with Email</button>
     </div>
 
     <!-- Phone Login -->
     <div class="phone-login">
-      <input type="tel" id="phone" placeholder="+91XXXXXXXXXX">
+      <input type="tel" id="phone" placeholder="+91XXXXXXXXXX" autocomplete="off">
       <div id="recaptcha-container"></div>
       <button id="sendOtp"><i class="fas fa-sms"></i> Send OTP</button>
-      <input type="text" id="otp" placeholder="Enter OTP">
-      <button id="verifyOtp"><i class="fas fa-check"></i> Verify OTP</button>
+      <input type="text" id="otp" placeholder="Enter OTP" style="display:none;" autocomplete="off">
+      <button id="verifyOtp" style="display:none;"><i class="fas fa-check"></i> Verify OTP</button>
     </div>
+
     <!-- Sign Up Link -->
-<div class="signup-link">
-  <p>New user? <a href="signup.html">Create an account</a></p>
-</div>
-    
+    <div class="signup-link">
+      <p>New user? <a href="signup.html">Create an account</a></p>
+    </div>
   </div>
 </div>
 
+<!-- Recaptcha fallback (if needed) -->
 <div id="recaptcha-login" style="display:none;"></div>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
-      .then(function (registration) {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch(function (err) {
-        console.error('Service Worker registration failed:', err);
-      });
-  }
-</script>
-	
-
+<!-- Scripts -->
 <script type="module" src="js/auth-check.js"></script>
 <script type="module" src="js/index.js"></script>
+
 </body>
 </html>
