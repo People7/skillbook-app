@@ -8,54 +8,46 @@
   <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-	
-	<div class="header">
-    <div class="header-top">
-      <div class="logo-title">
-        <img src="images/logo.jpg" alt="Skillbook Logo" />
-        <h1>Skillbook</h1>
-      </div>
-      <img src="images/profile-pic-url.png" alt="Profile Pic" class="profile-pic">
-    </div>
-  </div>
 
-<!-- Signup Page -->
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo-title">
+      <img src="images/logo.jpg" alt="Skillbook Logo" />
+      <h1>Skillbook</h1>
+    </div>
+    <img src="images/profile-pic-url.png" alt="Profile Pic" class="profile-pic">
+  </div>
+</div>
+
+<!-- Signup Section -->
 <div id="landing" class="show">
   <h1>Join Skillbook</h1>
   <p>Explore and Offer your Skill</p>
 
-  <!-- Inline Message -->
+  <!-- Message display -->
   <div id="message" style="display:none; color: #dc2626; margin-bottom: 1rem;"></div>
 
   <!-- Signup Form -->
-<div id="login-options">
-  <input type="text" id="name" placeholder="Full Name" required>
-  <input type="email" id="email" placeholder="Email" required>
-  <input type="password" id="password" placeholder="Password" required>
-  <input type="tel" id="phone" placeholder="Phone Number" required>
+  <div id="login-options">
+    <input type="text" id="name" placeholder="Full Name" autocomplete="off" required>
+    <input type="email" id="email" placeholder="Email" autocomplete="off" required>
+    <input type="password" id="password" placeholder="Password" autocomplete="off" required>
+    <input type="tel" id="phone" placeholder="Phone Number" autocomplete="off" required>
 
-  <button id="signUpButton">
-    <i class="fas fa-user-plus"></i>
-    Sign Up
-  </button>
+    <button id="signUpButton">
+      <i class="fas fa-user-plus"></i> Sign Up
+    </button>
 
-  <p style="margin-top: 1rem; text-align: center;">
-    Already have an account?
-    <a href="index.html" style="color: #065f46; font-weight: bold;">Login</a>
-  </p>
+    <p style="margin-top: 1rem; text-align: center;">
+      Already have an account?
+      <a href="index.html" style="color: #065f46; font-weight: bold;">Login</a>
+    </p>
+  </div>
 </div>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
-      .then(function (registration) {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch(function (err) {
-        console.error('Service Worker registration failed:', err);
-      });
-  }
-</script>
-
+<!-- Scripts -->
 <script type="module" src="js/signup.js"></script>
+
 </body>
 </html>
