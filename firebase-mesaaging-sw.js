@@ -22,7 +22,7 @@ onBackgroundMessage(messaging, (payload) => {
   const notificationTitle = payload.notification?.title || 'Skillbook Notification';
   const notificationOptions = {
     body: payload.notification?.body || 'You have a new message.',
-    icon: '/logo.png'  // Make sure logo.png is placed in your public root folder
+    icon: '/images/logo.jpg'  // Make sure logo.png is placed in your public root folder
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
