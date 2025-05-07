@@ -55,7 +55,7 @@ if (signUpButton) {
       // Save FCM token
       await requestForToken();
 
-      // Redirect
+      // Redirect to dashboard
       window.location.href = 'dashboard.html';
     } catch (error) {
       console.error(error);
