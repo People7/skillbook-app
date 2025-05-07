@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";  // Import Firestore functions
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
@@ -15,16 +15,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Firebase Services
 const auth = getAuth(app);
 const messaging = getMessaging(app);
-const db = getFirestore(app);  // Initialize Firestore
+const db = getFirestore(app);
 
-// Export Firebase services
 export { app, auth, messaging, db };
 
-// Request permission and get FCM token
+// Request FCM Token and save to Firestore
 export const requestForToken = async () => {
   try {
     const currentToken = await getToken(messaging, {
@@ -33,7 +30,13 @@ export const requestForToken = async () => {
 
     if (currentToken) {
       console.log("FCM Token:", currentToken);
-      // Optional: Send this token to your backend server
+
+      const user = auth.currentUser;
+      if (user) {
+        await setDoc(doc(db, "users", user.uid), {
+          fcmToken: currentToken
+        }, { merge: true });
+      }
     } else {
       console.warn("No registration token available. Request permission to generate one.");
     }
@@ -46,13 +49,3 @@ export const requestForToken = async () => {
 onMessage(messaging, (payload) => {
   console.log("Message received in foreground: ", payload);
 });
-
-if (currentToken) {
-  const user = auth.currentUser;
-  if (user) {
-    await setDoc(doc(db, "users", user.uid), {
-      fcmToken: currentToken
-    }, { merge: true });
-  }
-}
-
