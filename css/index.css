@@ -100,14 +100,8 @@ body, html {
   to { opacity: 1; transform: translateY(0); }
 }
 
-#landing h1 {
-  color: #065f46;
-  font-size: 2.2rem;
-  margin-bottom: 0.5rem;
-}
-
 #landing p {
-  font-size: 2.2rem;
+  font-size: 1.8rebol
   margin-bottom: 1.5rem;
   color: #444;
 }
