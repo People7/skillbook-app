@@ -1,33 +1,32 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+// firebase.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging.js";
 
-// Updated Firebase configuration
+// ✅ Firebase Config
 const firebaseConfig = {
-    apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
-    authDomain: "skillbook-3fa41.firebaseapp.com",
-    projectId: "skillbook-3fa41",
-    storageBucket: "skillbook-3fa41.firebasestorage.app",
-    messagingSenderId: "599549421075",
-    appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
-    measurementId: "G-3VKK01HXE6"
-  };
+  apiKey: "AIzaSyDS6oRCGu8BW3fXnpp6L4AhkNJ4OsGpwtk",
+  authDomain: "skillbook-3fa41.firebaseapp.com",
+  projectId: "skillbook-3fa41",
+  storageBucket: "skillbook-3fa41.appspot.com", // ✅ Fixed from .firebasestorage.app
+  messagingSenderId: "599549421075",
+  appId: "1:599549421075:web:9092eeb6bc3765baebc1e6",
+  measurementId: "G-3VKK01HXE6"
+};
 
-// Initialize Firebase
+// ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const messaging = getMessaging(app);
 const db = getFirestore(app);
-</script>
+const messaging = getMessaging(app);
 
-export { app, auth, messaging, db };
+// ✅ Export core Firebase services
+export { app, auth, db, messaging };
 
-// Request FCM Token and save to Firestore
+// ✅ Request Notification Token and Save it
 export const requestForToken = async () => {
   try {
     const currentToken = await getToken(messaging, {
@@ -35,8 +34,7 @@ export const requestForToken = async () => {
     });
 
     if (currentToken) {
-      console.log("FCM Token:", currentToken);
-
+      console.log("✅ FCM Token:", currentToken);
       const user = auth.currentUser;
       if (user) {
         await setDoc(doc(db, "users", user.uid), {
@@ -44,14 +42,14 @@ export const requestForToken = async () => {
         }, { merge: true });
       }
     } else {
-      console.warn("No registration token available. Request permission to generate one.");
+      console.warn("⚠️ No registration token available. Request permission.");
     }
-  } catch (error) {
-    console.error("An error occurred while retrieving token. ", error);
+  } catch (err) {
+    console.error("❌ Error getting FCM token: ", err);
   }
 };
 
-// Handle foreground messages
+// ✅ Handle messages when app is in foreground
 onMessage(messaging, (payload) => {
-  console.log("Message received in foreground: ", payload);
+  console.log("📩 Message received in foreground: ", payload);
 });
