@@ -135,9 +135,10 @@ body, html {
 
 .slides img {
   width: 100%;
-  height: auto;
+  height: 250px; /* or adjust to your desired fixed height */
   flex: 0 0 100%;
   object-fit: cover;
+  border-radius: 10px;
 }
 
 @keyframes slide {
