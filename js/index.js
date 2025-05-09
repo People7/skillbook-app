@@ -1,22 +1,21 @@
 import { auth, db } from './firebase.js';
 import {
-  signInWithPopup,
   GoogleAuthProvider,
+  signInWithPopup,
   signInWithEmailAndPassword,
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  setPersistence,
-  browserLocalPersistence,
   onAuthStateChanged,
-  getAuth
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-const appAuth = getAuth();
-setPersistence(appAuth, browserLocalPersistence);
+// ✅ Use `auth` directly from firebase.js, already initialized
+setPersistence(auth, browserLocalPersistence);
 
-// --- Check Profile Completeness ---
+// ✅ Check profile completeness
 async function checkProfile(user) {
   const userRef = doc(db, 'users', user.uid);
   const userSnap = await getDoc(userRef);
@@ -33,12 +32,14 @@ async function checkProfile(user) {
   }
 }
 
-// --- Redirect if already logged in ---
-onAuthStateChanged(appAuth, async (user) => {
-  if (user) await checkProfile(user);
+// ✅ Auto-redirect if already logged in
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    await checkProfile(user);
+  }
 });
 
-// --- Splash Screen Handling ---
+// ✅ Splash screen
 window.addEventListener('DOMContentLoaded', () => {
   const splash = document.getElementById('splash');
   const landing = document.getElementById('landing');
@@ -48,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 5000);
 });
 
-// --- Display Message Helper ---
+// ✅ Helper for showing messages
 function showMessage(msg) {
   const messageDiv = document.getElementById('message');
   if (messageDiv) {
@@ -59,7 +60,7 @@ function showMessage(msg) {
   }
 }
 
-// --- GOOGLE LOGIN ---
+// ✅ Google login
 const googleBtn = document.getElementById('googleLogin');
 if (googleBtn) {
   googleBtn.addEventListener('click', async (e) => {
@@ -67,7 +68,7 @@ if (googleBtn) {
     showMessage('Logging in with Google...');
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(appAuth, provider);
+      const result = await signInWithPopup(auth, provider);
       await checkProfile(result.user);
     } catch (err) {
       showMessage(err.message);
@@ -75,7 +76,7 @@ if (googleBtn) {
   });
 }
 
-// --- EMAIL LOGIN ---
+// ✅ Email login
 const emailBtn = document.getElementById('emailLoginBtn');
 if (emailBtn) {
   emailBtn.addEventListener('click', async () => {
@@ -89,7 +90,7 @@ if (emailBtn) {
 
     showMessage('Logging in...');
     try {
-      const result = await signInWithEmailAndPassword(appAuth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
       await checkProfile(result.user);
     } catch (err) {
       showMessage(err.message);
@@ -97,13 +98,13 @@ if (emailBtn) {
   });
 }
 
-// --- PHONE LOGIN ---
+// ✅ Phone login (OTP)
 let confirmationResult;
 
 window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
   size: 'invisible',
   callback: () => {}
-}, appAuth);
+}, auth);
 
 const sendOtpBtn = document.getElementById('sendOtp');
 if (sendOtpBtn) {
@@ -116,7 +117,7 @@ if (sendOtpBtn) {
     }
 
     showMessage('Sending OTP...');
-    signInWithPhoneNumber(appAuth, phone, window.recaptchaVerifier)
+    signInWithPhoneNumber(auth, phone, window.recaptchaVerifier)
       .then((result) => {
         confirmationResult = result;
         document.getElementById('otp').style.display = 'block';
@@ -147,12 +148,13 @@ if (verifyOtpBtn) {
   });
 }
 
-// --- Register Service Worker for Notifications ---
+// ✅ Register Service Worker for FCM
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')
     .then((registration) => {
       console.log('Service Worker registered with scope:', registration.scope);
-    }).catch((err) => {
+    })
+    .catch((err) => {
       console.error('Service Worker registration failed:', err);
     });
 }
