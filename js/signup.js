@@ -9,7 +9,7 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Show message helper
+// ✅ Helper to show messages
 function showMessage(msg) {
   const messageDiv = document.getElementById('message');
   if (messageDiv) {
@@ -20,7 +20,7 @@ function showMessage(msg) {
   }
 }
 
-// Handle Sign-Up
+// ✅ Handle Sign-Up
 const signUpButton = document.getElementById('signUpButton');
 if (signUpButton) {
   signUpButton.addEventListener('click', async (e) => {
@@ -37,26 +37,27 @@ if (signUpButton) {
     }
 
     try {
-      // Create account
+      // ✅ Create user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Update display name
+      // ✅ Set display name
       await updateProfile(user, { displayName: name });
 
-      // Save user info in Firestore
+      // ✅ Save user details to Firestore
       await setDoc(doc(db, "users", user.uid), {
         name,
         email,
         phone: phone.toString(),
-        createdAt: new Date(),
+        createdAt: new Date()
       });
 
-      // Save FCM token
+      // ✅ Request FCM token
       await requestForToken();
 
-      // Redirect to dashboard
+      // ✅ Redirect to dashboard
       window.location.href = 'dashboard.html';
+
     } catch (error) {
       console.error(error);
       showMessage(error.message);
