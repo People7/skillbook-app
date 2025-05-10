@@ -15,74 +15,46 @@
     }
 
     .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #065f46;
-      padding: 10px 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 100;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 100;
+}
 
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .logo-title {
-      display: flex;
-      align-items: center;
-    }
+.logo-title {
+  display: flex;
+  align-items: center;
+}
 
-    .header img {
-      height: 40px;
-      margin-right: 10px;
-    }
+.header img {
+  height: 40px;
+  margin-right: 10px;
+}
 
-    .header h1 {
-      color: white;
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin: 0;
-    }
+.header h1 {
+  color: #065f46;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+.profile-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
 
-    .profile-pic {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-    }
 
-    .icon-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-around;
-      background-color: white;
-      padding: 10px 0;
-      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-      z-index: 100;
-    }
-
-    .icon-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      font-size: 0.8rem;
-      color: #333;
-    }
-
-    .icon-item i {
-      font-size: 1.4rem;
-      padding: 8px;
-      border-radius: 50%;
-      color: white;
-      background-color: #065f46;
-    }
+    
 
     .container {
       padding: 20px;
@@ -284,6 +256,15 @@
         .contact-form .checkbox-group label {
             margin: 0;
         }
+        .contact-icons i {
+  font-size: 24px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.contact-icons label {
+  margin-right: 20px;
+}
+
 
         .contact-form button {
             padding: 12px 20px;
@@ -344,10 +325,6 @@
 
         <div id="suggestions" class="autocomplete-suggestions"></div>
 
-
-        <label for="description">Description</label>
-        <textarea id="description" name="description" rows="4" placeholder="Describe your service" required></textarea>
-
         <label for="category">Category</label>
         <select id="category" name="category" required>
           <option value="">Select a category</option>
@@ -357,24 +334,12 @@
           <option value="tech">Tech Support</option>
         </select>
 
+<label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" placeholder="Describe your service" required></textarea>
+
         <label for="tags">Tags</label>
         <input type="text" id="tags" name="tags" placeholder="e.g., plumbing, tutoring, design">
 
-        <fieldset>
-          <legend>Your Location</legend>
-          <label for="building">Building/Street</label>
-          <input type="text" id="building" name="building" placeholder="e.g., 123 Main Street">
-          <label for="locality">Locality</label>
-          <input type="text" id="locality" name="locality" placeholder="e.g., Near ABC Park">
-          <label for="area">Area</label>
-          <input type="text" id="area" name="area" placeholder="e.g., Sector 12">
-          <label for="pincode">Pincode</label>
-          <input type="text" id="pincode" name="pincode" placeholder="e.g., 110001">
-          <label for="city">City</label>
-          <input type="text" id="city" name="city" placeholder="e.g., Delhi">
-          <label for="state">State</label>
-          <input type="text" id="state" name="state" placeholder="e.g., Delhi">
-        </fieldset>
 
         <label for="imageUpload">Upload Image</label>
         <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
@@ -414,12 +379,25 @@
     <form id="contactForm">
         <!-- Contact Method -->
         <label>Contact Method:</label>
-        <div class="checkbox-group">
-            <label><input type="checkbox" id="chat" name="contactMethod" value="Chat"> Chat</label>
-            <label><input type="checkbox" id="call" name="contactMethod" value="Call"> Call</label>
-            <label><input type="checkbox" id="whatsapp" name="contactMethod" value="WhatsApp"> WhatsApp</label>
-            <label><input type="checkbox" id="email" name="contactMethod" value="Email"> Email</label>
-        </div>
+        <div class="checkbox-group contact-icons">
+  <label>
+    <input type="checkbox" id="chat" name="contactMethod" value="Chat">
+    <i class="fas fa-comment-dots" style="color: #007bff;"></i>
+  </label>
+  <label>
+    <input type="checkbox" id="call" name="contactMethod" value="Call">
+    <i class="fas fa-phone" style="color: #28a745;"></i>
+  </label>
+  <label>
+    <input type="checkbox" id="whatsapp" name="contactMethod" value="WhatsApp">
+    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+  </label>
+  <label>
+    <input type="checkbox" id="email" name="contactMethod" value="Email">
+    <i class="fas fa-envelope" style="color: #dc3545;"></i>
+  </label>
+</div>
+
 
         <!-- Hidden fields to store default contact info -->
         <input type="hidden" id="defaultPhoneNumber" value="9876543210">
@@ -465,33 +443,6 @@
         <button type="submit">Submit</button>
       </form>
     </div>
-  </div>
-
-  <div class="icon-bar">
-    <a href="profile.html" class="icon-item" title="Profile">
-      <i class="fas fa-user"></i>
-      <span>Profile</span>
-    </a>
-    <a href="notifications.html" class="icon-item" title="Notifications">
-      <i class="fas fa-bell"></i>
-      <span>Alerts</span>
-        </a>
-      <a href="chatlist.html" class="icon-item" title="Chatlist">
-      <i class="fas fa-comments"></i>
-      <span>Chats</span>
-    </a>
-    <a href="subscription.html" class="icon-item" title="Subscription">
-      <i class="fas fa-receipt"></i>
-      <span>Subscription</span>
-    </a>
-    <a href="setting-support-feedback.html" class="icon-item" title="Settings">
-      <i class="fas fa-cog"></i>
-      <span>Settings</span>
-    </a>
-    <a href="#" id="logout" class="icon-item" title="Logout">
-      <i class="fas fa-sign-out-alt"></i>
-      <span>Logout</span>
-    </a>
   </div>
 
 
@@ -584,7 +535,7 @@
             const profile = {
   mobile: document.getElementById('profileMobile').value,
   whatsapp: document.getElementById('profileWhatsApp').value,
-  email: document.getElementById('profileEmail').value
+  email: document.getElementById('p,rofileEmail').value
 };
 
 
