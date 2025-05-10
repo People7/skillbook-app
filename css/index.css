@@ -177,7 +177,7 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 20px; /* positions buttons below the header */
+  margin-top: 40px; /* positions buttons below the header */
   align-items: center;
 }
 
