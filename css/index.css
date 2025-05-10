@@ -83,7 +83,6 @@ body, html {
 
 /* Landing Container */
 #landing {
-#landing {
   max-width: 400px;
   background: #ffffff;
   margin: 6rem auto 2rem; /* reduced top margin */
@@ -121,14 +120,13 @@ body, html {
   }
 }
 
-
 .promo-video-container {
   width: 100%;
   max-width: 400px;
   border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 1rem;
   margin-top: 30px; /* space below header */
+  margin-bottom: 1rem;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
@@ -163,7 +161,7 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 40px; /* positions buttons below the header */
+  margin-tflex40px; /* positions buttons below the header */
   align-items: center;
 }
 
@@ -185,4 +183,5 @@ body, html {
     .offer-button {
       background-color: #065f46;
     }
+
 
