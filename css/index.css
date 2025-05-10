@@ -83,10 +83,11 @@ body, html {
 
 /* Landing Container */
 #landing {
+#landing {
   max-width: 400px;
   background: #ffffff;
-  margin: 7rem auto;
-  padding: 2rem;
+  margin: 6rem auto 2rem; /* reduced top margin */
+  padding: 1.5rem 1rem;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -176,7 +177,7 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 80px; /* positions buttons below the header */
+  margin-top: 20px; /* positions buttons below the header */
   align-items: center;
 }
 
@@ -203,7 +204,7 @@ body, html {
   max-width: 400px;
   border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
