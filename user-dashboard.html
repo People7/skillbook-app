@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard - Skillbook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script type="module" src="./firebase.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; margin: 0; }
+
+    .header {
+      background-color: #065f46; color: white;
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 12px 20px;
+      position: sticky; top: 0; z-index: 10;
+    }
+
+    .logo { display: flex; align-items: center; }
+    .logo i { margin-right: 8px; }
+    .right-icons { display: flex; align-items: center; gap: 16px; }
+    .right-icons img {
+      width: 36px; height: 36px;
+      border-radius: 50%; object-fit: cover; border: 2px solid white;
+    }
+
+    .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+
+    .profile-section {
+      background: white; padding: 15px;
+      border-radius: 10px; margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .profile-section button {
+      background: #065f46; color: white;
+      padding: 8px 14px; border: none;
+      border-radius: 6px; cursor: pointer;
+      font-weight: 500;
+    }
+
+    .service-card {
+      background: white; border-radius: 10px;
+      padding: 15px; margin-bottom: 15px;
+      display: flex; justify-content: space-between;
+      align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      transition: 0.2s ease; cursor: pointer;
+    }
+
+    .service-card:hover { background-color: #f0f8f4; }
+    .service-title { font-size: 1.1rem; font-weight: 600; color: #065f46; }
+
+    .toggle { display: flex; gap: 10px; }
+    .toggle button {
+      padding: 6px 10px; border: none;
+      border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+    }
+
+    .toggle .show { background: #28a745; color: white; }
+    .toggle .hide { background: #ffc107; color: black; }
+    .toggle .remove { background: #dc3545; color: white; }
+
+    .bottom-actions {
+      margin-top: 30px; display: flex;
+      justify-content: center; gap: 20px;
+    }
+
+    .bottom-actions a {
+      background: #065f46; color: white;
+      padding: 12px 18px; border-radius: 8px;
+      text-decoration: none; font-weight: 500;
+    }
+
+    #serviceList .service-card.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <i class="fas fa-book-open"></i>
+      <span style="font-size: 1.2rem; font-weight: bold;">Skillbook</span>
+    </div>
+    <div class="right-icons">
+      <i class="fas fa-bell" onclick="location.href='notifications.html'"></i>
+      <i class="fas fa-comments" onclick="location.href='chat.html'"></i>
+      <img id="userPic" src="https://via.placeholder.com/40" alt="Profile Pic" onclick="location.href='user-profile.html'"/>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- PROFILE EDIT -->
+    <div class="profile-section">
+      <p style="margin: 0 0 10px 0;"><strong>Welcome back!</strong> You can edit your profile or manage services below.</p>
+      <button onclick="location.href='user-profile.html'">Edit Profile</button>
+    </div>
+
+    <!-- SERVICE LIST -->
+    <div id="serviceList">
+      <p>Loading your services...</p>
+    </div>
+
+    <!-- BOTTOM BUTTONS -->
+    <div class="bottom-actions">
+      <a href="offer-service.html"><i class="fas fa-plus"></i> Offer Service</a>
+      <a href="search.html"><i class="fas fa-search"></i> Search Services</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      auth, db, onAuthStateChanged,
+      collection, query, where, getDocs,
+      doc, updateDoc, deleteDoc
+    } from './firebase.js';
+
+    const userPic = document.getElementById('userPic');
+    const serviceList = document.getElementById('serviceList');
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        if (user.photoURL) userPic.src = user.photoURL;
+
+        const q = query(collection(db, "services"), where("uid", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          serviceList.innerHTML = "<p>No services offered yet.</p>";
+          return;
+        }
+
+        serviceList.innerHTML = ""; // Clear loading msg
+
+        querySnapshot.forEach(docSnap => {
+          const service = docSnap.data();
+          const serviceId = docSnap.id;
+
+          const card = document.createElement("div");
+          card.className = "service-card";
+          if (service.status === "hidden") card.classList.add("disabled");
+          card.onclick = () => location.href = `edit-service.html?id=${serviceId}`;
+
+          const title = document.createElement("div");
+          title.className = "service-title";
+          title.innerText = service.title || "Untitled Service";
+
+          const toggle = document.createElement("div");
+          toggle.className = "toggle";
+
+          const showBtn = document.createElement("button");
+          showBtn.className = "show";
+          showBtn.innerText = "Show";
+          showBtn.onclick = async (e) => {
+            e.stopPropagation();
+            await updateDoc(doc(db, "services", serviceId), { status: "active" });
+            card.classList.remove("disabled");
+          };
+
+          const hideBtn = document.createElement("button");
+          hideBtn.className = "hide";
+          hideBtn.innerText = "Hide";
+          hideBtn.onclick = async (e) => {
+            e.stopPropagation();
+            await updateDoc(doc(db, "services", serviceId), { status: "hidden" });
+            card.classList.add("disabled");
+          };
+
+          const removeBtn = document.createElement("button");
+          removeBtn.className = "remove";
+          removeBtn.innerText = "Remove";
+          removeBtn.onclick = async (e) => {
+            e.stopPropagation();
+            if (confirm("Delete this service?")) {
+              await deleteDoc(doc(db, "services", serviceId));
+              card.remove();
+            }
+          };
+
+          toggle.append(showBtn, hideBtn, removeBtn);
+          card.append(title, toggle);
+          serviceList.appendChild(card);
+        });
+
+      } else {
+        location.href = "login.html";
+      }
+    });
+  </script>
+
+</body>
+</html>
