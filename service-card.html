@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Service Card - Skillbook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 700px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .service-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #065f46;
+      margin-bottom: 10px;
+    }
+
+    .user-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .location {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .description {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .tags {
+      font-size: 0.9rem;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .experience {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    .images {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .images img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .contact {
+      font-size: 0.95rem;
+    }
+
+    .contact a {
+      display: block;
+      margin-bottom: 5px;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .contact i {
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="service-title" id="serviceTitle"></div>
+
+    <div class="user-meta">
+      <div id="username">Loading...</div>
+      <div id="gender"></div>
+    </div>
+
+    <div class="location" id="location"></div>
+
+    <div class="description" id="description"></div>
+
+    <div class="tags" id="tags"></div>
+
+    <div class="experience" id="experience"></div>
+
+    <div class="images" id="images"></div>
+
+    <div class="contact" id="contact"></div>
+  </div>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-lite.js';
+
+    // Get service ID from URL query (e.g. service-card.html?id=abc123)
+    const params = new URLSearchParams(window.location.search);
+    const serviceId = params.get("id");
+
+    async function loadService() {
+      if (!serviceId) return alert("Service ID not provided in URL");
+
+      const docRef = doc(db, "services", serviceId);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        document.querySelector(".card").innerHTML = "<p>Service not found</p>";
+        return;
+      }
+
+      const data = docSnap.data();
+
+      document.getElementById("serviceTitle").textContent = data.title || "No title";
+      document.getElementById("username").textContent = data.username || "Unknown";
+      document.getElementById("gender").textContent = data.gender || "";
+      document.getElementById("location").textContent = `${data.area || ''}, ${data.pincode || ''}, ${data.city || ''}, ${data.state || ''}`;
+      document.getElementById("description").textContent = data.description || "";
+      document.getElementById("tags").textContent = (data.tags || []).map(t => `#${t}`).join(" ");
+      document.getElementById("experience").innerHTML = `<strong>Experience:</strong> ${data.experience || "N/A"}`;
+
+      // Load images
+      const imgDiv = document.getElementById("images");
+      imgDiv.innerHTML = "";
+      (data.images || []).forEach(url => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Work image";
+        imgDiv.appendChild(img);
+      });
+
+      // Contact options
+      const contactDiv = document.getElementById("contact");
+      contactDiv.innerHTML = `
+        <strong>Contact:</strong><br>
+        ${data.phone ? `<a href="tel:${data.phone}"><i class="fas fa-phone" style="color:#28a745;"></i> Call</a>` : ""}
+        ${data.phone ? `<a href="https://wa.me/91${data.phone}" target="_blank"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp</a>` : ""}
+        ${data.email ? `<a href="mailto:${data.email}"><i class="fas fa-envelope" style="color:#dc3545;"></i> Email</a>` : ""}
+        ${data.uid ? `<a href="chat.html?uid=${data.uid}"><i class="fas fa-comments" style="color:#6c63ff;"></i> Chat</a>` : ""}
+      `;
+    }
+
+    loadService();
+  </script>
+
+</body>
+</html>
