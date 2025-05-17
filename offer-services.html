@@ -1,165 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Post Service</title>
+  <title>Offer Your Service</title>
   <link rel="stylesheet" href="style.css"/>
   <style>
-    .form-container { max-width: 600px; margin: auto; padding: 1rem; }
+    .form-container { max-width: 700px; margin: auto; padding: 1rem; background: #f9f9f9; border-radius: 8px; }
     .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; }
-    input[type="text"], textarea, select { width: 100%; padding: 0.5rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+    input[type="text"], textarea, select { width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc; }
     .top-bar-right img { width: 36px; height: 36px; border-radius: 50%; }
     #contactOptions label { cursor: pointer; display: inline-block; margin-right: 10px; padding: 5px 10px; background: #eee; border-radius: 5px; }
     #contactOptions label.selected { background: #007bff; color: white; }
+    .multi-select { height: 100px; overflow-y: auto; background: white; border: 1px solid #ccc; border-radius: 4px; }
+    .tag-input { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag-input input { flex: 1; }
+    .image-preview { display: flex; overflow-x: auto; gap: 10px; margin-top: 10px; }
+    .image-preview img { width: 100px; height: 100px; object-fit: cover; border-radius: 4px; }
+    .image-upload { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
   </style>
 </head>
 <body>
   <div class="top-bar-right">
     <img src="https://via.placeholder.com/36" alt="User Profile" />
-  </div>
-
-  <div class="form-container">
-    <h1>Post a New Service</h1>
+  </div>  <div class="form-container">
+    <h1>Offer Your Service</h1>
     <form id="offerForm">
       <div class="form-group">
         <label for="serviceTitle">Service Title</label>
-        <input type="text" name="serviceTitle" required />
-      </div>
-      <div class="form-group">
-        <label for="category">Category</label>
-        <select name="category" required>
-          <option value="">Select Category</option>
-          <option value="Design">Design</option>
-          <option value="Development">Development</option>
-          <option value="Writing">Writing</option>
-          <option value="Marketing">Marketing</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea name="description" rows="4" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="tags">Tags (comma separated)</label>
-        <input type="text" name="tags" placeholder="e.g. logo, branding, graphic" />
-      </div>
-      <div class="form-group">
-        <label>Preferred Contact Method</label>
-        <div id="contactOptions">
-          <label data-method="Chat">Chat</label>
-          <label data-method="Email">Email</label>
-          <label data-method="Phone">Phone</label>
-          <label data-method="WhatsApp">WhatsApp</label>
-        </div>
-        <input type="hidden" id="preferredContact" name="preferredContact" value="Chat" />
-      </div>
-      <div class="form-group">
-        <label for="imageUpload">Service Image</label>
-        <input type="file" name="imageUpload" accept="image/*" />
-      </div>
-      <button type="submit">Publish</button>
-    </form>
+        <input type="text" name="serviceTitle" list="serviceSuggestions" required />
+        <datalist id="serviceSuggestions">
+          <option value="Logo Design">
+          <option value="Web Development">
+          <option value="Content Writing">
+          <option value="SEO Optimization">
+        </datalist>
+      </div><div class="form-group">
+    <label for="category">Category</label>
+    <select name="category" multiple class="multi-select">
+      <option value="Design">Design</option>
+      <option value="Development">Development</option>
+      <option value="Writing">Writing</option>
+      <option value="Marketing">Marketing</option>
+      <!-- Add more categories as needed -->
+    </select>
   </div>
 
-  <!-- Contact Option Toggle Script -->
-  <script>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea name="description" rows="4" required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="tags">Tags (up to 10)</label>
+    <input type="text" name="tags" placeholder="e.g. logo, branding, graphic" />
+  </div>
+
+  <div class="form-group">
+    <label>Preferred Contact Methods</label>
+    <div id="contactOptions">
+      <label data-method="Chat">Chat</label>
+      <label data-method="Email">Email</label>
+      <label data-method="Phone">Phone</label>
+      <label data-method="WhatsApp">WhatsApp</label>
+    </div>
+    <input type="hidden" id="preferredContact" name="preferredContact" />
+  </div>
+
+  <div class="form-group image-upload">
+    <label for="imageUpload">Service Images</label>
+    <input type="file" id="imageUpload" name="imageUpload" accept="image/*" multiple />
+    <div class="image-preview" id="imagePreview"></div>
+  </div>
+
+  <button type="submit">Publish</button>
+</form>
+
+  </div>  <script>
+    const imageInput = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', () => {
+      imagePreview.innerHTML = '';
+      Array.from(imageInput.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = document.createElement('img');
+          img.src = reader.result;
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    const selectedMethods = new Set();
     document.querySelectorAll('#contactOptions label').forEach(label => {
       label.addEventListener('click', () => {
-        document.querySelectorAll('#contactOptions label').forEach(l => l.classList.remove('selected'));
-        label.classList.add('selected');
-        document.getElementById('preferredContact').value = label.dataset.method;
+        const method = label.dataset.method;
+        if (selectedMethods.has(method)) {
+          selectedMethods.delete(method);
+          label.classList.remove('selected');
+        } else {
+          selectedMethods.add(method);
+          label.classList.add('selected');
+        }
+        document.getElementById('preferredContact').value = Array.from(selectedMethods).join(',');
       });
     });
-  </script>
-
-  <!-- Firebase logic as a module -->
-  <script type="module">
-    import { db, storage, auth } from './firebase.js';
-    import { doc, getDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
-    import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
-    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-
-    const offerForm = document.getElementById('offerForm');
-    const preferredContactField = document.getElementById('preferredContact');
-    const profileImg = document.querySelector('.top-bar-right img');
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        alert("Please log in first.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const userRef = doc(db, 'users', user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        alert("Profile not found. Please complete your profile first.");
-        window.location.href = "user-profile.html";
-        return;
-      }
-
-      const profile = userSnap.data();
-      profileImg.src = profile.profilePicUrl || 'https://via.placeholder.com/36';
-
-      offerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const serviceTitle = offerForm.serviceTitle.value.trim();
-        const category = offerForm.category.value;
-        const description = offerForm.description.value.trim();
-        const tags = offerForm.tags.value.trim();
-        const preferredContact = preferredContactField.value;
-        const imageFile = offerForm.imageUpload.files[0];
-
-        let imageURL = '';
-        if (imageFile) {
-          const imageRef = ref(storage, `services/${user.uid}/${Date.now()}_${imageFile.name}`);
-          const snapshot = await uploadBytes(imageRef, imageFile);
-          imageURL = await getDownloadURL(snapshot.ref);
-        }
-
-        const serviceData = {
-          serviceTitle,
-          category,
-          description,
-          tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-          preferredContact,
-          imageURL,
-          userId: user.uid,
-          createdAt: serverTimestamp(),
-          userProfile: {
-            name: profile.name || '',
-            gender: profile.gender || '',
-            mobile: profile.mobile || '',
-            whatsapp: profile.whatsapp || '',
-            email: profile.email || '',
-            qualification: profile.qualification || '',
-            experience: profile.experience || '',
-            pincode: profile.pincode || '',
-            area: profile.area || '',
-            city: profile.city || '',
-            state: profile.state || '',
-            country: profile.country || 'India',
-            profilePicUrl: profile.profilePicUrl || '',
-          }
-        };
-
-        try {
-          await addDoc(collection(db, 'services'), serviceData);
-          alert("Service published successfully!");
-          offerForm.reset();
-          preferredContactField.value = "Chat";
-          document.querySelectorAll('#contactOptions label').forEach(l => l.classList.remove('selected'));
-          document.querySelector('#contactOptions label[data-method="Chat"]').classList.add('selected');
-        } catch (error) {
-          console.error("Error saving service:", error);
-          alert("Failed to publish service. Please try again.");
-        }
-      });
-    });
-  </script>
-</body>
+  </script></body>
 </html>
